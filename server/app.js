@@ -6,8 +6,6 @@ const dbServerUrl = "mongodb://" + dbHostname + ":" + dbPort + "";
 
 const dbClient = new MongoClient(dbServerUrl);
 
-
-
 // declaration and loading (inclusion) of various modules
 const http = require("node:http");      // Node.js standard library for handling client/server server features
 
