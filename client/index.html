@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    
+    <link rel="stylesheet" href="styles.css">
 
 </head>
 
@@ -9,7 +9,93 @@
 
 </div>
 
-<div> <!--Spelet(baksida)-->
+<div class="main-page"> <!--Spelet(baksida)-->
+
+    <div class="header-main"> <!--Header-->
+
+        <div id="title-main">
+            <h1>Guess the movie</h1>
+        </div>
+    
+        <div id="dropdown-language-main"> <!--Dropdown button for language-->
+            <button onclick id="dropdown-language-main-button">Language</button>
+        </div>
+
+    </div>
+        
+    <div class="game-options"> <!--Choose game-buttons-->
+      
+        <button onclick>Game 1</button>
+        <button onclick>Game 2</button>
+       
+    </div>
+
+    <div class="game-center"> <!--Game center-->
+
+        <div id="rules-container"> <!--Rules-->
+
+            <div id="rules">
+                <h2>Rules</h2>
+                <p>...</p>
+            </div>
+
+        </div>
+
+        <div id="game"> <!--Game display-->
+
+            <div id="game-display">
+                
+                <!--Here the game will be called through a function-->
+
+                <div id="start-box"> <!--Start box for game-->
+
+                    <p>
+                        <label for="entry_name">Entry name:</label>
+                        <input type="text" id="entry_name" name="entry_name" minlength="1" />
+                    </p>
+
+                    <div class="difficulty-dropdown">
+                        <button class="difficulty-dropbtn">Difficulty</button>
+                        <div class="difficulty-dropdown-content">
+                            <a href="#">Difficulty 1</a>
+                            <a href="#">Difficulty 2</a>
+                            <a href="#">Difficulty 3</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="aswer-buttons-display">
+                <!--Temporary, buttons will be created through a functoin in client.js-->
+                <button onclick>Guess</button>
+                <button onclick>the</button>
+                <button onclick>movie</button>
+
+                <div id="submit-button">
+                    <button onclick>Submit</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="leaderboard-container"> <!--Leaderboard-->
+
+            <div id="leaderboard">
+                <h2>Leaderboard</h2>
+                <p>...</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bottom-page"> <!--Bottom of page-->
+        <p>Bottom page</p>
+    </div>
+
+
 
 </div>
 
