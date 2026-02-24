@@ -34,7 +34,7 @@ async function startGame() {
     
     //potential for difficulty input 
 
-    const response = await fetch(serverUrl + "/game/" + "10pictures",  { //requesting the 10 random pictures from server
+    const response = await fetch(serverUrl + "/game/" + "pictureGame",  { //requesting the 10 random pictures from server
         method : "GET",
         headers: {
             
