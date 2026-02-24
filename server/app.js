@@ -28,9 +28,13 @@ const server = http.createServer((req,res) => {
     if(req.method == "GET"){
 
         switch(pathComponents[1]){
-            case "test":
-                test(res,"Pollyanna"); //simpelt test för att se att vi får saker från databasen
+            case "test": //test to se what can be fetched from database
+                test(res,"Pollyanna"); 
             break;
+            case "pictureGame":
+                //routingPictureGame(res);
+                randomMovies(res, 10, null);
+            break
             default:
                 sendRespons(res,200,"text/plain", "No specific request made");
         }
@@ -39,7 +43,7 @@ const server = http.createServer((req,res) => {
 
         sendRespons(res,200, null,null); 
 
-    }else if(req.method == "POST") { //Det kommer den vara när vi sparar resultatet 
+    }else if(req.method == "POST") { //Used for result documentation and leaderboard
 
         //insert code
 
@@ -53,7 +57,7 @@ server.listen(port, hostname, () => {
     console.log("The server is running an listening at: " + serverUrl);
 });
 
-//standardfuktion för att skicka med allt som behövvs i en respons
+//standardfunction for sending respons to client
 function sendRespons(res, statusCode, contentType, data){
 
     res.statusCode = statusCode;
@@ -69,7 +73,7 @@ function sendRespons(res, statusCode, contentType, data){
 }
 
 
-//test funktion för communication till databasen
+//test function for communication with database
 async function test(res, search){
 
     await dbClient.connect();
@@ -83,5 +87,37 @@ async function test(res, search){
 
     sendRespons(res,200,"application/json",findResultString);
     await dbClient.close();
+
+}
+
+
+//Asks database for 10 random entry titles(ever one uniqe)
+//Imports the 10 correspondning pictures. 
+//For each of the main 10 movies, 5 other random movie names (which are different from the main movie) needs to be includeed, these will be the answer options
+async function routingPictureGame(res) {
+    const tenMovieQuestion = await randomMovies(10, null);
+
+}
+
+//asks database for numr amount for randomized movies that are distinct from check. 
+async function randomMovies(res, numr, check) {
+
+    if(check != null){ //if no paremeter is inclueded
+        
+        await dbClient.connect();
+        const db = dbClient.db("tnm121-project");
+        const  dbCollection = db.collection("imdb");
+
+        const findResult = await dbCollection.aggregate([{$sample: {size: numr}}]).toArray();
+        console.log(findResult);
+        const resultJson = {Questions: findResult};
+        const findResultString = JSON.stringify(resultJson);
+
+        sendRespons(res,200,"application/json",findResultString);
+        await dbClient.close();
+        
+    }else{
+        console.log("Not yet implemented");
+    }
 
 }
