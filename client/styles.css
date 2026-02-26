@@ -140,11 +140,16 @@ body{
     background-color: rgb(131, 9, 9);
 }
 
+.main-page{
+    display: none;
+}
 
 #intro-text1{ /*Text:Welcome To*/
     font-family: "Broadway";
     text-align: center;
-    font-size:1000%;
+    font-size:1700%;
+    margin-top: 100px;
+    margin-bottom: 5px;
     text-shadow: 0 10px 15px rgb(0, 0, 5);
     color: rgb(255, 217, 0);
     
@@ -153,7 +158,8 @@ body{
 #intro-text2{ /*Text: Guess The Game*/
     font-family: "Broadway";
     text-align: center;
-    font-size:600%;
+    font-size:1000%;
+    margin-top: 5px;
     color: rgb(255, 217, 0);
     text-shadow: 0 10px 15px rgb(0, 0, 5);
 }
