@@ -17,6 +17,7 @@ const hostname = "127.0.0.1";
 const port = 3000;
 const serverUrl = "http://" + hostname + ":" + port + "";
 
+/**************** STANDARD SERVER CREATION AND RESPONS MANAGMENT *****************/
 
 const server = http.createServer((req,res) => {
 
@@ -29,11 +30,13 @@ const server = http.createServer((req,res) => {
 
         switch(pathComponents[1]){
             case "test": //test to se what can be fetched from database
-                test(res,"Pollyanna"); 
+                //test(res,"Pollyanna"); 
+                randomMovies(res,pathComponents[2],null);
             break;
             case "pictureGame":
                 //routingPictureGame(res);
                 randomMovies(res, 10, null);
+                
             break
             default:
                 sendRespons(res,200,"text/plain", "No specific request made");
@@ -73,6 +76,9 @@ function sendRespons(res, statusCode, contentType, data){
     else res.end();
 
 }
+
+
+/******************** FUNCTION  ***********************/
 
 
 //test function for communication with database
@@ -171,22 +177,29 @@ async function routingPictureGame(res, numr, diff) {
 
 }
 
+
 //asks database for numr amount of randomized movies that are distinct from check. 
-async function randomMovies(numr, check) {
+async function randomMovies(res, numr, check) {
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
     const  dbCollection = db.collection("imdb");
+    const amountOfMovies = parseInt(numr);
     
 
     if(check == null){ //if no perimiter is inclueded
 
-        const sampelFilter = [{$sample: {size: numr}}];
+        const sampelFilter = [{$sample: {size: amountOfMovies}}];
         const findResult = await dbCollection.aggregate(sampelFilter).toArray();
         console.log(findResult);
+        
+        //Singel test (TO BE REMOVED)
+        const findResultString = JSON.stringify(findResult);
+        sendRespons(res,200,"application/json",findResultString);
+        //
 
         await dbClient.close();
-        return findResult
+        //return findResult
         
     }else{
         const sampelFilter = [
