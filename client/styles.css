@@ -10,7 +10,10 @@
 /*Header div - css*/
 .header-main{
     text-align: center;
-    font-size: 30px;
+    font-size: 50px;
+    font-family: "Broadway";
+    text-shadow: 0 10px 15px rgb(0, 0, 5);
+    color: rgb(255, 217, 0);
 
 }
 
@@ -26,16 +29,14 @@
     margin: 3% 3% 3% 3%;
 }
 
-#game1-button {
+.game-button {
     padding: 3px 8px;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgb(0, 0, 5);
 }
 
-#game2-button {
-    padding: 3px 8px;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgb(0, 0, 5);
+.game-button:hover {
+    background-color: rgb(255, 217, 0);
 }
 
 /*Game center div - css*/
@@ -101,17 +102,22 @@
     border-radius: 10px;
     box-shadow: 0 5px 10px rgb(0, 0, 5);
 }
+#submit-button:hover {
+    background-color: rgb(255, 217, 0);
+}
 
 /*Bottom page div - css*/
 .bottom-page {
     /*margin: 50px 50px 50px 50px;*/
-    margin: 5% 5% 5% 5%;
-    background-color: rgb(0, 0, 0);
+    margin: 0;
+    width: 100%;
+    min-height: 15vh;      
+    background-color: black;
 }
 
 
 
-/*Difficulty level dropdown*/
+/*Dropdown buttons*/
 .dropdown  {
   position: relative;
   display: inline-block;
@@ -130,12 +136,14 @@
 /* Links inside dropdown content */
 .dropdown-content button {
   color: black;
+  background-color: rgb(255, 217, 0);
   width: 100%;
   padding: 5px 1px;
   text-decoration: none;
   display: block;
   font-size: 50%;
 }
+
 
 /* Change color of dropdown links on hover */
 /*.dropdown-content a:hover {
@@ -167,7 +175,7 @@
 }
 
 body{
-    background-color: rgb(131, 9, 9);
+    background-color: rgb(124, 0, 31);
 }
 
 .main-page{
