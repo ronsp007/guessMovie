@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 //Will display the relevant html obejct for the first site
-function displayWelcome() {
+function displayWelcome() { //This we dont need.......i think :)
 
 }
 
@@ -53,4 +53,27 @@ function submittQuestion() {
 
 async function requestLeaderboard(){
     ;
+}
+
+function answerbuttons(number){
+    const container = document.getElementById("aswer-buttons-display"); //Conect the right div
+    container.innerHTML = " "; //Emty buttons evry time 
+
+    for(i = 0; i<number; ++i){
+
+    const className = document.createElement("label"); 
+    className.classList.add("movie-name-radio"); 
+
+    const button = document.createElement("input"); 
+    button.type = "radio"; 
+    button.name = "" //Måsrte länka namnet till documenten för att få in det
+    button.value = //Ska skriva 
+
+    className.appendChild(button); 
+    
+    }
+    
+  
+
+
 }
