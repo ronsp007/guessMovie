@@ -78,7 +78,7 @@ function sendRespons(res, statusCode, contentType, data){
 }
 
 
-/******************** FUNCTION  ***********************/
+/******************** FUNCTIONS  ***********************/
 
 
 //test function for communication with database
@@ -98,44 +98,6 @@ async function test(res, search){
 
 }
 
-
-// so instead of doing this we can manipulated the database and run a code seperatly that:
-// checks if the movie in the database has a picture
-// adds a tag to the movies that don't have a picture
-// When serching for the random movies exclude movies with said tag
-async function checkImageAndReplace(movie){
-    
-    let test = null; 
-    let imageData = null; 
-    const limit = 100; 
-    let n = 0;
-
-    while(test == null && n < limit){
-
-        const imageFilePath = "./media" + movie.normalized_id + ".png";
-
-        try{
-
-            imageData = await fs.readFile(imageFilePath);
-            test = 1;
-            return imageData;
-
-        }catch(err){
-            n++; 
-            console.log(movie + " does not have picture");
-            const newMovie = await randomMovies(1, movie);
-            movie = newMovie[0];
-
-        }
-
-    }
-    if(n == 100){
-        throw new Error("Error fetching data");
-    }else{
-        return imageData;
-    }
-}
-
 //Asks database for numr random entry titles(every one distinct)
 //Imports the numr correspondning pictures. 
 //For each of the main numr movies, diff other random movie names (which are different from the main movie) needs to be includeed: these will be the answer options
@@ -150,17 +112,24 @@ async function routingPictureGame(res, numr, diff) {
 
     const tenMovieQuestion = await randomMovies(numr, null);
     resultToClient.QuestionMovie = tenMovieQuestion;
-
+    console.log("Movie for question loaded.")
 
     let imagePaths = [];
 
     for(let i = 0; i < numr; i++){
-        //this will be replaced
-        const imageData = await checkImageAndReplace(QuestionMovie[i]);
-        imagePaths.push(imageData);
+        const imageFilePath = "./media/" + QuestionMovie[i].normalized_id + ".png";
 
+        fs.readFile(imageFilePath, (err, data) => {
+            if(err){
+                console.log("Error fetching image at:" + imageFilePath);
+            }else{
+                imagePaths.push(data);
+            }
+        })
+        
     }
     resultToClient.QuestionPicture = imagePaths;
+    console.log("Images to movies loaded.")
 
     let answerOptions = []; //empty array that will store the answer options for each movie
     for(let i = 0; i < numr; i++){
@@ -189,17 +158,16 @@ async function randomMovies(res, numr, check) {
 
     if(check == null){ //if no perimiter is inclueded
 
-        const sampelFilter = [{$sample: {size: amountOfMovies}}];
+        const sampelFilter = [
+            {$match: {photo: 1}},
+            {$sample: {size: amountOfMovies}}
+            ];
+        
         const findResult = await dbCollection.aggregate(sampelFilter).toArray();
         console.log(findResult);
-        
-        //Singel test (TO BE REMOVED)
-        const findResultString = JSON.stringify(findResult);
-        sendRespons(res,200,"application/json",findResultString);
-        //
 
         await dbClient.close();
-        //return findResult
+        return findResult
         
     }else{
         const sampelFilter = [
