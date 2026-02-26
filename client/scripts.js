@@ -17,12 +17,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
 //Will display the relevant html obejct for the first site
 function displayWelcome() {
-    ;
+
 }
 
 //Will display the relevant html object for the game site
 function displayGameView() {
-    ;
+   document.querySelector(".frontpage").style.display = "none"; 
+   document.querySelector(".main-page").style.display ="block";
+    
 }
 
 
