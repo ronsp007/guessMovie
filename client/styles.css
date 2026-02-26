@@ -1,3 +1,134 @@
+/*Main page css-----------------------------------------------------------------------------*/
+.main-page {
+    display: flex;
+    flex-direction: column;
+    font-family:'Serif';
+    height: 100%;
+
+}
+
+/*Header div - css*/
+.header-main{
+    text-align: center;
+    font-size: 30px;
+
+}
+
+#dropdown-language-main {
+    text-align: right;
+    margin: 0 2% 2% 0;
+}
+
+/*Game options div - css*/
+.game-options {
+    text-align: center;
+    /*margin: 50px 50px 50px 50px;*/
+    margin: 3% 3% 3% 3%;
+}
+
+/*Game center div - css*/
+.game-center {
+    display: flex;
+    flex-direction: row;
+}
+
+#rules-container {
+    width: 20%;
+}
+
+#game {
+    width: 60%;
+    text-align: center;
+    /*border-style: solid;
+    border-color: rgb(0, 0, 0);*/
+    /*margin: 0 10px 0 10px;*/
+    margin: 0 5% 0 5%;
+}
+
+#start-box {
+    margin: 5% 5% 5% 5%;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+    padding: 5% 5% 5% 5%;
+
+}
+
+#leaderboard-container {
+    width: 20%
+}
+
+#rules {
+    text-align: center;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+}
+
+#leaderboard {
+    text-align: center;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+}
+
+#game-display {
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+}
+
+#aswer-buttons-display {
+    margin: 5% 5% 5% 5%;
+}
+
+#submit-button {
+    margin: 2% 0 0 0;
+}
+
+/*Bottom page div - css*/
+.bottom-page {
+    /*margin: 50px 50px 50px 50px;*/
+    margin: 5% 5% 5% 5%;
+    background-color: rgb(24, 23, 23);
+}
+
+
+
+/*Difficulty level dropdown*/
+
+.difficulty-dropdown {
+  position: relative;
+}
+
+/* Dropdown content */
+.difficulty-dropdown-content {
+  display: none;
+  position: center;
+  /*background-color: #d4bfbf;*/
+  min-width: 5%;
+  
+}
+
+/* Links inside dropdown content */
+.difficulty-dropdown-content a {
+  color: black;
+  padding: 5px 1px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+/*.dropdown-content a:hover {
+  background-color: #f1f1f1
+}*/
+
+/* Show the dropdown content on hover */
+.difficulty-dropdown:hover .difficulty-dropdown-content {
+  display: block;
+}
+
+/* Change background color of dropdown button on hover */
+.difficulty-dropdown:hover .difficulty-dropbtn {
+  background-color: #915151;
+}
+/*-------------------------------------------------------------------------------------------*/
 
 @font-face { /*For the Broadway font*/
     font-family: "Broadway";
@@ -10,7 +141,7 @@ body{
 }
 
 
-h1{ /*Text:Welcome To*/
+#intro-text1{ /*Text:Welcome To*/
     font-family: "Broadway";
     text-align: center;
     font-size:1000%;
@@ -19,7 +150,7 @@ h1{ /*Text:Welcome To*/
     
 } 
 
-h2{ /*Text: Guess The Game*/
+#intro-text2{ /*Text: Guess The Game*/
     font-family: "Broadway";
     text-align: center;
     font-size:600%;
