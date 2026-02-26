@@ -1,0 +1,9 @@
+{
+  "name": "tnm121-project-material",
+  "version": "1.0.0",
+  "description": "Movie JSON Data Import to MongoDB data storage system",
+  "author": "Ellen Sundblad",
+  "dependencies": {
+    "mongodb": "7.0.0"
+  }
+}
