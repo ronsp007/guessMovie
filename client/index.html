@@ -45,16 +45,24 @@
                         <h1>Guess the movie</h1>
                     </div> 
 
-                    <div id="dropdown-language-main"> <!--Dropdown button for language--> 
-                        <button onclick id="dropdown-language-main-button">Language</button> 
-                    </div> 
+                    <div id="dropdown-language-main"> 
+                        <div class="dropdown"> 
+                            <button class="dropbtn">Language</button> 
+                                <div class="dropdown-content"> 
+                                    <button onclick>Swedish</button> 
+                                    <button onclick>English</button> 
+                            </div> 
+                        </div> 
+                         
+                    </div>
+
 
                 </div> 
 
                 <div class="game-options"> <!--Choose game-buttons--> 
 
-                    <button onclick>Game 1</button> 
-                    <button onclick>Game 2</button> 
+                    <button onclick id="game1-button">Game 1</button> 
+                    <button onclick id="game2-button">Game 2</button> 
 
                 </div> 
 
@@ -83,12 +91,12 @@
                                 <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
                             </p> 
 
-                            <div class="difficulty-dropdown"> 
-                                <button class="difficulty-dropbtn">Difficulty</button> 
-                                <div class="difficulty-dropdown-content"> 
-                                    <a href="#">Difficulty 1</a> 
-                                    <a href="#">Difficulty 2</a> 
-                                    <a href="#">Difficulty 3</a> 
+                            <div class="dropdown"> 
+                                <button class="dropbtn">Difficulty</button> 
+                                <div class="dropdown-content"> 
+                                    <button onclick class="difficulty-buttons">Easy</button> 
+                                    <button onclick class="difficulty-buttons">Medium</button> 
+                                    <button onclick class="difficulty-buttons">Hard</button> 
                                 </div> 
                             </div> 
 
@@ -101,8 +109,8 @@
                         <button onclick>the</button> 
                         <button onclick>movie</button> 
 
-                        <div id="submit-button"> 
-                            <button onclick>Submit</button> 
+                        <div id="submit-container"> 
+                            <button onclick id="submit-button">Submit</button> 
                         </div> 
 
                     </div> 
@@ -122,7 +130,7 @@
 
             <div class="bottom-page"> <!--Bottom of page--> 
 
-                <p>Bottom page</p> 
+                <p>...</p> 
 
             </div> 
 

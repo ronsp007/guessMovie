@@ -26,6 +26,18 @@
     margin: 3% 3% 3% 3%;
 }
 
+#game1-button {
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+
+#game2-button {
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+
 /*Game center div - css*/
 .game-center {
     display: flex;
@@ -36,7 +48,7 @@
     width: 20%;
 }
 
-#game {
+#game {  /*The container with the actual game*/
     width: 60%;
     text-align: center;
     /*border-style: solid;
@@ -45,11 +57,13 @@
     margin: 0 5% 0 5%;
 }
 
-#start-box {
+#start-box { /*The container where the user puts their name and chooses difficulty*/
     margin: 5% 5% 5% 5%;
     border-style: solid;
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
     padding: 5% 5% 5% 5%;
+    font-size: 150%;
+    color:rgb(255, 255, 253)
 
 }
 
@@ -60,58 +74,67 @@
 #rules {
     text-align: center;
     border-style: solid;
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
 }
 
 #leaderboard {
     text-align: center;
     border-style: solid;
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
 }
 
 #game-display {
     border-style: solid;
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
 }
 
 #aswer-buttons-display {
     margin: 5% 5% 5% 5%;
 }
 
-#submit-button {
+#submit-container {
     margin: 2% 0 0 0;
+}
+
+#submit-button {
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
 }
 
 /*Bottom page div - css*/
 .bottom-page {
     /*margin: 50px 50px 50px 50px;*/
     margin: 5% 5% 5% 5%;
-    background-color: rgb(24, 23, 23);
+    background-color: rgb(0, 0, 0);
 }
 
 
 
 /*Difficulty level dropdown*/
-
-.difficulty-dropdown {
+.dropdown  {
   position: relative;
+  display: inline-block;
 }
 
 /* Dropdown content */
-.difficulty-dropdown-content {
+.dropdown-content {
   display: none;
-  position: center;
-  /*background-color: #d4bfbf;*/
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   min-width: 5%;
-  
 }
 
 /* Links inside dropdown content */
-.difficulty-dropdown-content a {
+.dropdown-content button {
   color: black;
+  width: 100%;
   padding: 5px 1px;
   text-decoration: none;
   display: block;
+  font-size: 50%;
 }
 
 /* Change color of dropdown links on hover */
@@ -120,14 +143,21 @@
 }*/
 
 /* Show the dropdown content on hover */
-.difficulty-dropdown:hover .difficulty-dropdown-content {
+.dropdown:hover .dropdown-content {
   display: block;
 }
 
 /* Change background color of dropdown button on hover */
-.difficulty-dropdown:hover .difficulty-dropbtn {
+.dropdown:hover .dropbtn {
   background-color: #915151;
 }
+
+.dropbtn {
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+
 /*-------------------------------------------------------------------------------------------*/
 
 @font-face { /*For the Broadway font*/
