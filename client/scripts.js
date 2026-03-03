@@ -30,8 +30,8 @@ function displayGameView() {
 //takes in the given values for name and game diffuculty (set to 6 options in the beginning) 
 async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
-    //const playerName = document.getElementById("player_name").value; //this is from the input element in the middle of the screen 
-    //console.log(playerName);
+    const playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
+    console.log(playerName);
     
     //potential for difficulty input 
 

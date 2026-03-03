@@ -81,5 +81,8 @@ $RECYCLE.BIN/
 
 # Ignores the picture files for upload 
 server/media/
+data-managment/node_modules/
+
+
 
 
