@@ -11,10 +11,6 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-
-
-
-
 //Will display the relevant html obejct for the first site
 function displayWelcome() { //This we dont need.......i think :)
 
@@ -55,25 +51,34 @@ async function requestLeaderboard(){
     ;
 }
 
-function answerbuttons(number){
-    const container = document.getElementById("aswer-buttons-display"); //Conect the right div
-    container.innerHTML = " "; //Emty buttons evry time 
 
-    for(i = 0; i<number; ++i){
+//Funktion for the answerbuttons 
+function answerbuttons(arrayNameMovie){  //Number is dificuld level, arrayNameMovie is the name of the movies
+   
+    const container = document.getElementById("answer-buttons-display"); //Conect the right div
+    container.innerHTML = ""; //Emty buttons evry time 
 
-    const className = document.createElement("label"); 
-    className.classList.add("movie-name-radio"); 
+    const corectAnswer = arrayNameMovie.QuestionMovie[0].name;
+    let selectedMovie = null; 
 
-    const button = document.createElement("input"); 
-    button.type = "radio"; 
-    button.name = "" //Måsrte länka namnet till documenten för att få in det
-    button.value = //Ska skriva 
+    for(let i = 0; i < arrayNameMovie.answerOptionsForQuestions[0].length;  ++i){ //lookps throw how many bottons 
 
-    className.appendChild(button); 
-    
+        const buttons = document.createElement("button"); 
+        buttons.classList.add("movie-name-buttons"); 
+        buttons.textContent = arrayNameMovie.answerOptionsForQuestions[0][i].name;
+
+        //Do the buttons so they work ass radio buttons
+        buttons.addEventListener("click", ()=> { //Kanek ska ha function() istället för =>
+            const allButtons = document.querySelectorAll(".movie-name-buttons"); 
+            allButtons.forEach(button => button.classList.remove("selected")); //deselect all buttons 
+
+            buttons.classList.add("selected"); //select the preest button
+
+            selectedMovie = buttons.textContent; //so we now wich button is selected
+
+            console.log("Select Movie:", selectedMovie); //TA BORT SEN KOLLA BA SÅ DE FUNKAR
+        });
+
+        container.appendChild(buttons);
     }
-    
-  
-
-
 }
