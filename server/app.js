@@ -48,12 +48,12 @@ const server = http.createServer((req,res) => {
                 routingScore(res, difficulty);
             break;
             default:
-                sendRespons(res,200,"text/plain", "No specific request made");
+                sendResponse(res,200,"text/plain", "No specific request made");
         }
 
     }else if(req.method == "OPTIONS"){
 
-        sendRespons(res,200, null,null); 
+        sendResponse(res,200, null,null); 
 
     }else if(req.method == "POST") { //Used for result documentation and leaderboard
 
@@ -64,7 +64,7 @@ const server = http.createServer((req,res) => {
                 
                 req.on("error", (err) => {
                     console.log("An error occured when reading the Post message body.");
-                    sendRespons(res,500,null,null);
+                    sendResponse(res,500,null,null);
                 })
                 req.on("data", (chunk) => {
                     bodyChunks.push(chunk);
@@ -83,7 +83,7 @@ const server = http.createServer((req,res) => {
         }
 
     }else {
-          sendResponse(res,200,"text/plain", "Unrecognized request");
+        sendResponse(res,200,"text/plain", "Unrecognized request");
     }
 
 });
@@ -95,7 +95,7 @@ server.listen(port, hostname, () => {
 
 
 //standardfunction for sending respons to client
-function sendRespons(res, statusCode, contentType, data){
+function sendResponse(res, statusCode, contentType, data){
 
     res.statusCode = statusCode;
 
@@ -125,7 +125,7 @@ async function test(res, search){
     console.log(findResult);
     const findResultString = JSON.stringify(findResult);
 
-    sendRespons(res,200,"application/json",findResultString);
+    sendResponse(res,200,"application/json",findResultString);
     await dbClient.close();
 
 }
@@ -167,7 +167,7 @@ async function routingPictureGame(res, numr, diff) {
    
 
     const stringToClient = JSON.stringify(resultToClient);
-    sendRespons(res, 200, "application/json", stringToClient);
+    sendResponse(res, 200, "application/json", stringToClient);
 
 }
 
@@ -249,10 +249,10 @@ async function routingScore(res, diff){
     
     if(findResult.length > 0) {
         const resultToClient = JSON.stringify(findResult);
-        sendRespons(res, 200, "application/json", resultToClient);
+        sendResponse(res, 200, "application/json", resultToClient);
 
     }else{
-        sendRespons(res, 406, null, null);
+        sendResponse(res, 406, null, null);
     }
     await dbClient.close();
 
