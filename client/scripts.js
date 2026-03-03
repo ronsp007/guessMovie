@@ -30,12 +30,12 @@ function displayGameView() {
 //takes in the given values for name and game diffuculty (set to 6 options in the beginning) 
 async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
-    const playerName = document.getElementById("player_name").value; //this is from the input element in the middle of the screen 
-    console.log(playerName);
+    //const playerName = document.getElementById("player_name").value; //this is from the input element in the middle of the screen 
+    //console.log(playerName);
     
     //potential for difficulty input 
 
-    const response = await fetch(serverUrl + "/game/" + "pictureGame" + "/" + difficulty,  { //requesting the 10 random pictures from server
+    const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { //requesting the 10 random pictures from server
         method : "GET",
         headers: {
             "Content-Type": "application/json",
@@ -53,7 +53,8 @@ async function startGame(difficulty) {
 
     } else {
         gameInfo = await response.json();
-        playGame() //Function that will display the actual game, not yet created.
+        console.log(gameInfo);
+        answerbuttons() //Function that will display the actual game, not yet created.
     }
 
 }
@@ -71,19 +72,19 @@ async function requestLeaderboard(){
 
 
 //Funktion for the answerbuttons 
-function answerbuttons(arrayNameMovie){  //Number is dificuld level, arrayNameMovie is the name of the movies
+function answerbuttons(){  //Number is dificuld level, arrayNameMovie is the name of the movies
    
     const container = document.getElementById("answer-buttons-display"); //Conect the right div
     container.innerHTML = ""; //Emty buttons evry time 
 
-    const corectAnswer = arrayNameMovie.QuestionMovie[0].name;
+    const corectAnswer = gameInfo.QuestionMovie[0].name;
     let selectedMovie = null; 
 
-    for(let i = 0; i < arrayNameMovie.answerOptionsForQuestions[0].length;  ++i){ //lookps throw how many bottons 
+    for(let i = 0; i < gameInfo.answerOptionsForQuestions[0].length;  ++i){ //lookps throw how many bottons 
 
         const buttons = document.createElement("button"); 
         buttons.classList.add("movie-name-buttons"); 
-        buttons.textContent = arrayNameMovie.answerOptionsForQuestions[0][i].name;
+        buttons.textContent = gameInfo.answerOptionsForQuestions[0][i].name;
 
         //Do the buttons so they work ass radio buttons
         buttons.addEventListener("click", ()=> { //Kanek ska ha function() istället för =>
