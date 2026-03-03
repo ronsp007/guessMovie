@@ -1,6 +1,8 @@
 
 const serverUrl = "http://127.0.0.1:3000";
-const gameScore = 0; 
+let gameScore = 0; 
+let gameInfo = [];
+let playerName = "";
 
 
 //runs when the website is loaded.
@@ -30,18 +32,34 @@ function displayGameView() {
 
 
 //takes in the given values for name and game diffuculty (set to 6 options in the beginning) 
-async function startGame() {
+async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
     const playerName = document.getElementById("player_name").value; //this is from the input element in the middle of the screen 
+    console.log(playerName);
     
     //potential for difficulty input 
 
-    const response = await fetch(serverUrl + "/game/" + "pictureGame",  { //requesting the 10 random pictures from server
+    const response = await fetch(serverUrl + "/game/" + "pictureGame" + "/" + difficulty,  { //requesting the 10 random pictures from server
         method : "GET",
         headers: {
-            
-        }
+            "Content-Type": "application/json",
+        },
+        body: null,
     }); 
+
+    if (!response.ok) {
+        console.log("Response not okay");
+        const startBox = getElementById("start-box");  // Code to display error message on the webpage
+        startBox.innerHTML = "";
+        const message = document.createElement(p);
+        message.textContent = "Error in loading server";
+        startBox.appendChild(message);
+
+    } else {
+        gameInfo = await response.json();
+        playGame() //Function that will display the actual game, not yet created.
+    }
+
 }
 
 
