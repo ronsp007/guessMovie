@@ -55,7 +55,7 @@
     /*border-style: solid;
     border-color: rgb(0, 0, 0);*/
     /*margin: 0 10px 0 10px;*/
-    margin: 0 5% 0 5%;
+    margin: 0 0.5% 0 0.5%;
 }
 
 #start-box { /*The container where the user puts their name and chooses difficulty*/
@@ -75,13 +75,15 @@
 #rules {
     text-align: center;
     border-style: solid;
-    border-color: rgb(255, 255, 255);
+    border-color: rgb(255, 217, 0);
+    background-color: white;
 }
 
 #leaderboard {
     text-align: center;
     border-style: solid;
-    border-color: rgb(255, 255, 255);
+    border-color: rgb(255, 217, 0);
+    background-color: white;
 }
 
 #game-display {
@@ -136,12 +138,23 @@
 /* Links inside dropdown content */
 .dropdown-content button {
   color: black;
-  background-color: rgb(255, 217, 0);
+  background-color: rgb(255, 255, 255);
   width: 100%;
   padding: 5px 1px;
   text-decoration: none;
   display: block;
-  font-size: 50%;
+  /*font-size: 50%;*/
+  font-size: 15px;
+}
+
+#dropdown-content-front button {
+  color: black;
+  /*background-color: rgb(255, 255, 255);*/
+  width: 100%;
+  padding: 10px 10px;
+  text-decoration: none;
+  display: block;
+  font-size: 80%;
 }
 
 
@@ -164,6 +177,10 @@
     padding: 3px 8px;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+
+.dropdown-buttons:hover {
+    background-color: rgb(255, 217, 0);
 }
 
 /* Front Page -------------------------------------------------------------------------------------------*/
@@ -229,16 +246,15 @@ background-color: gold;
 }
 
 
-#language-button{ /*Choose language button*/
+#language-button{
     font-family: sans-serif;
     font-size: 150%;
     padding: 3px 8px;
     border-radius: 15px;
     box-shadow: 0 5px 10px rgb(0, 0, 5);
-    background-color: white;
     color: black;
 }
 
 #language-button:hover{ /*language button hover*/
-    background-color: gold;
+    background-color: #915151;
 }

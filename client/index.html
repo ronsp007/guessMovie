@@ -32,10 +32,21 @@
                     <button id="play-button" onclick = "displayGameView()"> Press to play</button>
                  </div>
 
-                <div id="language-container"> <!--drop down button-->
+                <!--<div id="language-container">
                     <button id="language-button" onclick > Language</button>
 
+                </div>-->
+                <div id="language-container"> 
+                    <div class="dropdown"> 
+                        <button class="dropbtn" id="language-button">Language</button> 
+                            <div class="dropdown-content" id="dropdown-content-front"> 
+                                <button onclick class="dropdown-buttons">Swedish</button> 
+                                <button onclick class="dropdown-buttons">English</button> 
+                            </div> 
+                    </div> 
+                         
                 </div>
+
               
             </div>
         
@@ -54,8 +65,8 @@
                         <div class="dropdown"> 
                             <button class="dropbtn">Language</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick>Swedish</button> 
-                                    <button onclick>English</button> 
+                                    <button onclick class="dropdown-buttons">Swedish</button> 
+                                    <button onclick class="dropdown-buttons">English</button> 
                             </div> 
                         </div> 
                          
@@ -99,9 +110,9 @@
                             <div class="dropdown"> 
                                 <button class="dropbtn">Difficulty</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick="startGame(3)" class="difficulty-buttons">Easy</button> 
-                                    <button onclick="startGame(6)" class="difficulty-buttons">Medium</button> 
-                                    <button onclick="startGame(9)" class="difficulty-buttons">Hard</button> 
+                                    <button onclick="startGame(3)" class="dropdown-buttons">Easy</button> 
+                                    <button onclick="startGame(6)" class="dropdown-buttons">Medium</button> 
+                                    <button onclick="startGame(9)" class="dropdown-buttons">Hard</button> 
                                 </div> 
                             </div> 
 
