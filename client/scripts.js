@@ -72,19 +72,27 @@ async function requestLeaderboard(){
 
 
 //Funktion for the answerbuttons 
-function answerbuttons(){  //Number is dificuld level, arrayNameMovie is the name of the movies
+function answerbuttons(){  
    
     const container = document.getElementById("answer-buttons-display"); //Conect the right div
     container.innerHTML = ""; //Emty buttons evry time 
 
-    const corectAnswer = gameInfo.QuestionMovie[0].name;
-    let selectedMovie = null; 
+    const corectAnswerName = gameInfo.QuestionMovie[0].name;
+    const corectAnswer = gameInfo.QuestionMovie[0]
+    let selectedMovie = null;
+    const wrongAnswer =  gameInfo.answerOptionsForQuestions[0];
 
-    for(let i = 0; i < gameInfo.answerOptionsForQuestions[0].length;  ++i){ //lookps throw how many bottons 
+    const allAnswer = [corectAnswer].concat(wrongAnswer); //Conect corect answer whit wrong answer
+
+    allAnswer.sort(() => Math.random() - 0.5); //"shufell" the order (the corect answar apers in a radom order)
+
+    //loop thro all answers that depens on the difuculd level (3,6 or 9)
+    for(let i = 0; i < allAnswer.length;  ++i){ 
 
         const buttons = document.createElement("button"); 
         buttons.classList.add("movie-name-buttons"); 
-        buttons.textContent = gameInfo.answerOptionsForQuestions[0][i].name;
+        buttons.textContent = allAnswer[i].name;
+        
 
         //Do the buttons so they work ass radio buttons
         buttons.addEventListener("click", ()=> { //Kanek ska ha function() istället för =>
