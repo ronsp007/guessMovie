@@ -11,6 +11,8 @@ const dbClient = new MongoClient(dbServerUrl);
 // declaration and loading (inclusion) of various modules
 const http = require("node:http");      // Node.js standard library for handling client/server server features
 const fs = require("node:fs");      //needed for loading in pictures
+const path = require("node:path");
+const { send } = require("node:process");
 
 // initialization of server properties
 const hostname = "127.0.0.1";
@@ -29,13 +31,14 @@ const server = http.createServer((req,res) => {
     if(req.method == "GET"){
 
         switch(pathComponents[1]){
+
             case "test": //test to se what can be fetched from database
-                //test(res,"Pollyanna"); 
-                randomMovies(res,pathComponents[2],null);
+                test(res,"Pollyanna"); 
+                //randomMovies(pathComponents[2],null);
+                //routingPictureGame(res,10,6);
             break;
             case "pictureGame":
-                //routingPictureGame(res);
-                randomMovies(res, 10, null);
+                routingPictureGame(res, 10, pathComponents[2]);
                 
             break
             default:
@@ -48,7 +51,30 @@ const server = http.createServer((req,res) => {
 
     }else if(req.method == "POST") { //Used for result documentation and leaderboard
 
-        //insert code
+        switch(pathComponents[1]){
+            case "score":
+                
+                const bodyChunks = [];
+                
+                req.on("error", (err) => {
+                    console.log("An error occured when reading the Post message body.");
+                    sendRespons(res,500,null,null);
+                })
+                req.on("data", (chunk) => {
+                    bodyChunks.push(chunk);
+                })
+                req.on("end", () =>{
+                    //Buffer.concat() takes an array of Buffer objekt and concatenates
+                    //them into a singel Buffer objekt. (Incoming HTTP request bodies are handled as Buffer objekt(works with raw binary data))
+                    const messageBody = Buffer.concat(bodyChunks).toString(); //compses message as a string
+
+                    uploading_score(messageBody);
+                })
+
+            break;
+            default:
+                sendResponse(res, 400, "text/plain", "A HTTP POST method has been sent to the server, but no specific API endpoint could be determined.");
+        }
 
     }else {
           sendResponse(res,200,"text/plain", "Unrecognized request");
@@ -117,15 +143,8 @@ async function routingPictureGame(res, numr, diff) {
     let imagePaths = [];
 
     for(let i = 0; i < numr; i++){
-        const imageFilePath = "./media/" + QuestionMovie[i].normalized_id + ".png";
-
-        fs.readFile(imageFilePath, (err, data) => {
-            if(err){
-                console.log("Error fetching image at:" + imageFilePath);
-            }else{
-                imagePaths.push(data);
-            }
-        })
+        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id + ".png";
+        imagePaths.push(imageFilePath);
         
     }
     resultToClient.QuestionPicture = imagePaths;
@@ -133,7 +152,7 @@ async function routingPictureGame(res, numr, diff) {
 
     let answerOptions = []; //empty array that will store the answer options for each movie
     for(let i = 0; i < numr; i++){
-        const fiveMovies = await randomMovies(diff, QuestionMovie[i]);
+        const fiveMovies = await randomMovies(diff, resultToClient.QuestionMovie[i]);
         answerOptions.push(fiveMovies);
     }
     resultToClient.answerOptionsForQuestions = answerOptions;
@@ -148,7 +167,7 @@ async function routingPictureGame(res, numr, diff) {
 
 
 //asks database for numr amount of randomized movies that are distinct from check. 
-async function randomMovies(res, numr, check) {
+async function randomMovies(numr, check) {
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
@@ -170,9 +189,14 @@ async function randomMovies(res, numr, check) {
         return findResult
         
     }else{
+
         const sampelFilter = [
-            {$sample: {size: numr}}, //sets how many entries we want
-            {$match: {normalized_id: {$ne: check.normalized_id}}} //sets witch entry we want to exclude
+            {$match: {normalized_id: {$ne: check.normalized_id}}}, //sets witch entry we want to exclude
+            {$sample: {size: amountOfMovies-1}}, //sets how many entries we want
+            {$project: {
+                _id: 0,
+                name: 1,
+            }}
         ];
 
         const findResult = await dbCollection.aggregate(sampelFilter).toArray();
@@ -181,4 +205,10 @@ async function randomMovies(res, numr, check) {
         return findResult; 
     }
 
+}
+
+async function uploading_score(dataFromClient) {
+    //To be
+
+    
 }
