@@ -13,6 +13,7 @@ const http = require("node:http");      // Node.js standard library for handling
 const fs = require("node:fs");      //needed for loading in pictures
 const path = require("node:path");
 const { send } = require("node:process");
+const { json } = require("node:stream/consumers");
 
 // initialization of server properties
 const hostname = "127.0.0.1";
@@ -33,14 +34,19 @@ const server = http.createServer((req,res) => {
         switch(pathComponents[1]){
 
             case "test": //test to se what can be fetched from database
-                test(res,"Pollyanna"); 
+                //test(res,"Pollyanna"); 
                 //randomMovies(pathComponents[2],null);
                 //routingPictureGame(res,10,6);
+                uploadingScore(kollar);
             break;
             case "pictureGame":
                 routingPictureGame(res, 10, pathComponents[2]);
                 
             break
+            case "leaderboard":
+                const difficulty = pathComponents[2];
+                routingScore(res, difficulty);
+            break;
             default:
                 sendRespons(res,200,"text/plain", "No specific request made");
         }
@@ -207,8 +213,48 @@ async function randomMovies(numr, check) {
 
 }
 
-async function uploading_score(dataFromClient) {
-    //To be
+async function uploadingScore(dataFromClient) {
 
+    const scoreJsonData = JSON.parse(dataFromClient);
+
+    await dbClient.connect();
+    const db = dbClient.db("tnm121-project");
+
+
+    const dbCollection = db.collection("leaderboard_" + scoreJsonData.difficulty); //if there isn't one, one is created
     
+    const insertResult = await dbCollection.insertOne(dataFromClient);
+
+    console.log("Uploaded to database: " + insertResult);
+
+    await dbClient.close();
+    
+}
+//A test. The POST HTTP message's body should have the following structure. 
+const kollar = {
+    name: "Ronja",
+    score: 1,
+    difficulty: "easy"
+}
+
+//gets the results(maximum of 10) from the specified difficulty level and sends it to the client 
+async function routingScore(res, diff){
+    await dbClient.connect();
+    const db = dbClient.db("tnm121-project");
+    const  dbCollection = db.collection("leaderboard_" + diff);
+
+    const filterQuery = {};
+    const sortQuery = {score: -1}; //sorts in decending order highest->lowest
+    const findResult = await dbCollection.find(filterQuery).sort(sortQuery).limit(10).toArray();
+    
+    if(findResult.length > 0) {
+        const resultToClient = JSON.stringify(findResult);
+        sendRespons(res, 200, "application/json", resultToClient);
+
+    }else{
+        sendRespons(res, 406, null, null);
+    }
+    await dbClient.close();
+
+
 }
