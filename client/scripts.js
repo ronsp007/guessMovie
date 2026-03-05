@@ -32,6 +32,7 @@ async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
     const playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
     console.log(playerName);
+    document.querySelector(".submit-container").style.display ="block";
     
     //potential for difficulty input 
 
@@ -62,7 +63,7 @@ async function startGame(difficulty) {
 
 //takes the value from the button pressed and depending on that increases the score. 
 function submittQuestion() {
-    ;
+    
 }
 
 
