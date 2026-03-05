@@ -60,11 +60,9 @@
 
 #start-box { /*The container where the user puts their name and chooses difficulty*/
     margin: 5% 5% 5% 5%;
-    border-style: solid;
-    border-color: rgb(255, 255, 255);
     padding: 5% 5% 5% 5%;
     font-size: 150%;
-    color:rgb(255, 255, 253)
+    color:rgb(255, 255, 253);
 
 }
 
@@ -87,8 +85,10 @@
 }
 
 #game-display {
+    
     border-style: solid;
     border-color: rgb(255, 255, 255);
+    background-color: rgb(80, 78, 78);
 }
 
 #aswer-buttons-display {
@@ -97,7 +97,7 @@
 
 #submit-container {
     margin: 2% 0 0 0;
-    display: none;
+    /*display: none;*/
 }
 
 #submit-button {
@@ -187,7 +187,6 @@
     gap: 8px; 
     padding-inline: 4%; /*Horisontial*/
     padding-block: 2%;  /*Vertical*/
-    margin-bottom: 3%;
 }
 
 .movie-name-buttons{ /*Answer buttons (inside)*/

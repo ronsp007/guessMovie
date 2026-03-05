@@ -12,8 +12,6 @@ const dbClient = new MongoClient(dbServerUrl);
 const http = require("node:http");      // Node.js standard library for handling client/server server features
 const fs = require("node:fs");      //needed for loading in pictures
 const path = require("node:path");
-const { send } = require("node:process");
-const { json } = require("node:stream/consumers");
 
 // initialization of server properties
 const hostname = "127.0.0.1";
@@ -36,8 +34,8 @@ const server = http.createServer((req,res) => {
             case "test": //test to se what can be fetched from database
                 //test(res,"Pollyanna"); 
                 //randomMovies(pathComponents[2],null);
-                //routingPictureGame(res,10,6);
-                uploadingScore(kollar);
+                routingPictureGame(res,10,6);
+                //uploadingScore(kollar);
             break;
             case "pictureGame":
                 routingPictureGame(res, 10, pathComponents[2]);
@@ -46,6 +44,11 @@ const server = http.createServer((req,res) => {
             case "leaderboard":
                 const difficulty = pathComponents[2];
                 routingScore(res, difficulty);
+            break;
+            case "picture":
+                
+                routingImages(res, pathComponents[3]);
+                
             break;
             default:
                 sendResponse(res,200,"text/plain", "No specific request made");
@@ -74,7 +77,7 @@ const server = http.createServer((req,res) => {
                     //them into a singel Buffer objekt. (Incoming HTTP request bodies are handled as Buffer objekt(works with raw binary data))
                     const messageBody = Buffer.concat(bodyChunks).toString(); //compses message as a string
 
-                    uploading_score(messageBody);
+                    uploadingScore(messageBody);
                 })
 
             break;
@@ -122,7 +125,7 @@ async function test(res, search){
 
     const filterQuery = {name: search};
     const findResult = await dbCollection.find(filterQuery).toArray();
-    console.log(findResult);
+    //console.log(findResult);
     const findResultString = JSON.stringify(findResult);
 
     sendResponse(res,200,"application/json",findResultString);
@@ -149,7 +152,7 @@ async function routingPictureGame(res, numr, diff) {
     let imagePaths = [];
 
     for(let i = 0; i < numr; i++){
-        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id + ".png";
+        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id +"/" + ".png";
         imagePaths.push(imageFilePath);
         
     }
@@ -171,6 +174,23 @@ async function routingPictureGame(res, numr, diff) {
 
 }
 
+function routingImages(res, list) {
+    const imageFilePath = "./media/" + list + ".png";
+    console.log(list);
+
+    fs.readFile(imageFilePath, (err, data) => {
+        if (err) {
+            sendResponse(res, 404, "text/plain", "Image not found");
+        } else {
+            console.log("Sending image");
+            console.log(data);
+            sendResponse(res, 200, "image/png", data);
+            
+        }
+    });
+
+}
+
 
 //asks database for numr amount of randomized movies that are distinct from check. 
 async function randomMovies(numr, check) {
@@ -189,7 +209,7 @@ async function randomMovies(numr, check) {
             ];
         
         const findResult = await dbCollection.aggregate(sampelFilter).toArray();
-        console.log(findResult);
+        //console.log(findResult);
 
         await dbClient.close();
         return findResult

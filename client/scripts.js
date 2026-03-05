@@ -3,6 +3,8 @@ const serverUrl = "http://127.0.0.1:3000";
 let gameScore = 0; 
 let gameInfo = [];
 let playerName = "";
+let selectedMovie = null;
+let questionCounter = 0;
 
 
 //runs when the website is loaded.
@@ -32,7 +34,8 @@ async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
     const playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
     console.log(playerName);
-    document.querySelector(".submit-container").style.display ="block";
+    //document.querySelector("#submit-container").style.display ="block";
+    
     
     //potential for difficulty input 
 
@@ -44,11 +47,12 @@ async function startGame(difficulty) {
         body: null,
     }); 
 
+
     if (!response.ok) {
         console.log("Response not okay");
-        const startBox = getElementById("start-box");  // Code to display error message on the webpage
-        startBox.innerHTML = "";
         const message = document.createElement(p);
+        const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
+        startBox.innerHTML = "";
         message.textContent = "Error in loading server";
         startBox.appendChild(message);
 
@@ -56,13 +60,85 @@ async function startGame(difficulty) {
         gameInfo = await response.json();
         console.log(gameInfo);
         answerbuttons() //Function that will display the actual game, not yet created.
+        gameRound();
     }
+
+}
+
+async function gameRound() {
+    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
+    startBox.innerHTML = "";
+    answerbuttons();
+
+    const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionPicture[questionCounter],  { //requesting the 10 random pictures from server
+        method : "GET",
+        headers: {
+            "Content-Type": "image/png",
+        },
+        body: null,
+    }); 
+
+    if (response.ok) {
+
+        response.blob().then((blobBody) => {
+            console.log(blobBody);
+            const pictureDiv = document.createElement("div");
+            const image = document.createElement("img");
+            image.src = URL.createObjectURL(blobBody);
+            console.log(image.src);
+            image.style.width = "60%";
+            image.style.objectFit = "cover";
+
+            pictureDiv.appendChild(image);
+            startBox.appendChild(pictureDiv);
+        });
+
+    } else {
+
+    }
+
+
 
 }
 
 
 //takes the value from the button pressed and depending on that increases the score. 
 function submittQuestion() {
+    console.log("button is pressed");
+    const gameDiv = document.getElementById("game-display");
+
+    if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) {
+        gameScore++;
+         gameDiv.style.borderColor = "green";
+
+    }else{
+        gameDiv.style.borderColor = "red";
+    }
+
+    const title = document.createElement("p")
+        title.textContent = "Right answer: " + gameInfo.QuestionMovie[questionCounter].name;
+
+        const titleDiv = document.createElement("div");
+        titleDiv.appendChild(title);
+        gameDiv.appendChild(titleDiv);
+        title.style.font = "Serif";
+        title.style.fontSize = "150%";
+        title.style.color = "white";
+       
+        const nextQuestion = document.createElement("button");
+        nextQuestion.textContent = "Next question";
+        titleDiv.appendChild(nextQuestion);
+        nextQuestion.addEventListener("click", function (){
+            questionCounter++;
+            console.log(questionCounter);
+            gameDiv.style.borderColor = "white";
+            titleDiv.innerHTML = " ";
+            gameRound();
+        });
+       
+}
+
+function gameWindow() {
     
 }
 
@@ -78,10 +154,9 @@ function answerbuttons(){
     const container = document.getElementById("answer-buttons-display"); //Conect the right div
     container.innerHTML = ""; //Emty buttons evry time 
 
-    const corectAnswerName = gameInfo.QuestionMovie[0].name;
-    const corectAnswer = gameInfo.QuestionMovie[0]
-    let selectedMovie = null;
-    const wrongAnswer =  gameInfo.answerOptionsForQuestions[0];
+    const corectAnswerName = gameInfo.QuestionMovie[questionCounter].name;
+    const corectAnswer = gameInfo.QuestionMovie[questionCounter]
+    const wrongAnswer =  gameInfo.answerOptionsForQuestions[questionCounter];
 
     const allAnswer = [corectAnswer].concat(wrongAnswer); //Conect corect answer whit wrong answer
 
@@ -106,7 +181,24 @@ function answerbuttons(){
 
             console.log("Select Movie:", selectedMovie); //TA BORT SEN KOLLA BA SÅ DE FUNKAR
         });
+    
 
         container.appendChild(buttons);
+
     }
+
+
+    const submitButton = document.createElement("button");
+    submitButton.textContent = "Submit";
+    submitButton.style.position = "center";
+    submitButton.addEventListener("click", function (){
+        submittQuestion();
+    });
+    submitButton.style.gridColumn = "2";
+    submitButton.style.fontSize = "100%";
+    submitButton.style.margin = "5%";
+    submitButton.style.font = "Serif";
+    container.appendChild(submitButton);
+
+
 }
