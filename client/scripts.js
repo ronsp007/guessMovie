@@ -10,15 +10,8 @@ let questionCounter = 0;
 //runs when the website is loaded.
 document.addEventListener("DOMContentLoaded", function(){
 
-    displayWelcome();
     
 });
-
-
-//Will display the relevant html obejct for the first site
-function displayWelcome() { //This we dont need.......i think :)
-
-}
 
 //Will display the relevant html object for the game site
 function displayGameView() {
@@ -27,19 +20,16 @@ function displayGameView() {
     
 }
 
-
-
-//takes in the given values for name and game diffuculty (set to 6 options in the beginning) 
+//takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
+    questionCounter = 0; //starts the counter at 0
     const playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
     console.log(playerName);
     //document.querySelector("#submit-container").style.display ="block";
     
-    
-    //potential for difficulty input 
-
-    const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { //requesting the 10 random pictures from server
+    //requesting the 10 random pictures(movies) from the server
+    const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { 
         method : "GET",
         headers: {
             "Content-Type": "application/json",
@@ -57,9 +47,10 @@ async function startGame(difficulty) {
         startBox.appendChild(message);
 
     } else {
-        gameInfo = await response.json();
-        console.log(gameInfo);
-        answerbuttons() //Function that will display the actual game, not yet created.
+        gameInfo = await response.json(); //saves the info of the current game as in a global variable. 
+        console.log(gameInfo); //check
+
+        //answerbuttons() 
         gameRound();
     }
 
@@ -68,7 +59,7 @@ async function startGame(difficulty) {
 async function gameRound() {
     const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
     startBox.innerHTML = "";
-    answerbuttons();
+    answerbuttons(); //Display the answer option buttons
 
     const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionPicture[questionCounter],  { //requesting the 10 random pictures from server
         method : "GET",
@@ -94,18 +85,18 @@ async function gameRound() {
         });
 
     } else {
-
+        console.log("Image request whent bad");
     }
-
-
 
 }
 
 
 //takes the value from the button pressed and depending on that increases the score. 
 function submittQuestion() {
-    console.log("button is pressed");
+    //console.log("button is pressed");
     const gameDiv = document.getElementById("game-display");
+    const nextButton = document.getElementById("nQContainer");
+    nextButton.style.display = "flex";
 
     if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) {
         gameScore++;
@@ -115,31 +106,82 @@ function submittQuestion() {
         gameDiv.style.borderColor = "red";
     }
 
+    /*
     const title = document.createElement("p")
-        title.textContent = "Right answer: " + gameInfo.QuestionMovie[questionCounter].name;
+    title.textContent = "Right answer: " + gameInfo.QuestionMovie[questionCounter].name;
 
-        const titleDiv = document.createElement("div");
-        titleDiv.appendChild(title);
-        gameDiv.appendChild(titleDiv);
-        title.style.font = "Serif";
-        title.style.fontSize = "150%";
-        title.style.color = "white";
-       
-        const nextQuestion = document.createElement("button");
-        nextQuestion.textContent = "Next question";
-        titleDiv.appendChild(nextQuestion);
-        nextQuestion.addEventListener("click", function (){
-            questionCounter++;
-            console.log(questionCounter);
-            gameDiv.style.borderColor = "white";
-            titleDiv.innerHTML = " ";
-            gameRound();
-        });
-       
+    const titleDiv = document.createElement("div");
+    titleDiv.appendChild(title);
+    gameDiv.appendChild(titleDiv);
+    title.style.font = "Serif";
+    title.style.fontSize = "150%";
+    title.style.color = "white";
+    */
+
+    //Display correct answer: 
+
+    const textDisplayDiv = document.getElementById("textDisplay");
+    const textDiv = document.getElementById("gameTextDisplay");
+    textDiv.textContent = gameInfo.QuestionMovie[questionCounter].name;
+    textDisplayDiv.style.display = "block";
+
+    
+
+    //"Next question" button:
+    /*
+    const gameBox = document.getElementById("game-display");
+
+    const nextQuestion = document.createElement("button");
+    nextQuestion.textContent = "Next question";
+    gameBox.appendChild(nextQuestion);
+    */
 }
 
-function gameWindow() {
-    
+
+function nextQuestion(){
+    const gameDiv = document.getElementById("game-display");
+    const textDisplayDiv = document.getElementById("textDisplay");
+    const myButton = document.getElementById("nQContainer");
+
+    questionCounter++;
+
+     if (questionCounter < 9)
+            {
+            console.log("Question number:" + questionCounter);
+
+            gameDiv.style.borderColor = "white";
+
+            textDisplayDiv.style.display = "none";
+
+            myButton.style.display = "none";
+
+            gameRound();
+        }else if (questionCounter == 10)
+        {
+            console.log("End of game"); 
+            myButton.style.display = "none";
+            endOfGame();
+        }
+}
+
+
+async function endOfGame(){
+
+    const textDisplayDiv = document.getElementById("textDisplay");
+    const textDiv = document.getElementById("gameTextDisplay");
+    textDiv.textContent = "Congratulations!";
+
+    const resultText = document.createElement("p");
+    resultText.textContent = "Your score is: " + gameScore; 
+    resultText.style.fontSize = "10ch";
+    textDisplayDiv.appendChild(resultText);
+    textDisplayDiv.style.display = "block";
+
+    const startBox = document.getElementById("start-box");
+    const buttonBox = document.getElementById("answer-buttons-display"); 
+    startBox.innerHTML= "";
+    buttonBox.innerHTML = "";
+
 }
 
 
@@ -148,21 +190,21 @@ async function requestLeaderboard(){
 }
 
 
-//Funktion for the answerbuttons 
+//Displays the answer option buttons for the relevant question
 function answerbuttons(){  
    
-    const container = document.getElementById("answer-buttons-display"); //Conect the right div
-    container.innerHTML = ""; //Emty buttons evry time 
+    const container = document.getElementById("answer-buttons-display"); //Connect the right div
+    container.innerHTML = ""; //Empty buttons every time 
 
     const corectAnswerName = gameInfo.QuestionMovie[questionCounter].name;
     const corectAnswer = gameInfo.QuestionMovie[questionCounter]
     const wrongAnswer =  gameInfo.answerOptionsForQuestions[questionCounter];
 
-    const allAnswer = [corectAnswer].concat(wrongAnswer); //Conect corect answer whit wrong answer
+    const allAnswer = [corectAnswer].concat(wrongAnswer); //Connect correct answer with the wrong into one single array
 
-    allAnswer.sort(() => Math.random() - 0.5); //"shufell" the order (the corect answar apers in a radom order)
+    allAnswer.sort(() => Math.random() - 0.5); //Shuffel the order (so that correct answer appears in a random order)
 
-    //loop thro all answers that depens on the difuculd level (3,6 or 9)
+    //loop thru all answers that depends on the difficulty level (3,6 or 9)
     for(let i = 0; i < allAnswer.length;  ++i){ 
 
         const buttons = document.createElement("button"); 

@@ -217,6 +217,33 @@
     background-color: rgb(255, 217, 0);
 }
 
+
+
+#textDisplay{
+    display: none;
+}
+
+#gameTextDisplay{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 13ch;
+    text-align: center;
+    text-decoration: underline;
+
+}
+
+#nQContainer {
+    display: none;
+    justify-content: center;
+    
+}
+
+#nQ {
+    padding: 10px 15px;
+    font-size: 18px;
+}
+
+
+
 /* Front Page -------------------------------------------------------------------------------------------*/
 
 @font-face { /*For the Broadway font*/
