@@ -3,6 +3,7 @@ const serverUrl = "http://127.0.0.1:3000";
 let gameScore = 0; 
 let gameInfo = [];
 let playerName = "";
+let gameDifficulty = "";
 let selectedMovie = null;
 let questionCounter = 0;
 
@@ -24,9 +25,10 @@ function displayGameView() {
 async function startGame(difficulty) {
     gameScore = 0; //sets the score to 0 at the start of the game
     questionCounter = 0; //starts the counter at 0
-    const playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
-    console.log(playerName);
-    //document.querySelector("#submit-container").style.display ="block";
+    gameDifficulty = difficulty; 
+    playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
+
+    console.log("Name: " + playerName + " Game Difficulty: " + gameDifficulty);
     
     //requesting the 10 random pictures(movies) from the server
     const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { 
@@ -72,11 +74,11 @@ async function gameRound() {
     if (response.ok) {
 
         response.blob().then((blobBody) => {
-            console.log(blobBody);
             const pictureDiv = document.createElement("div");
+
+            //göra det på html istället? nej va
             const image = document.createElement("img");
             image.src = URL.createObjectURL(blobBody);
-            console.log(image.src);
             image.style.width = "60%";
             image.style.objectFit = "cover";
 
@@ -85,87 +87,69 @@ async function gameRound() {
         });
 
     } else {
-        console.log("Image request whent bad");
+        console.log("Image request went bad");
     }
 
 }
 
 
-//takes the value from the button pressed and depending on that increases the score. 
-function submittQuestion() {
-    //console.log("button is pressed");
+//Takes the value from the button pressed and depending on that increases the score. 
+function submitQuestion() {
+
     const gameDiv = document.getElementById("game-display");
     const nextButton = document.getElementById("nQContainer");
     nextButton.style.display = "flex";
 
+    //Depending on answer: add score and give positive indikator or give negative indikator
     if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) {
         gameScore++;
-         gameDiv.style.borderColor = "green";
+        gameDiv.style.borderColor = "green";
 
     }else{
         gameDiv.style.borderColor = "red";
     }
 
-    /*
-    const title = document.createElement("p")
-    title.textContent = "Right answer: " + gameInfo.QuestionMovie[questionCounter].name;
-
-    const titleDiv = document.createElement("div");
-    titleDiv.appendChild(title);
-    gameDiv.appendChild(titleDiv);
-    title.style.font = "Serif";
-    title.style.fontSize = "150%";
-    title.style.color = "white";
-    */
+    //Hide sumbit button
+    const submitButton = document.getElementById("submit-container");
+    submitButton.style.display = "none"; 
 
     //Display correct answer: 
 
     const textDisplayDiv = document.getElementById("textDisplay");
     const textDiv = document.getElementById("gameTextDisplay");
-    textDiv.textContent = gameInfo.QuestionMovie[questionCounter].name;
+    textDiv.textContent = "Correct answer: " + gameInfo.QuestionMovie[questionCounter].name;
     textDisplayDiv.style.display = "block";
-
-    
-
-    //"Next question" button:
-    /*
-    const gameBox = document.getElementById("game-display");
-
-    const nextQuestion = document.createElement("button");
-    nextQuestion.textContent = "Next question";
-    gameBox.appendChild(nextQuestion);
-    */
 }
 
 
 function nextQuestion(){
     const gameDiv = document.getElementById("game-display");
     const textDisplayDiv = document.getElementById("textDisplay");
-    const myButton = document.getElementById("nQContainer");
+    const nextButton = document.getElementById("nQContainer");
 
     questionCounter++;
 
-     if (questionCounter < 9)
+     if (questionCounter < 10)
             {
-            console.log("Question number:" + questionCounter);
+            console.log("Question number:" + (questionCounter+1));
 
             gameDiv.style.borderColor = "white";
 
             textDisplayDiv.style.display = "none";
-
-            myButton.style.display = "none";
+            nextButton.style.display = "none";
 
             gameRound();
+            
         }else if (questionCounter == 10)
         {
             console.log("End of game"); 
-            myButton.style.display = "none";
+            nextButton.style.display = "none";
             endOfGame();
         }
 }
 
 
-async function endOfGame(){
+async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
 
     const textDisplayDiv = document.getElementById("textDisplay");
     const textDiv = document.getElementById("gameTextDisplay");
@@ -182,12 +166,10 @@ async function endOfGame(){
     startBox.innerHTML= "";
     buttonBox.innerHTML = "";
 
+    uploadScore(); //upload the playerinfo and score to the database
+
 }
 
-
-async function requestLeaderboard(){
-    ;
-}
 
 
 //Displays the answer option buttons for the relevant question
@@ -219,9 +201,8 @@ function answerbuttons(){
 
             buttons.classList.add("selected"); //select the preest button
 
-            selectedMovie = buttons.textContent; //so we now wich button is selected
+            selectedMovie = buttons.textContent; //so we now which button is selected
 
-            console.log("Select Movie:", selectedMovie); //TA BORT SEN KOLLA BA SÅ DE FUNKAR
         });
     
 
@@ -229,7 +210,11 @@ function answerbuttons(){
 
     }
 
+    const submitButton = document.getElementById("submit-container");
+    submitButton.style.display = "flex";
 
+    /////////////////////////////////////////////Gör om //////////////////////////////////////////////////////////
+    /*
     const submitButton = document.createElement("button");
     submitButton.textContent = "Submit";
     submitButton.style.position = "center";
@@ -241,6 +226,75 @@ function answerbuttons(){
     submitButton.style.margin = "5%";
     submitButton.style.font = "Serif";
     container.appendChild(submitButton);
+    */
 
+}
+
+async function uploadScore() {
+
+    const scoreData = {
+        name: playerName,
+        score: gameScore,
+        difficulty: gameDifficulty
+    };
+
+    console.log(scoreData);
+
+    const response = await fetch(serverUrl + "/" + "score",  { 
+        method : "Post",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(scoreData)
+    }); 
+
+    ///////////////show this in the browser//////////////////////////////
+    if(response.ok){
+        console.log("Game saved");
+    }else {
+        console.log("Failed to save game info to database");
+    }
+}
+
+async function requestLeaderboard(){ //requests the 10 players with the higest score
+
+    const response = await fetch(serverUrl + "/" + "leaderboard/" + gameDifficulty,  { 
+        method : "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: null,
+    }); 
+
+    if(response.ok){
+
+        response.json().then((jsonBody) => {
+            console.log(jsonBody);
+
+            const tabel = document.getElementById("leaderboardText");
+            //potentially empties the list exept the headers 
+            while(tabel.rows.length > 1){
+                tabel.deleteRow(1);
+            }
+
+            //writes out the new list(is ordered on the server side)
+            for(let i = 0; i < jsonBody.length; i++) {
+                const tabelRow = document.createElement("tr");
+               
+                const tabelContentName = document.createElement("td");
+                tabelContentName.textContent = jsonBody[i].name;
+                tabelRow.appendChild(tabelContentName);
+
+                const tabelContentScore = document.createElement("td");
+                tabelContentScore.textContent = jsonBody[i].score;
+                tabelRow.appendChild(tabelContentScore);
+                
+                tabel.appendChild(tabelRow);
+            }
+        });
+
+    }else{///////////////show this in the browser//////////////////////////////
+        console.log("Failed to request leaderbord from server.")
+    }
 
 }

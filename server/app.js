@@ -34,11 +34,19 @@ const server = http.createServer((req,res) => {
             case "test": //test to se what can be fetched from database
                 //test(res,"Pollyanna"); 
                 //randomMovies(pathComponents[2],null);
-                routingPictureGame(res,10,6);
-                //uploadingScore(kollar);
+                //routingPictureGame(res,10,6);
+                uploadingScore(kollar);
             break;
             case "pictureGame":
-                routingPictureGame(res, 10, pathComponents[2]);
+                let amountOfQuestion = 0; 
+                if(pathComponents[2] == "easy"){
+                    amountOfQuestion = 3;
+                }else if (pathComponents[2] == "normal"){
+                    amountOfQuestion = 6;
+                }else if(pathComponents[2] == "hard"){
+                    amountOfQuestion = 9; 
+                }
+                routingPictureGame(res, 10, amountOfQuestion);
                 
             break
             case "leaderboard":
@@ -75,7 +83,7 @@ const server = http.createServer((req,res) => {
                 req.on("end", () =>{
                     //Buffer.concat() takes an array of Buffer objekt and concatenates
                     //them into a singel Buffer objekt. (Incoming HTTP request bodies are handled as Buffer objekt(works with raw binary data))
-                    const messageBody = Buffer.concat(bodyChunks).toString(); //compses message as a string
+                    const messageBody = Buffer.concat(bodyChunks).toString(); //composes message as a string
 
                     uploadingScore(messageBody);
                 })
@@ -182,8 +190,6 @@ function routingImages(res, list) {
         if (err) {
             sendResponse(res, 404, "text/plain", "Image not found");
         } else {
-            console.log("Sending image");
-            console.log(data);
             sendResponse(res, 200, "image/png", data);
             
         }
@@ -235,16 +241,17 @@ async function randomMovies(numr, check) {
 
 async function uploadingScore(dataFromClient) {
 
-    const scoreJsonData = JSON.parse(dataFromClient);
+
+    const scoreJsonData = JSON.parse(dataFromClient); //Converts the string into an objekt
+  
+    const collectionName =  "leaderboard_" + scoreJsonData.difficulty;
+    
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
-
-
-    const dbCollection = db.collection("leaderboard_" + scoreJsonData.difficulty); //if there isn't one, one is created
+    const dbCollection = db.collection(collectionName); //if there isn't one, one is created
     
-    const insertResult = await dbCollection.insertOne(dataFromClient);
-
+    const insertResult = await dbCollection.insertOne(scoreJsonData);
     console.log("Uploaded to database: " + insertResult);
 
     await dbClient.close();
@@ -271,7 +278,7 @@ async function routingScore(res, diff){
         const resultToClient = JSON.stringify(findResult);
         sendResponse(res, 200, "application/json", resultToClient);
 
-    }else{
+    }else { //if no resulst are found
         sendResponse(res, 406, null, null);
     }
     await dbClient.close();

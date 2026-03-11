@@ -6,7 +6,7 @@
 // Make sure that the database is updated with all the movie data(runt the data_import script that's found on the course website)
 // In the terminal run this scripts: node -\image_check.js
 // Check with the numbers that appear in the terminal that everything is correct: correct numbers are writtes as comments in the code
-// Check in 
+// You can also dubbelcheck in the database that the new value has appeared
 
 
 

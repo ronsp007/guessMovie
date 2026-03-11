@@ -107,7 +107,8 @@
                         <!--Here the game will be called through a function--> 
 
                         <div id="textDisplay">
-                            <p id="gameTextDisplay">Test</p>
+        
+                            <p id="gameTextDisplay"></p>
                         </div>
 
                         <div id="start-box"> <!--Start box for game--> 
@@ -120,25 +121,24 @@
                             <div class="dropdown"> 
                                 <button class="dropbtn">Difficulty</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick="startGame(3)" class="dropdown-buttons">Easy</button> 
-                                    <button onclick="startGame(6)" class="dropdown-buttons">Medium</button> 
-                                    <button onclick="startGame(9)" class="dropdown-buttons">Hard</button> 
+                                    <button onclick="startGame('easy')" class="dropdown-buttons">Easy</button> 
+                                    <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
+                                    <button onclick="startGame('hard')" class="dropdown-buttons">Hard</button> 
                                 </div> 
                             </div> 
 
                         </div> 
 
-                         <div id="answer-buttons-display"> 
-                        <!--Temporary, buttons will be created through a function in client.js--> 
+                        <div id="answer-buttons-display"> 
+                            <!--buttons will be created through a function in client.js--> 
+                        </div> 
 
-                            <div id="submit-container">
-                            
-                            </div> 
-
+                        <div id="submit-container">
+                            <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
                         </div> 
 
                         <div id="nQContainer">
-                            <button onclick="nextQuestion()" id="nQ">Next question</button>
+                            <button onclick="nextQuestion()" class="nQ">Next question</button>
                         </div>
 
                     </div> 
@@ -148,11 +148,23 @@
                 </div> 
 
                 <div id="leaderboard-container"> <!--Leaderboard--> 
-
+                        <div>
+                        <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
+                    </div>
                     <div id="leaderboard"> 
                         <h2>Leaderboard</h2> 
-                        <p>...</p> 
+                        <table id="leaderboardText">
+                            <tr>
+                                <th>Name</th>
+                                <th>Score</th>
+                            </tr>
+
+                            
+
+                        </table>
                     </div> 
+
+                
 
                 </div> 
 

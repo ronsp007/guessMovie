@@ -7,7 +7,6 @@
 
 }
 
-
 /*Header div - css*/
 .header-main{
     text-align: center;
@@ -60,7 +59,7 @@
 }
 
 #start-box { /*The container where the user puts their name and chooses difficulty*/
-    margin: 5% 5% 5% 5%;
+    /*margin: 5% 5% 5% 5%;*/
     padding: 5% 5% 5% 5%;
     font-size: 150%;
     color:rgb(255, 255, 253);
@@ -68,7 +67,9 @@
 }
 
 #leaderboard-container {
+    
     width: 20%
+    
 }
 
 #rules {
@@ -83,10 +84,18 @@
 }
 
 #leaderboard {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     text-align: center;
     border-style: solid;
     border-color: rgb(255, 217, 0);
     background-color: white;
+}
+
+
+th {
+    width: 50px;
 }
 
 #game-display {
@@ -102,7 +111,8 @@
 
 #submit-container {
     margin: 2% 0 0 0;
-    /*display: none;*/
+    display: none;
+    justify-content: center;
 }
 
 #submit-button {
@@ -230,9 +240,9 @@
 
 #gameTextDisplay{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 13ch;
+    font-size: 20px;
     text-align: center;
-    text-decoration: underline;
+    color: white;
 
 }
 
@@ -242,7 +252,12 @@
     
 }
 
-#nQ {
+.buttonStandard {
     padding: 10px 15px;
-    font-size: 18px;
+    font-size: 14px;
+}
+
+#buttonContainer{
+    display: flex;
+    justify-content: center;
 }
