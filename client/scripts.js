@@ -7,6 +7,14 @@ let gameDifficulty = "";
 let selectedMovie = null;
 let questionCounter = 0;
 
+function language(lang) {
+    if (lang == "eng") {
+        window.location.href = "index.html";
+    } else if (lang == "swe") {
+        window.location.href = "index_Swe.html";
+    }
+}
+
 
 //runs when the website is loaded.
 document.addEventListener("DOMContentLoaded", function(){
@@ -23,6 +31,8 @@ function displayGameView() {
 
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
+    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
+    startBox.style.display = "none";
     gameScore = 0; //sets the score to 0 at the start of the game
     questionCounter = 0; //starts the counter at 0
     gameDifficulty = difficulty; 
@@ -41,12 +51,12 @@ async function startGame(difficulty) {
 
 
     if (!response.ok) {
+        // Code to display error message on the webpage
         console.log("Response not okay");
-        const message = document.createElement(p);
-        const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
-        startBox.innerHTML = "";
-        message.textContent = "Error in loading server";
-        startBox.appendChild(message);
+        const textDiv = document.getElementById("textDisplay");
+        const gameText = document.getElementById("gameTextDisplay");
+        textDiv.style.display = "block";
+        gameText.textContent = "Error in loading server";
 
     } else {
         gameInfo = await response.json(); //saves the info of the current game as in a global variable. 
@@ -59,8 +69,8 @@ async function startGame(difficulty) {
 }
 
 async function gameRound() {
-    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
-    startBox.innerHTML = "";
+    const gameContent = document.getElementById("gameContent");  // Code to display error message on the webpage
+    gameContent.innerHTML = ""; // Maybe problem*
     answerbuttons(); //Display the answer option buttons
 
     const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionPicture[questionCounter],  { //requesting the 10 random pictures from server
@@ -151,14 +161,14 @@ function nextQuestion(){
 
 async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
 
-    const textDisplayDiv = document.getElementById("textDisplay");
-    const textDiv = document.getElementById("gameTextDisplay");
-    textDiv.textContent = "Congratulations!";
+    
+    const textDisplayDiv = document.getElementById("endGame");
 
     const resultText = document.createElement("p");
-    resultText.textContent = "Your score is: " + gameScore; 
-    resultText.style.fontSize = "10ch";
+    resultText.textContent = gameScore; 
+    resultText.id = "endGame";
     textDisplayDiv.appendChild(resultText);
+
     textDisplayDiv.style.display = "block";
 
     const startBox = document.getElementById("start-box");

@@ -123,7 +123,6 @@ function sendResponse(res, statusCode, contentType, data){
 
 /******************** FUNCTIONS  ***********************/
 
-
 //test function for communication with database
 async function test(res, search){
 
@@ -173,9 +172,6 @@ async function routingPictureGame(res, numr, diff) {
         answerOptions.push(fiveMovies);
     }
     resultToClient.answerOptionsForQuestions = answerOptions;
-
-
-   
 
     const stringToClient = JSON.stringify(resultToClient);
     sendResponse(res, 200, "application/json", stringToClient);
@@ -256,12 +252,6 @@ async function uploadingScore(dataFromClient) {
 
     await dbClient.close();
     
-}
-//A test. The POST HTTP message's body should have the following structure. 
-const kollar = {
-    name: "Ronja",
-    score: 1,
-    difficulty: "easy"
 }
 
 //gets the results(maximum of 10) from the specified difficulty level and sends it to the client 
