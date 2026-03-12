@@ -154,30 +154,37 @@ function nextQuestion(){
         {
             console.log("End of game"); 
             nextButton.style.display = "none";
+            textDisplayDiv.style.display = "none";
             endOfGame();
         }
 }
 
 
 async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
-
+    const gameDiv = document.getElementById("gameContent");
+    const buttonBox = document.getElementById("answer-buttons-display"); 
+    gameDiv.innerHTML= "";
+    buttonBox.innerHTML = "";
     
     const textDisplayDiv = document.getElementById("endGame");
+    console.log(gameScore)
 
     const resultText = document.createElement("p");
-    resultText.textContent = gameScore; 
-    resultText.id = "endGame";
+    resultText.textContent = gameScore;
+
     textDisplayDiv.appendChild(resultText);
 
     textDisplayDiv.style.display = "block";
 
-    const startBox = document.getElementById("start-box");
-    const buttonBox = document.getElementById("answer-buttons-display"); 
-    startBox.innerHTML= "";
-    buttonBox.innerHTML = "";
-
     uploadScore(); //upload the playerinfo and score to the database
 
+}
+
+function newGame(){
+    const startBox = document.getElementById("start-box");
+    const textDisplayDiv = document.getElementById("endGame");
+    textDisplayDiv.style.display = "none";
+    startBox.style.display = "block";
 }
 
 

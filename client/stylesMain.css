@@ -154,7 +154,7 @@ th {
 }
 
 #submit-container {
-    margin: 2% 0 0 0;
+    /*margin: 2% 0 0 0;*/
     display: none;
     justify-content: center;
 }
