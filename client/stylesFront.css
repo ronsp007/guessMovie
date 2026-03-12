@@ -7,10 +7,10 @@
 }
 
 body{
-    background-color: rgb(124, 0, 31);
+    background-image: url("../client/Resources/felix-mooneeram-evlkOfkQ5rE-unsplash.jpg");
+    background-size: cover;
+    background-position: center;
 }
-
-
 
 #intro-text1{ /*Text:Welcome To*/
     font-family: "Broadway";
@@ -19,7 +19,7 @@ body{
     margin-top: 100px;
     margin-bottom: 5px;
     text-shadow: 0 10px 15px rgb(0, 0, 5);
-    color: rgb(255, 217, 0);
+    color: rgba(255, 245, 245, 0.833)
     
 } 
 
@@ -28,7 +28,7 @@ body{
     text-align: center;
     font-size:1000%;
     margin-top: 5px;
-    color: rgb(255, 217, 0);
+    color: rgba(235, 235, 235, 0.733);
     text-shadow: 0 10px 15px rgb(0, 0, 5);
 }
 
@@ -36,6 +36,7 @@ body{
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
+    margin-left: 50px;
 }
 
 #play-button{ /*The press to play button*/
@@ -44,18 +45,23 @@ body{
     padding: 30px 80px;
     border-radius: 40px;
     box-shadow: 0 10px 15px rgb(0, 0, 5);
-    background-color: white;
+    background-color: rgba(241, 241, 241, 0.89);
     color: black;
+    transition: all 0.2s ease; 
 }
 
 #play-button:hover{ /* Press to play button hover*/
-background-color: gold;
+    background-color: rgba(94, 2, 2, 0.863);
+    color: rgba(245, 245, 245, 0.815);
+    transform:translateY(2%)
+    
 }
 
 #language-container{ /*Choose language (around) */
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
+    margin-left: 50px;
 }
 
 
@@ -66,8 +72,127 @@ background-color: gold;
     border-radius: 15px;
     box-shadow: 0 5px 10px rgb(0, 0, 5);
     color: black;
+    background-color: rgba(255, 255, 255, 0.842);
 }
 
 #language-button:hover{ /*language button hover*/
-    background-color: #915151;
+    background-color: rgba(109, 3, 3, 0.774);
+    color: rgba(245, 245, 245, 0.815);
+    transform:translateY(2%)
+    
 }
+
+/* Collor of droppdown buttons*/
+.dropdown-buttons:hover { 
+    background-color: rgba(109, 3, 3, 0.863);
+}
+
+/*Dropdown buttons*/
+.dropdown  {
+  position: relative;
+  display: inline-block;
+  
+}
+
+/* Dropdown content */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 5%;
+}
+
+/* Links inside dropdown content */
+.dropdown-content button {
+  color: rgb(218, 215, 215); /* gör inget*/
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  padding: 5px 1px;
+  text-decoration: none;
+  display: block;
+  /*font-size: 50%;*/
+  font-size: 15px;
+}
+
+#dropdown-content-front button {
+  color: rgb(0, 0, 0); 
+  /*background-color: rgb(255, 255, 255);*/
+  width: 100%;
+  padding: 10px 10px;
+  text-decoration: none;
+  display: block;
+  border-radius: 15px;
+  font-size: 150%;
+}
+
+/* Show the dropdown content on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/*
+Show the dropdown content on hover 
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+*/
+
+/*
+.dropbtn {
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+ */
+
+
+/*Dropdown buttons
+.dropdown  {
+  position: relative;
+  display: inline-block;
+}
+*/
+
+/* Dropdown content 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 5%;
+}
+*/
+
+/* Links inside dropdown content 
+.dropdown-content button {
+  color: rgb(216, 209, 209);
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  padding: 5px 1px;
+  text-decoration: none;
+  display: block;
+  font-size: 15px;
+}
+*/
+
+/*
+#dropdown-content-front button { 
+  color: black;
+  width: 100%;
+  padding: 10px 10px;
+  text-decoration: none;
+  display: block;
+  font-size: 80%;
+}
+*/
+
+/*
+.dropbtn { 
+    padding: 3px 8px; 
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 5);
+}
+*/

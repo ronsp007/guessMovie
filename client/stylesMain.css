@@ -4,7 +4,8 @@
     flex-direction: column;
     font-family:'Serif';
     height: 100%;
-
+    
+   
 }
 
 /*Header div - css*/
@@ -134,67 +135,6 @@ th {
 }
 
 
-
-/*Dropdown buttons*/
-.dropdown  {
-  position: relative;
-  display: inline-block;
-}
-
-/* Dropdown content */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 5%;
-}
-
-/* Links inside dropdown content */
-.dropdown-content button {
-  color: black;
-  background-color: rgb(255, 255, 255);
-  width: 100%;
-  padding: 5px 1px;
-  text-decoration: none;
-  display: block;
-  /*font-size: 50%;*/
-  font-size: 15px;
-}
-
-#dropdown-content-front button {
-  color: black;
-  /*background-color: rgb(255, 255, 255);*/
-  width: 100%;
-  padding: 10px 10px;
-  text-decoration: none;
-  display: block;
-  font-size: 80%;
-}
-
-
-/* Change color of dropdown links on hover */
-/*.dropdown-content a:hover {
-  background-color: #f1f1f1
-}*/
-
-/* Show the dropdown content on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Change background color of dropdown button on hover */
-.dropdown:hover .dropbtn {
-  background-color: #915151;
-}
-
-.dropbtn {
-    padding: 3px 8px;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgb(0, 0, 5);
-}
-
 #answer-buttons-display{ /*Answer buttons (outside) */
     display: grid;
     grid-template-columns: repeat(3,1fr); /* 3 colums*/
@@ -226,13 +166,6 @@ th {
 .movie-name-buttons:hover{ 
     border: 3px solid  rgba(255, 217, 0, 0.925);;
 }
-
-
-.dropdown-buttons:hover {
-    background-color: rgb(255, 217, 0);
-}
-
-
 
 #textDisplay{
     display: none;
