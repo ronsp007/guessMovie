@@ -1,6 +1,6 @@
 /*Main page css-----------------------------------------------------------------------------*/
 .main-page {
-    display: flex;
+    display: none;
     flex-direction: column;
     font-family:'Serif';
     height: 100%;
@@ -59,17 +59,17 @@
 }
 
 #start-box { /*The container where the user puts their name and chooses difficulty*/
-    margin: 5% 5% 5% 5%;
-    border-style: solid;
-    border-color: rgb(255, 255, 255);
+    /*margin: 5% 5% 5% 5%;*/
     padding: 5% 5% 5% 5%;
     font-size: 150%;
-    color:rgb(255, 255, 253)
+    color:rgb(255, 255, 253);
 
 }
 
 #leaderboard-container {
+    
     width: 20%
+    
 }
 
 #rules {
@@ -79,16 +79,30 @@
     background-color: white;
 }
 
+#rulesList{
+    text-align: left;
+}
+
 #leaderboard {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     text-align: center;
     border-style: solid;
     border-color: rgb(255, 217, 0);
     background-color: white;
 }
 
+
+th {
+    width: 50px;
+}
+
 #game-display {
+    
     border-style: solid;
     border-color: rgb(255, 255, 255);
+    background-color: rgb(80, 78, 78);
 }
 
 #aswer-buttons-display {
@@ -97,6 +111,8 @@
 
 #submit-container {
     margin: 2% 0 0 0;
+    display: none;
+    justify-content: center;
 }
 
 #submit-button {
@@ -186,7 +202,6 @@
     gap: 8px; 
     padding-inline: 4%; /*Horisontial*/
     padding-block: 2%;  /*Vertical*/
-    margin-bottom: 3%;
 }
 
 .movie-name-buttons{ /*Answer buttons (inside)*/
@@ -200,13 +215,15 @@
     box-shadow: 0 2px 5px rgb(0, 0, 5);
     background-color: white;
     color: black;
+    border: 3px solid rgba(255, 255, 255, 0.082);
   
 }
 
 .movie-name-buttons.selected{
     background-color: gold;
+    border: 3px solid gold;
 }
-.movie-name-buttons:hover{
+.movie-name-buttons:hover{ 
     border: 3px solid  rgba(255, 217, 0, 0.925);;
 }
 
@@ -215,78 +232,32 @@
     background-color: rgb(255, 217, 0);
 }
 
-/* Front Page -------------------------------------------------------------------------------------------*/
 
-@font-face { /*For the Broadway font*/
-    font-family: "Broadway";
-    src: url('../client/Resources/Broadway3D-Italic.ttf') format('truetype');
-    
-}
 
-body{
-    background-color: rgb(124, 0, 31);
-}
-
-.main-page{
+#textDisplay{
     display: none;
 }
 
-#intro-text1{ /*Text:Welcome To*/
-    font-family: "Broadway";
+#gameTextDisplay{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
     text-align: center;
-    font-size:1700%;
-    margin-top: 100px;
-    margin-bottom: 5px;
-    text-shadow: 0 10px 15px rgb(0, 0, 5);
-    color: rgb(255, 217, 0);
+    color: white;
+
+}
+
+#nQContainer {
+    display: none;
+    justify-content: center;
     
-} 
-
-#intro-text2{ /*Text: Guess The Game*/
-    font-family: "Broadway";
-    text-align: center;
-    font-size:1000%;
-    margin-top: 5px;
-    color: rgb(255, 217, 0);
-    text-shadow: 0 10px 15px rgb(0, 0, 5);
 }
 
-#press-to-play-button{ /*press to play button (around)*/
-    text-align: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
+.buttonStandard {
+    padding: 10px 15px;
+    font-size: 14px;
 }
 
-#play-button{ /*The press to play button*/
-    font-family: sans-serif;
-    font-size: 250%;
-    padding: 30px 80px;
-    border-radius: 40px;
-    box-shadow: 0 10px 15px rgb(0, 0, 5);
-    background-color: white;
-    color: black;
-}
-
-#play-button:hover{ /* Press to play button hover*/
-background-color: gold;
-}
-
-#language-container{ /*Choose language (around) */
-    text-align: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
-}
-
-
-#language-button{
-    font-family: sans-serif;
-    font-size: 150%;
-    padding: 3px 8px;
-    border-radius: 15px;
-    box-shadow: 0 5px 10px rgb(0, 0, 5);
-    color: black;
-}
-
-#language-button:hover{ /*language button hover*/
-    background-color: #915151;
+#buttonContainer{
+    display: flex;
+    justify-content: center;
 }

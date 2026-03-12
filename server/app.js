@@ -12,8 +12,6 @@ const dbClient = new MongoClient(dbServerUrl);
 const http = require("node:http");      // Node.js standard library for handling client/server server features
 const fs = require("node:fs");      //needed for loading in pictures
 const path = require("node:path");
-const { send } = require("node:process");
-const { json } = require("node:stream/consumers");
 
 // initialization of server properties
 const hostname = "127.0.0.1";
@@ -40,12 +38,25 @@ const server = http.createServer((req,res) => {
                 uploadingScore(kollar);
             break;
             case "pictureGame":
-                routingPictureGame(res, 10, pathComponents[2]);
+                let amountOfQuestion = 0; 
+                if(pathComponents[2] == "easy"){
+                    amountOfQuestion = 3;
+                }else if (pathComponents[2] == "normal"){
+                    amountOfQuestion = 6;
+                }else if(pathComponents[2] == "hard"){
+                    amountOfQuestion = 9; 
+                }
+                routingPictureGame(res, 10, amountOfQuestion);
                 
             break
             case "leaderboard":
                 const difficulty = pathComponents[2];
                 routingScore(res, difficulty);
+            break;
+            case "picture":
+                
+                routingImages(res, pathComponents[3]);
+                
             break;
             default:
                 sendResponse(res,200,"text/plain", "No specific request made");
@@ -72,9 +83,9 @@ const server = http.createServer((req,res) => {
                 req.on("end", () =>{
                     //Buffer.concat() takes an array of Buffer objekt and concatenates
                     //them into a singel Buffer objekt. (Incoming HTTP request bodies are handled as Buffer objekt(works with raw binary data))
-                    const messageBody = Buffer.concat(bodyChunks).toString(); //compses message as a string
+                    const messageBody = Buffer.concat(bodyChunks).toString(); //composes message as a string
 
-                    uploading_score(messageBody);
+                    uploadingScore(messageBody);
                 })
 
             break;
@@ -122,7 +133,7 @@ async function test(res, search){
 
     const filterQuery = {name: search};
     const findResult = await dbCollection.find(filterQuery).toArray();
-    console.log(findResult);
+    //console.log(findResult);
     const findResultString = JSON.stringify(findResult);
 
     sendResponse(res,200,"application/json",findResultString);
@@ -149,7 +160,7 @@ async function routingPictureGame(res, numr, diff) {
     let imagePaths = [];
 
     for(let i = 0; i < numr; i++){
-        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id + ".png";
+        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id +"/" + ".png";
         imagePaths.push(imageFilePath);
         
     }
@@ -171,6 +182,21 @@ async function routingPictureGame(res, numr, diff) {
 
 }
 
+function routingImages(res, list) {
+    const imageFilePath = "./media/" + list + ".png";
+    console.log(list);
+
+    fs.readFile(imageFilePath, (err, data) => {
+        if (err) {
+            sendResponse(res, 404, "text/plain", "Image not found");
+        } else {
+            sendResponse(res, 200, "image/png", data);
+            
+        }
+    });
+
+}
+
 
 //asks database for numr amount of randomized movies that are distinct from check. 
 async function randomMovies(numr, check) {
@@ -189,7 +215,7 @@ async function randomMovies(numr, check) {
             ];
         
         const findResult = await dbCollection.aggregate(sampelFilter).toArray();
-        console.log(findResult);
+        //console.log(findResult);
 
         await dbClient.close();
         return findResult
@@ -215,16 +241,17 @@ async function randomMovies(numr, check) {
 
 async function uploadingScore(dataFromClient) {
 
-    const scoreJsonData = JSON.parse(dataFromClient);
+
+    const scoreJsonData = JSON.parse(dataFromClient); //Converts the string into an objekt
+  
+    const collectionName =  "leaderboard_" + scoreJsonData.difficulty;
+    
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
-
-
-    const dbCollection = db.collection("leaderboard_" + scoreJsonData.difficulty); //if there isn't one, one is created
+    const dbCollection = db.collection(collectionName); //if there isn't one, one is created
     
-    const insertResult = await dbCollection.insertOne(dataFromClient);
-
+    const insertResult = await dbCollection.insertOne(scoreJsonData);
     console.log("Uploaded to database: " + insertResult);
 
     await dbClient.close();
@@ -251,7 +278,7 @@ async function routingScore(res, diff){
         const resultToClient = JSON.stringify(findResult);
         sendResponse(res, 200, "application/json", resultToClient);
 
-    }else{
+    }else { //if no resulst are found
         sendResponse(res, 406, null, null);
     }
     await dbClient.close();

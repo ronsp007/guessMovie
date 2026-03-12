@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang ="eng">
+<html lang ="sv">
     <head>
         <meta charset="utf-8">
         <meta name="authors" content="Ronja Spies, Ellen Sundblad, Clara Nordström">
@@ -21,7 +21,7 @@
 
             <div> <!--Title/Intro text-->
                 <div id="intro1-front">
-                     <h1 id="intro-text1">Welcome To</h1>
+                     <h1 id="intro-text1">Välkommen till</h1>
                 </div>
 
                 <div id="intro2-front">
@@ -31,15 +31,15 @@
             
             <div> <!--The buttons-->
                  <div  id="press-to-play-button"> <!--Play button-->
-                    <button id="play-button" onclick = "displayGameView()"> Press to play</button>
+                    <button id="play-button" onclick = "displayGameView()">Tryck för att spela</button>
                  </div>
 
                 <div id="language-container"> 
                     <div class="dropdown"> 
-                        <button class="dropbtn" id="language-button">Language</button> 
+                        <button class="dropbtn" id="language-button">Språk</button> 
                             <div class="dropdown-content" id="dropdown-content-front"> 
-                                <button onclick class="dropdown-buttons">Swedish</button> 
-                                <button onclick class="dropdown-buttons">English</button> 
+                                <button onclick class="dropdown-buttons">Svenska</button> 
+                                <button onclick class="dropdown-buttons">Engelska</button> 
                             </div> 
                     </div> 
                          
@@ -61,10 +61,10 @@
 
                     <div id="dropdown-language-main"> 
                         <div class="dropdown"> 
-                            <button class="dropbtn">Language</button> 
+                            <button class="dropbtn">Språk</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick class="dropdown-buttons">Swedish</button> 
-                                    <button onclick class="dropdown-buttons">English</button> 
+                                    <button onclick class="dropdown-buttons">Svenska</button> 
+                                    <button onclick class="dropdown-buttons">Engelska</button> 
                             </div> 
                         </div> 
                          
@@ -75,8 +75,8 @@
 
                 <div class="game-options"> <!--Choose game-buttons--> 
 
-                    <button onclick class="game-button">Game 1</button> 
-                    <button onclick class="game-button">Game 2</button> 
+                    <button onclick class="game-button">Spel 1</button> 
+                    <button onclick class="game-button">Spel 2</button> 
 
                 </div> 
 
@@ -85,14 +85,14 @@
                     <div id="rules-container"> <!--Rules--> 
 
                         <div id="rules"> 
-                            <h2>Instructions</h2> 
+                            <h2>Instructioner</h2> 
                             <ul id="rulesList">
-                                <li>Enter username and choose difficulty. </li>
-                                <li>10 poster of different movies will appear in succession.</li>
-                                <li>Choose the correct release date year from the options and press submit.</li>
-                                <li>After each question, you will see the correct answer.</li>
-                                <li>To move on to the next question press next question. </li>
-                                <li>Your score will be displayed at the end. Have fun!</li>
+                                <li>Skriv användarnamn och välj svårighetsgrad.</li>
+                                <li>Affisher av olika filmer kommer visas efter varandra</li>
+                                <li>Välj det korrekta utgivnings året bland alternativen och tryck på bekräfta.</li>
+                                <li>Rätt svar kommer visas efter varje film</li>
+                                <li>Tryck på "Nästa fråga" för att gå vidare</li>
+                                <li>Resultatet visas på slutet. Lycka till!</li>
                             </ul>
                            
                         </div> 
@@ -114,16 +114,16 @@
                         <div id="start-box"> <!--Start box for game--> 
 
                             <p> 
-                                <label for="entry_name">Entry name:</label> 
+                                <label for="entry_name">Användarnamn:</label> 
                                 <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
                             </p> 
 
                             <div class="dropdown"> 
-                                <button class="dropbtn">Difficulty</button> 
+                                <button class="dropbtn">Svårighetsgrad</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick="startGame('easy')" class="dropdown-buttons">Easy</button> 
+                                    <button onclick="startGame('easy')" class="dropdown-buttons">Enkel</button> 
                                     <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
-                                    <button onclick="startGame('hard')" class="dropdown-buttons">Hard</button> 
+                                    <button onclick="startGame('hard')" class="dropdown-buttons">Svår</button> 
                                 </div> 
                             </div> 
 
@@ -134,11 +134,11 @@
                         </div> 
 
                         <div id="submit-container">
-                            <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
+                            <button onclick="submitQuestion()" class="buttonStandard">Bekräfta</button>
                         </div> 
 
                         <div id="nQContainer">
-                            <button onclick="nextQuestion()" class="nQ">Next question</button>
+                            <button onclick="nextQuestion()" class="nQ">Nästa fråga</button>
                         </div>
 
                     </div> 
@@ -149,18 +149,15 @@
 
                 <div id="leaderboard-container"> <!--Leaderboard--> 
                         <div>
-                        <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
+                        <button onclick="requestLeaderboard()" class="buttonStandard">Uppdatera leaderboard</button>
                     </div>
                     <div id="leaderboard"> 
                         <h2>Leaderboard</h2> 
                         <table id="leaderboardText">
                             <tr>
-                                <th>Name</th>
-                                <th>Score</th>
+                                <th>Namn</th>
+                                <th>Poäng</th>
                             </tr>
-
-                            
-
                         </table>
                     </div> 
 

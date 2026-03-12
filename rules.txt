@@ -1,0 +1,8 @@
+Game 1 (Picture game):
+
+- Enter username and choose difficulty. 
+- 10 poster of different movies will appear in succession.
+- Choose the correct release date year from the options and press submit. 
+- After each question, you will see the correct answer. 
+- To move on to the next question press next question. 
+- Your score will be displayed at the end. Have fun!
