@@ -93,7 +93,7 @@ async function gameRound() {
             image.style.objectFit = "cover";
 
             pictureDiv.appendChild(image);
-            startBox.appendChild(pictureDiv);
+            gameContent.appendChild(pictureDiv);
         });
 
     } else {

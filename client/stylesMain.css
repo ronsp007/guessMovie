@@ -194,3 +194,15 @@ th {
     display: flex;
     justify-content: center;
 }
+
+#endGame{
+    display: none;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    text-align: center;
+    color: white;
+}
+
+#gameContent{
+    padding-top: 4%;
+}
