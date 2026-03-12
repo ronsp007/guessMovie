@@ -151,14 +151,14 @@ function nextQuestion(){
 
 async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
 
-    const textDisplayDiv = document.getElementById("textDisplay");
-    const textDiv = document.getElementById("gameTextDisplay");
-    textDiv.textContent = "Congratulations!";
+    
+    const textDisplayDiv = document.getElementById("endGame");
 
     const resultText = document.createElement("p");
-    resultText.textContent = "Your score is: " + gameScore; 
-    resultText.style.fontSize = "10ch";
+    resultText.textContent = gameScore; 
+    resultText.id = "endGame";
     textDisplayDiv.appendChild(resultText);
+
     textDisplayDiv.style.display = "block";
 
     const startBox = document.getElementById("start-box");
