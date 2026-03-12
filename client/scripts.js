@@ -31,6 +31,8 @@ function displayGameView() {
 
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
+    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
+    startBox.style.display = "none";
     gameScore = 0; //sets the score to 0 at the start of the game
     questionCounter = 0; //starts the counter at 0
     gameDifficulty = difficulty; 
@@ -49,12 +51,12 @@ async function startGame(difficulty) {
 
 
     if (!response.ok) {
+        // Code to display error message on the webpage
         console.log("Response not okay");
-        const message = document.createElement(p);
-        const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
-        startBox.innerHTML = "";
-        message.textContent = "Error in loading server";
-        startBox.appendChild(message);
+        const textDiv = document.getElementById("textDisplay");
+        const gameText = document.getElementById("gameTextDisplay");
+        textDiv.style.display = "block";
+        gameText.textContent = "Error in loading server";
 
     } else {
         gameInfo = await response.json(); //saves the info of the current game as in a global variable. 
@@ -67,8 +69,8 @@ async function startGame(difficulty) {
 }
 
 async function gameRound() {
-    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
-    startBox.innerHTML = "";
+    const gameContent = document.getElementById("gameContent");  // Code to display error message on the webpage
+    gameContent.innerHTML = ""; // Maybe problem*
     answerbuttons(); //Display the answer option buttons
 
     const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionPicture[questionCounter],  { //requesting the 10 random pictures from server
