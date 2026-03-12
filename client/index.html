@@ -89,106 +89,100 @@
                     <button onclick class="game-button">Game 2</button> 
 
                 </div> -->
+                    <div class="game-center"> <!--Game center--> 
 
-                <div class="game-center"> <!--Game center--> 
+                        <div id="rules-container"> <!--Rules--> 
 
-                    <div id="rules-container"> <!--Rules--> 
-
-                        <div id="rules"> 
-                            <h2>Instructions</h2> 
-                            <ul id="rulesList">
-                                <li>Enter username and choose difficulty. </li>
-                                <li>10 poster of different movies will appear in succession.</li>
-                                <li>Choose the correct release date year from the options and press submit.</li>
-                                <li>After each question, you will see the correct answer.</li>
-                                <li>To move on to the next question press next question. </li>
-                                <li>Your score will be displayed at the end. Have fun!</li>
-                            </ul>
-                           
-                        </div> 
-
-                    </div> 
-
-
-                <div id="game"> <!--Game display--> 
-
-                    <div id="game-display"> <!--????-->
-
-                        <!--Here the game will be called through a function-->
-                        
-                        <div id="textDisplay">
-        
-                            <p id="gameTextDisplay"></p>
-                        </div>
-
-                        <div id="endGame">
-                            <button onclick="newGame()" class="buttonStandard">New Game</button>
-                            <p>Congratulations!</p>
-                            <p>Your score is:</p>
+                            <div id="rules"> 
+                                <h2>Instructions</h2> 
+                                <ul id="rulesList">
+                                    <li>Enter username and choose difficulty. </li>
+                                    <li>10 poster of different movies will appear in succession.</li>
+                                    <li>Choose the correct release date year from the options and press submit.</li>
+                                    <li>After each question, you will see the correct answer.</li>
+                                    <li>To move on to the next question press next question. </li>
+                                    <li>Your score will be displayed at the end. Have fun!</li>
+                                </ul>
                             
-                        </div>
-
-                        <div id="start-box"> <!--Start box for game--> 
-
-                            <p> 
-                                <label for="entry_name">Entry name:</label> 
-                                <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
-                            </p> 
-
-                            <div class="dropdown"> 
-                                <button class="dropbtn">Difficulty</button> 
-                                <div class="dropdown-content"> 
-                                    <button onclick="startGame('easy')" class="dropdown-buttons">Easy</button> 
-                                    <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
-                                    <button onclick="startGame('hard')" class="dropdown-buttons">Hard</button> 
-                                </div> 
                             </div> 
 
                         </div> 
 
-                        <div id="gameContent">
 
-                        </div>
+                    <div id="game"> <!--Game display--> 
 
-                        <div id="answer-buttons-display"> 
-                            <!--buttons will be created through a function in client.js--> 
-                        </div> 
+                        <div id="game-display"> <!--????-->
 
-                        <div id="submit-container">
-                            <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
-                        </div> 
-
-                        <div id="nQContainer">
-                            <button onclick="nextQuestion()" class="nQ">Next question</button>
-                        </div>
-
-                    </div> 
-
-                   
-
-                </div> 
-
-                <div id="leaderboard-container"> <!--Leaderboard--> 
-                        <div>
-                        <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
-                    </div>
-                    <div id="leaderboard"> 
-                        <h2>Leaderboard</h2> 
-                        <table id="leaderboardText">
-                            <tr>
-                                <th>Name</th>
-                                <th>Score</th>
-                            </tr>
-
+                            <!--Here the game will be called through a function-->
                             
+                            <div id="textDisplay">
+            
+                                <p id="gameTextDisplay"></p>
+                            </div>
 
-                        </table>
+                            <div id="endGame">
+                                <button onclick="newGame()" class="buttonStandard">New Game</button>
+                                <p>Congratulations!</p>
+                                <p>Your score is:</p>
+                                
+                            </div>
+
+                            <div id="start-box"> <!--Start box for game--> 
+
+                                <p> 
+                                    <label for="entry_name">Entry name:</label> 
+                                    <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
+                                </p> 
+
+                                <div class="dropdown"> 
+                                    <button class="dropbtn">Difficulty</button> 
+                                    <div class="dropdown-content"> 
+                                        <button onclick="startGame('easy')" class="dropdown-buttons">Easy</button> 
+                                        <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
+                                        <button onclick="startGame('hard')" class="dropdown-buttons">Hard</button> 
+                                    </div> 
+                                </div> 
+
+                            </div> 
+
+                            <div id="gameContent">
+
+                            </div>
+
+                            <div id="answer-buttons-display"> 
+                                <!--buttons will be created through a function in client.js--> 
+                            </div> 
+
+                            <div id="submit-container">
+                                <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
+                            </div> 
+
+                            <div id="nQContainer">
+                                <button onclick="nextQuestion()" class="nQ">Next question</button>
+                            </div>
+
+                        </div> 
+
+                    
+
                     </div> 
 
-                
+                    <div id="leaderboard-container"> <!--Leaderboard--> 
+                        <div id="leaderboard"> 
+                            <h2>Leaderboard</h2> 
+                            <table id="leaderboardText">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Score</th>
+                                </tr>
+                            </table>
+                        </div> 
 
-                </div> 
+                         <div>
+                             <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
+                         </div>
 
+                    </div> 
             </div> 
 
             <div class="bottom-page"> <!--Bottom of page--> 

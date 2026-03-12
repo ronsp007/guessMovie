@@ -4,8 +4,6 @@
     flex-direction: column;
     font-family:'Serif';
     height: 100%;
-    
-   
 }
 
 /*Header div - css*/
@@ -14,10 +12,10 @@
     align-items: center;
     gap: 1%;
     /*text-align: center;*/
-    font-size: 50px;
+    font-size: 450%;
     font-family: "Broadway";
     text-shadow: 0 10px 15px rgb(0, 0, 5);
-    color: rgb(255, 217, 0);
+    color: rgba(161, 5, 5, 0.719);
 }
 
 /*Work in progress - clapperboard*/
@@ -88,10 +86,6 @@
     flex-direction: row;
 }
 
-#rules-container {
-    width: 20%;
-}
-
 #game {  /*The container with the actual game*/
     width: 60%;
     text-align: center;
@@ -101,53 +95,72 @@
     margin: 0 0.5% 0 0.5%;
 }
 
+#game-display { /*The game box*/
+    border-radius: 20px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.774);
+    background-color: rgba(49, 17, 17, 0.733);
+}
+
+
 #start-box { /*The container where the user puts their name and chooses difficulty*/
     /*margin: 5% 5% 5% 5%;*/
     padding: 5% 5% 5% 5%;
-    font-size: 150%;
+    font-size: 250%;
     color:rgb(255, 255, 253);
-
 }
 
-#leaderboard-container {
-    
-    width: 20%
-    
+#entry_name{ /* Where you enter your name*/
+    font-size: 50%;
+}
+
+#rules-container {
+    width: 20%;
+    min-height: 100%;
 }
 
 #rules {
     text-align: center;
     border-style: solid;
-    border-color: rgb(255, 217, 0);
-    background-color: white;
+    font-size: 120%;
+    font-family: sans-serif;
+    border-radius: 20px;
+    border-color: rgb(255, 255, 255);
+    background-color: rgba(49, 17, 17, 0.733);
+    color: white;
+    height: 100%;
 }
 
 #rulesList{
     text-align: left;
 }
 
+li{
+ margin-top: 10px;
+}
+
+#leaderboard-container {
+    width: 20%;
+}
+
 #leaderboard {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     text-align: center;
+    font-size: 130%;
+    font-family: sans-serif;
+    background-color: rgba(49, 17, 17, 0.733);
+    color: white;
+    border-color: rgb(255, 255, 255);
+    border-radius: 20px;
     border-style: solid;
-    border-color: rgb(255, 217, 0);
-    background-color: white;
+    height: 90%;
 }
 
 
-th {
+th { /*tabel header*/
     width: 50px;
 }
-
-#game-display {
-    
-    border-style: solid;
-    border-color: rgb(255, 255, 255);
-    background-color: rgb(80, 78, 78);
-}
-
 
 #aswer-buttons-display {
     margin: 5% 5% 5% 5%;
@@ -167,16 +180,6 @@ th {
 #submit-button:hover {
     background-color: rgb(255, 217, 0);
 }
-
-/*Bottom page div - css*/
-.bottom-page {
-    /*margin: 50px 50px 50px 50px;*/
-    margin: 0;
-    width: 100%;
-    min-height: 15vh;      
-    background-color: black;
-}
-
 
 #answer-buttons-display{ /*Answer buttons (outside) */
     display: grid;
