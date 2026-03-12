@@ -47,7 +47,7 @@ body{
     box-shadow: 0 10px 15px rgb(0, 0, 5);
     background-color: rgba(241, 241, 241, 0.89);
     color: black;
-    transition: all 0.2s ease; 
+    transition: all 0.3s ease; 
 }
 
 #play-button:hover{ /* Press to play button hover*/
@@ -77,9 +77,7 @@ body{
 
 #language-button:hover{ /*language button hover*/
     background-color: rgba(109, 3, 3, 0.774);
-    color: rgba(245, 245, 245, 0.815);
-    transform:translateY(2%)
-    
+    color: rgba(253, 253, 253, 0.815);
 }
 
 /* Collor of droppdown buttons*/
@@ -113,14 +111,14 @@ body{
   text-decoration: none;
   display: block;
   /*font-size: 50%;*/
-  font-size: 15px;
+  font-size: 10px;
 }
 
 #dropdown-content-front button {
   color: rgb(0, 0, 0); 
   /*background-color: rgb(255, 255, 255);*/
   width: 100%;
-  padding: 10px 10px;
+  padding: 3px 8px;
   text-decoration: none;
   display: block;
   border-radius: 15px;
