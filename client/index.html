@@ -84,41 +84,8 @@
                     </div> 
                 </div> 
 
-                <div id="game"> <!--Display of the actual game--> 
+                
 
-                    <div id="game-display"> <!--????-->
-                        
-                        <div id="textDisplay"> <!--Correct answer will be written-->
-                            <p id="gameTextDisplay"></p>
-                        </div>
-
-                        <div id="endGame"> <!--End of the game with total score-->
-                            <button onclick="newGame()" class="buttonStandard">New Game</button>
-                            <p>Congratulations!</p>
-                            <p>Your score is:</p>
-                            
-                        </div>
-
-                        <div id="start-box"> <!--Start box for game: Entry name and difficulty--> 
-
-                            <p> 
-                                <label for="entry_name">Entry name:</label> 
-                                <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
-                            </p> 
-
-                            <div class="dropdown"> <!--Dropdown button for difficulty levels-->
-                                <button class="dropbtn">Difficulty</button> 
-                                <div class="dropdown-content"> 
-                                    <button onclick="startGame('easy')" class="dropdown-buttons">Easy</button> 
-                                    <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
-                                    <button onclick="startGame('hard')" class="dropdown-buttons">Hard</button> 
-                                </div> 
->>>>>>> 223dfaf51ec16fa22819b2602d93bf5e10b03b2a
-                            </div> 
-
-                        </div> 
-
-<<<<<<< HEAD
 
                     <div id="game"> <!--Game display--> 
 
@@ -192,50 +159,12 @@
                          <div>
                              <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
                          </div>
-=======
-                        <!--Exists only in index.html, not index_Swe.html-->
-                        <div id="gameContent">
-                        </div>
-                        <!---->
-
-                        <div id="answer-buttons-display"> 
-                            <!--buttons will be created through a function in client.js--> 
-                        </div> 
-
-                        <div id="submit-container"> <!--Submit button-->
-                            <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
-                        </div> 
-
-                        <div id="nQContainer">
-                            <button onclick="nextQuestion()" class="nQ">Next question</button>
-                        </div>
-
-                    </div> 
-
-                </div> 
-
-                <div id="leaderboard-container"> <!--Leaderboard--> 
-                        <div>
-                        <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
-                    </div>
-                    <div id="leaderboard"> 
-                        <h2>Leaderboard</h2> 
-                        <table id="leaderboardText">
-                            <tr>
-                                <th>Name</th>
-                                <th>Score</th>
-                            </tr>
-                        </table>
-                    </div> 
-
-                </div> 
->>>>>>> 223dfaf51ec16fa22819b2602d93bf5e10b03b2a
 
                     </div> 
             </div> 
 
         </div> 
-        
+
     </body>
 
 </html>
