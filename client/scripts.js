@@ -4,6 +4,14 @@ let gameScore = 0;
 let gameInfo = [];
 let playerName = "";
 
+function language(lang) {
+    if (lang == "eng") {
+        window.location.href = "index.html";
+    } else if (lang == "swe") {
+        window.location.href = "index_Swe.html";
+    }
+}
+
 
 //runs when the website is loaded.
 document.addEventListener("DOMContentLoaded", function(){
