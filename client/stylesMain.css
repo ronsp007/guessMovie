@@ -10,13 +10,55 @@
 
 /*Header div - css*/
 .header-main{
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 1%;
+    /*text-align: center;*/
     font-size: 50px;
     font-family: "Broadway";
     text-shadow: 0 10px 15px rgb(0, 0, 5);
     color: rgb(255, 217, 0);
-
 }
+
+/*Work in progress - clapperboard*/
+.clapperboard{
+  width:10%;
+  margin:2% auto;
+}
+
+.clapper-bottom{
+  width:100%;
+  height:75px; /*Procent??*/
+  background:rgb(25, 25, 25);
+}
+
+.clapper-top{
+  width:100%;
+  height:20px; /*Procent??*/
+  background: repeating-linear-gradient(
+    45deg,
+    white,
+    white 10%,
+    rgb(25, 25, 25) 10%,
+    rgb(25, 25, 25) 20%
+  );
+  transform-origin:left center;
+  animation: clap 2s;
+  transform: rotate(-20deg);
+}
+
+@keyframes clap{
+  0%   { transform: rotate(-20deg); }
+  40%  { transform: rotate(-45deg); }
+  60%  { transform: rotate(0deg); }
+  100% { transform: rotate(-20deg); }
+}
+
+#clapperBoardLeft {
+    transform: scaleX(-1);
+}
+
+/*----------*/
 
 #dropdown-language-main {
     text-align: right;
@@ -106,12 +148,13 @@ th {
     background-color: rgb(80, 78, 78);
 }
 
+
 #aswer-buttons-display {
     margin: 5% 5% 5% 5%;
 }
 
 #submit-container {
-    margin: 2% 0 0 0;
+    /*margin: 2% 0 0 0;*/
     display: none;
     justify-content: center;
 }
@@ -193,4 +236,16 @@ th {
 #buttonContainer{
     display: flex;
     justify-content: center;
+}
+
+#endGame{
+    display: none;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    text-align: center;
+    color: white;
+}
+
+#gameContent{
+    padding-top: 4%;
 }

@@ -55,9 +55,19 @@
 
                 <div class="header-main"> <!--Header--> 
 
+                    <div class="clapperboard">
+                        <div class="clapper-top"></div>
+                        <div class="clapper-bottom"></div>
+                    </div>
+
                     <div id="title-main"> 
                         <h1>Guess the movie</h1>
                     </div> 
+
+                    <div class="clapperboard" id="clapperBoardLeft">
+                        <div class="clapper-top"></div>
+                        <div class="clapper-bottom"></div>
+                    </div>
 
                     <!--<div id="dropdown-language-main"> 
                         <div class="dropdown"> 
@@ -73,12 +83,12 @@
 
                 </div> 
 
-                <div class="game-options"> <!--Choose game-buttons--> 
+                <!--<div class="game-options"> 
 
                     <button onclick class="game-button">Game 1</button> 
                     <button onclick class="game-button">Game 2</button> 
 
-                </div> 
+                </div> -->
 
                 <div class="game-center"> <!--Game center--> 
 
@@ -104,16 +114,18 @@
 
                     <div id="game-display"> <!--????-->
 
-                        <!--Here the game will be called through a function--> 
-
+                        <!--Here the game will be called through a function-->
+                        
                         <div id="textDisplay">
         
                             <p id="gameTextDisplay"></p>
                         </div>
 
                         <div id="endGame">
+                            <button onclick="newGame()" class="buttonStandard">New Game</button>
                             <p>Congratulations!</p>
                             <p>Your score is:</p>
+                            
                         </div>
 
                         <div id="start-box"> <!--Start box for game--> 
