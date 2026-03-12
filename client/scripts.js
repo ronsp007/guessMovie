@@ -7,6 +7,14 @@ let gameDifficulty = "";
 let selectedMovie = null;
 let questionCounter = 0;
 
+function language(lang) {
+    if (lang == "eng") {
+        window.location.href = "index.html";
+    } else if (lang == "swe") {
+        window.location.href = "index_Swe.html";
+    }
+}
+
 
 //runs when the website is loaded.
 document.addEventListener("DOMContentLoaded", function(){
