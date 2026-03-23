@@ -7,6 +7,15 @@ let gameDifficulty = "";
 let selectedMovie = null;
 let questionCounter = 0;
 
+let gameParameters = {
+    gameType: null, //maybe
+    questionBase: null,
+    optionBase: null,
+    searchParameter: null, //what the data must include (is used for entries with photos)
+    amountOfQuestion: 10, //set the standard to all the games to have 10 questions
+    difficulty: null,
+};
+
 function language(lang) {
     if (lang == "eng") {
         window.location.href = "index.html";
@@ -31,14 +40,20 @@ function displayGameView() {
 
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
-    const startBox = document.getElementById("start-box");  // Code to display error message on the webpage
+    //Hides intro box
+    const startBox = document.getElementById("start-box");  
     startBox.style.display = "none";
+
+    //resets and adds game information 
     gameScore = 0; //sets the score to 0 at the start of the game
     questionCounter = 0; //starts the counter at 0
     gameDifficulty = difficulty; 
     playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
 
     console.log("Name: " + playerName + " Game Difficulty: " + gameDifficulty);
+
+    //Check which game is being played
+
     
     //requesting the 10 random pictures(movies) from the server
     const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { 
@@ -62,7 +77,6 @@ async function startGame(difficulty) {
         gameInfo = await response.json(); //saves the info of the current game as in a global variable. 
         console.log(gameInfo); //check
 
-        //answerbuttons() 
         gameRound();
     }
 
@@ -73,7 +87,9 @@ async function gameRound() {
     gameContent.innerHTML = ""; // Maybe problem*
     answerbuttons(); //Display the answer option buttons
 
-    const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionPicture[questionCounter],  { //requesting the 10 random pictures from server
+    console.log("Image URL: " + gameInfo.QuestionMovie[questionCounter].normalized_id);
+
+    const response = await fetch(serverUrl + "/" + "picture" + "/" + gameInfo.QuestionMovie[questionCounter].normalized_id,  { //requesting the 10 random pictures from server
         method : "GET",
         headers: {
             "Content-Type": "image/png",
@@ -111,7 +127,7 @@ function submitQuestion() {
     nextButton.style.display = "flex";
 
     //Depending on answer: add score and give positive indikator or give negative indikator
-    if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) {
+    if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) { //not working
         gameScore++;
         gameDiv.style.borderColor = "green";
 
@@ -127,7 +143,7 @@ function submitQuestion() {
 
     const textDisplayDiv = document.getElementById("textDisplay");
     const textDiv = document.getElementById("gameTextDisplay");
-    textDiv.textContent = "Correct answer: " + gameInfo.QuestionMovie[questionCounter].name;
+    textDiv.textContent = "The movie " + gameInfo.QuestionMovie[questionCounter].name + " came out in: " + gameInfo.QuestionMovie[questionCounter].year;
     textDisplayDiv.style.display = "block";
 }
 
@@ -195,11 +211,13 @@ function answerbuttons(){
     const container = document.getElementById("answer-buttons-display"); //Connect the right div
     container.innerHTML = ""; //Empty buttons every time 
 
-    const corectAnswerName = gameInfo.QuestionMovie[questionCounter].name;
-    const corectAnswer = gameInfo.QuestionMovie[questionCounter]
-    const wrongAnswer =  gameInfo.answerOptionsForQuestions[questionCounter];
+    //const corectAnswerName = gameInfo.QuestionMovie[questionCounter].name;
+    const corectAnswer = gameInfo.QuestionMovie[questionCounter];
+    const wrongAnswer =  gameInfo.answerOptionsForQuestion[questionCounter];
 
     const allAnswer = [corectAnswer].concat(wrongAnswer); //Connect correct answer with the wrong into one single array
+    console.log("Option Answers: ", allAnswer
+    )
 
     allAnswer.sort(() => Math.random() - 0.5); //Shuffel the order (so that correct answer appears in a random order)
 
@@ -208,7 +226,7 @@ function answerbuttons(){
 
         const buttons = document.createElement("button"); 
         buttons.classList.add("movie-name-buttons"); 
-        buttons.textContent = allAnswer[i].name;
+        buttons.textContent = allAnswer[i].year;
         
 
         //Do the buttons so they work ass radio buttons

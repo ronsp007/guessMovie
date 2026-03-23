@@ -28,49 +28,98 @@ const server = http.createServer((req,res) => {
     console.log(pathComponents);
 
     if(req.method == "GET"){
+        
+        /*****Set up****/
+        let gameParameters = {
+            questionBase: null,
+            optionBase: null,
+            searchParameter: null, //what the data must include (is used for entries with photos)
+            amountOfQuestion: 10, //set the standard to all the games to have 10 questions
+            difficulty: 5,
+        };
+
+        if(pathComponents[2] == "easy"){
+            gameParameters.difficulty = 2;
+        }else if (pathComponents[2] == "normal"){ //should this be removed since it's unecesarrry
+            gameParameters.difficulty = 5;
+        }else if(pathComponents[2] == "hard"){
+            gameParameters.difficulty = 8; 
+        }
+        /**************/
 
         switch(pathComponents[1]){
-
-            case "test": //test to se what can be fetched from database
-                //test(res,"Pollyanna"); 
-                //randomMovies(pathComponents[2],null);
-                //routingPictureGame(res,10,6);
-                uploadingScore(kollar);
+            
+            case"movie": //test to get a single movie from the imdb database
+                console.log("hej");
+                singleMovie(res,pathComponents[2]); 
             break;
+
             case "pictureGame":
-                let amountOfQuestion = 0; 
-                if(pathComponents[2] == "easy"){
-                    amountOfQuestion = 3;
-                }else if (pathComponents[2] == "normal"){
-                    amountOfQuestion = 6;
-                }else if(pathComponents[2] == "hard"){
-                    amountOfQuestion = 9; 
-                }
-                routingPictureGame(res, 10, amountOfQuestion);
-                
+                gameParameters.questionBase = "year";
+                gameParameters.optionBase = "year";
+                gameParameters.searchParameter = "photo";
+
+                console.log(gameParameters);
+
+                routingGame(res, gameParameters);
             break
+
+            case "description":
+                gameParameters.questionBase = "description";
+                gameParameters.optionBase = "name";
+
+                routingGame(res, gameParameters);
+            break;
+
+            case "actors":
+                gameParameters.questionBase = "star"; //star is the key for actors in the database
+                gameParameters.optionBase = "name"; //still name of movie
+
+                routingGame(res, gameParameters);
+            break;
+
+            case "directorWhichMovie":
+                gameParameters.questionBase = "director";
+                gameParameters.optionBase = "name";
+
+                routingGame(res, gameParameters);
+            break;
+
+            case "moviesDirector":
+                gameParameters.questionBase = "director";
+                gameParameters.optionBase = "director";
+
+                routingGame(res, gameParameters);
+            break;
+
             case "leaderboard":
+
                 const difficulty = pathComponents[2];
                 routingScore(res, difficulty);
+
             break;
+
             case "picture":
                 
-                routingImages(res, pathComponents[3]);
+                routingImages(res, pathComponents[2]); //pathcomponents[2] = normalized_id
                 
             break;
+
             default:
                 sendResponse(res,200,"text/plain", "No specific request made");
+            
         }
 
     }else if(req.method == "OPTIONS"){
 
         sendResponse(res,200, null,null); 
 
-    }else if(req.method == "POST") { //Used for result documentation and leaderboard
+    }else if(req.method == "POST") { //Used for game result and leaderboard
+       
 
         switch(pathComponents[1]){
             case "score":
-                
+    
                 const bodyChunks = [];
                 
                 req.on("error", (err) => {
@@ -124,7 +173,7 @@ function sendResponse(res, statusCode, contentType, data){
 /******************** FUNCTIONS  ***********************/
 
 //test function for communication with database
-async function test(res, search){
+async function singleMovie(res, search){
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
@@ -132,7 +181,7 @@ async function test(res, search){
 
     const filterQuery = {name: search};
     const findResult = await dbCollection.find(filterQuery).toArray();
-    //console.log(findResult);
+    console.log(findResult);
     const findResultString = JSON.stringify(findResult);
 
     sendResponse(res,200,"application/json",findResultString);
@@ -140,108 +189,163 @@ async function test(res, search){
 
 }
 
-//Asks database for numr random entry titles(every one distinct)
-//Imports the numr correspondning pictures. 
-//For each of the main numr movies, diff other random movie names (which are different from the main movie) needs to be includeed: these will be the answer options
-async function routingPictureGame(res, numr, diff) {
+async function routingGame(res, gameParameters){
     
-    const resultToClient = {
+    const resultToClient = { //composes the data for one entire game(exluding images) 
         QuestionMovie: null,
-        answerOptionsForQuestions: null, 
-        QuestionPicture: null,
+        answerOptionsForQuestion: [], 
     };
+    
+    await dbClient.connect();
+    const db = dbClient.db("tnm121-project");
+    const dbCollection = db.collection("imdb");
+    const amountOfMovies = parseInt(gameParameters.amountOfQuestion);
+    const amountOfQuestions = parseInt(gameParameters.difficulty);
 
+    const sampelFilterQuestion = [];
+    if(gameParameters.searchParameter != null){  //if we want to match search something that is added
+        sampelFilterQuestion.push({
+            $match: {[gameParameters.searchParameter]: 1}, //bracket [] are used to ensure the request dosen't search for the field "matchfilter", and instead the value assigned to it
+        })
+    }
+    sampelFilterQuestion.push(
+        {$sample: {size: amountOfMovies}}, //sets how many entries we want
+        {$project: {
+            normalized_id: 1, //always inclued the normalized_id since it's the same between different data groups(images)
+            name: 1,
+            [gameParameters.questionBase]: 1,
+        }}
+    );
+  
+    //movies that are used for the questions are found and stored. 
+    resultToClient.QuestionMovie = await dbCollection.aggregate(sampelFilterQuestion).toArray();
+    
 
-    const tenMovieQuestion = await randomMovies(numr, null);
-    resultToClient.QuestionMovie = tenMovieQuestion;
-    console.log("Movie for question loaded.")
-
-    let imagePaths = [];
-
-    for(let i = 0; i < numr; i++){
-        const imageFilePath = "./media/" + resultToClient.QuestionMovie[i].normalized_id +"/" + ".png";
-        imagePaths.push(imageFilePath);
+    for(let i = 0; i < resultToClient.QuestionMovie.length; i++){
         
-    }
-    resultToClient.QuestionPicture = imagePaths;
-    console.log("Images to movies loaded.")
+        const sampelFilterOptions = [
+            {$match: {//excludes the real answer from the options answers so there are no dublicates
+                normalized_id: {$ne: resultToClient.QuestionMovie.normalized_id}, //included to explicitly remove the correct answer
+                [gameParameters.optionBase]: {$ne: resultToClient.QuestionMovie[gameParameters.optionBase]},
+            }}, 
 
-    let answerOptions = []; //empty array that will store the answer options for each movie
-    for(let i = 0; i < numr; i++){
-        const fiveMovies = await randomMovies(diff, resultToClient.QuestionMovie[i]);
-        answerOptions.push(fiveMovies);
-    }
-    resultToClient.answerOptionsForQuestions = answerOptions;
+            //group is used to ensure we don't get the same values for the option questions, for example year
+            //reference for how templet literals `$ ` works: https://www.freecodecamp.org/news/what-does-the-dollar-sign-mean-in-javascript/#:~:text=Using%20the%20%24%20in%20Template%20Literals&text=They%20allow%20you%20to%20embed,expressions%20dynamically%20in%20template%20literals.
+            //info on how group works: https://www.mongodb.com/docs/manual/reference/operator/aggregation/group/
+            {$group: {
+                _id: `$${gameParameters.optionBase}`,
+            }}, 
 
+            {$sample: {size: amountOfQuestions}}, //how many answer options there are is dependent on difficulty
+            {$project: { //include the following variable name
+                [gameParameters.optionBase]: "$_id",
+            }}
+        ];
+
+        const optionData = await dbCollection.aggregate(sampelFilterOptions).toArray();
+        resultToClient.answerOptionsForQuestion.push(optionData);
+    }
+
+    await dbClient.close();
     const stringToClient = JSON.stringify(resultToClient);
     sendResponse(res, 200, "application/json", stringToClient);
 
 }
 
-function routingImages(res, list) {
-    const imageFilePath = "./media/" + list + ".png";
-    console.log(list);
+
+
+
+
+
+//Asks database for numr random entry titles(every one distinct)
+//Imports the numr of correspondning pictures. 
+//For each of the main numr movies, numrAnswerOptions other random movie names (which are different from the main movie) needs to be includeed: these will be the answer options
+async function routingPictureGame(res, amount, numrAnswerOptions) {
+    
+    const resultToClient = {
+        QuestionMovie: null,
+        answerOptionsForQuestion: null, 
+    };
+
+    const MovieQuestion = await randomMovies(amount, null); //fetches the data that will be used for the questions
+    resultToClient.QuestionMovie = MovieQuestion;
+
+    let answerOptions = []; //empty array that will store the answer options for each movie
+    for(let i = 0; i < amount; i++){
+        const optionData = await randomMovies(numrAnswerOptions, resultToClient.QuestionMovie[i]);//fetches the data that will be used for the answer options
+        answerOptions.push(optionData);
+    }
+    resultToClient.answerOptionsForQuestion = answerOptions;
+
+    const stringToClient = JSON.stringify(resultToClient);
+    sendResponse(res, 200, "application/json", stringToClient);
+
+}
+//asks database for numr amount of randomized movies that are distinct from check. 
+async function randomMovies(numr, exclude) {
+
+    const sampelFilter = [
+        {$match: {photo: 1}},
+        {$sample: {size: amountOfMovies}},
+        {$project: {
+            _id: 0,
+            name: 1,
+        }}
+        ];
+    
+    const findResult = await dbCollection.aggregate(sampelFilter).toArray();
+    //console.log(findResult);
+
+    await dbClient.close();
+    return findResult
+
+}
+async function randomAnswerOptions(numr, exclude) {
+    await dbClient.connect();
+    const db = dbClient.db("tnm121-project");
+    const  dbCollection = db.collection("imdb");
+    const amountOfMovies = parseInt(numr);
+
+    const sampelFilter = [
+            {$match: {normalized_id: {$ne: exclude.normalized_id}}}, //sets which entry we want to exclude
+            {$sample: {size: amountOfMovies-1}}, //sets how many entries we want
+            {$project: { //only include the following data
+                _id: 0,
+                name: 1,
+            }}
+        ];
+    const findResult = await dbCollection.aggregate(sampelFilter).toArray();
+        
+    await dbClient.close();
+    return findResult; 
+}
+
+
+
+
+
+//sends image to client based on the normalized id
+function routingImages(res, id) {
+
+    const imageFilePath = "./media/" + id + ".png";
+    console.log(imageFilePath);
 
     fs.readFile(imageFilePath, (err, data) => {
         if (err) {
             sendResponse(res, 404, "text/plain", "Image not found");
         } else {
             sendResponse(res, 200, "image/png", data);
-            
         }
     });
 
 }
 
-
-//asks database for numr amount of randomized movies that are distinct from check. 
-async function randomMovies(numr, check) {
-
-    await dbClient.connect();
-    const db = dbClient.db("tnm121-project");
-    const  dbCollection = db.collection("imdb");
-    const amountOfMovies = parseInt(numr);
-    
-
-    if(check == null){ //if no perimiter is inclueded
-
-        const sampelFilter = [
-            {$match: {photo: 1}},
-            {$sample: {size: amountOfMovies}}
-            ];
-        
-        const findResult = await dbCollection.aggregate(sampelFilter).toArray();
-        //console.log(findResult);
-
-        await dbClient.close();
-        return findResult
-        
-    }else{
-
-        const sampelFilter = [
-            {$match: {normalized_id: {$ne: check.normalized_id}}}, //sets witch entry we want to exclude
-            {$sample: {size: amountOfMovies-1}}, //sets how many entries we want
-            {$project: {
-                _id: 0,
-                name: 1,
-            }}
-        ];
-
-        const findResult = await dbCollection.aggregate(sampelFilter).toArray();
-        
-        await dbClient.close();
-        return findResult; 
-    }
-
-}
-
+//uploads score to database
 async function uploadingScore(dataFromClient) {
-
 
     const scoreJsonData = JSON.parse(dataFromClient); //Converts the string into an objekt
   
-    const collectionName =  "leaderboard_" + scoreJsonData.difficulty;
-    
+    const collectionName =  "leaderboard_" + scoreJsonData.difficulty;    
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
@@ -269,9 +373,7 @@ async function routingScore(res, diff){
         sendResponse(res, 200, "application/json", resultToClient);
 
     }else { //if no resulst are found
-        sendResponse(res, 406, null, null);
+        sendResponse(res, 404, null, null);
     }
     await dbClient.close();
-
-
 }
