@@ -105,7 +105,7 @@ body{
 
 
 #dropdown-content-front button {
-  color: rgb(0, 0, 0); 
+  /*color: rgb(0, 0, 0); */
   /*background-color: rgb(255, 255, 255);*/
   width: 100%;
   padding: 3px 8px;
@@ -120,33 +120,6 @@ body{
   display: block;
 }
 
-/*----------Main----------------*/
-
-.dropbtn { /* Main*/
-    padding: 15px 25px; 
-    border-radius: 15px;
-    box-shadow: 0 5px 10px rgb(0, 0, 5);
-    font-family: sans-serif;
-    font-size: 50%;
-}
-.dropbtn:hover{
-  color: rgb(255, 255, 255); 
-  background-color: rgba(88, 3, 3, 0.507);
-}
-
-/* Links inside dropdown content */
-.dropdown-content button { /*Main*/
-  color: rgb(0, 0, 0); 
-  background-color: rgba(255, 255, 255);
-  width: 100%;
-  padding: 5px 1px;
-  text-decoration: none;
-  display: block;
-  /*font-size: 50%;*/
-  font-size: 15px;
-  font-family: sans-serif;
-  border-radius: 10px;
-}
 
 
 /*

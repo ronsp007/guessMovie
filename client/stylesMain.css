@@ -2,7 +2,7 @@
 .main-page {
     display: none;
     flex-direction: column;
-    font-family:'Serif';
+    font-family: 'Verdana, sans-serif';
     height: 100%;
 }
 
@@ -16,6 +16,29 @@
     font-family: "Broadway";
     text-shadow: 0 10px 15px rgb(0, 0, 5);
     color: rgba(161, 5, 5, 0.719);
+}
+
+.buttonStandard { /*The press to play button*/
+    font-size: 14px;
+    padding: 10px 15px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 5px 15px rgb(0, 0, 5);
+    background-color: rgb(241, 241, 241);
+    color: black;
+    
+    transition: all 0.3s ease; 
+}
+
+.buttonStandard:hover{ /* Press to play button hover*/
+    color: rgb(255, 255, 255); 
+    background-color:rgba(88, 3, 3);
+    /*
+    background-color: rgba(94, 2, 2, 0.863);
+    color: rgba(245, 245, 245, 0.815);*/
+    transform:translateY(2%)
+    
 }
 
 /*Work in progress - clapperboard*/
@@ -63,6 +86,38 @@
     margin: 0 2% 2% 0;
 }
 
+/*----------Main----------------*/
+
+.dropbtn { /* Main*/
+  width: 100%;
+  /*padding: 15px 25px; */
+  /*border-radius: 15px;*/
+    /*box-shadow: 0 5px 10px rgb(0, 0, 5);
+  font-family: sans-serif;*/
+  font-size: 20px;
+}
+
+.dropbtn:hover{
+  color: rgb(255, 255, 255); 
+  background-color: rgba(88, 3, 3);
+}
+
+/* Links inside dropdown content */
+.dropdown-content button { /*Main*/
+  color: rgb(0, 0, 0); 
+  background-color: rgba(255, 255, 255);
+  width: 100%;
+  /*padding: 5px 1px;*/
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  /*font-size: 50%;*/
+  font-size: 20px;
+  /*font-family: sans-serif;*/
+  border-radius: 10px;
+}
+
+
 /*Game options div - css*/
 .game-options {
     text-align: center;
@@ -103,6 +158,47 @@
 }
 
 
+/*Game chooser buttons */
+#gameChooserContainer{
+    flex-direction: row;
+    text-align: center;
+    margin-bottom: 0.5%;
+}
+
+
+/*****************/
+
+/*----------Main----------------*/
+
+.dropbtn { /* Main*/
+  width: 100%;
+  /*padding: 15px 25px; */
+  border-radius: 15px;
+    /*box-shadow: 0 5px 10px rgb(0, 0, 5);
+  font-family: sans-serif;*/
+  font-size: 24px;
+}
+.dropbtn:hover{
+  color: rgb(255, 255, 255); 
+  background-color: rgba(88, 3, 3, 0.507);
+}
+
+/* Links inside dropdown content */
+.dropdown-content button { /*Main*/
+  color: rgb(0, 0, 0); 
+  background-color: rgba(255, 255, 255);
+  width: 100%;
+  padding: 5px 1px;
+  text-decoration: none;
+  display: block;
+  /*font-size: 50%;*/
+  font-size: 50%;
+  /*font-family: sans-serif;*/
+  border-radius: 10px;
+}
+
+
+
 #start-box { /*The container where the user puts their name and chooses difficulty*/
     /*margin: 5% 5% 5% 5%;*/
     padding: 5% 5% 5% 5%;
@@ -122,8 +218,7 @@
 #rules {
     text-align: center;
     border-style: solid;
-    font-size: 120%;
-    font-family: sans-serif;
+    font-size: 20px;
     border-radius: 20px;
     border-color: rgb(255, 255, 255);
     background-color: rgba(49, 17, 17, 0.733);
@@ -147,8 +242,7 @@ li{
     display: flex;
     flex-direction: column;
     text-align: center;
-    font-size: 130%;
-    font-family: sans-serif;
+    font-size: 20px;
     background-color: rgba(49, 17, 17, 0.733);
     color: white;
     border-color: rgb(255, 255, 255);
@@ -193,7 +287,6 @@ th { /*tabel header*/
 .movie-name-buttons{ /*Answer buttons (inside)*/
     width: 100%;
     height: 100%;
-    font-family: sans-serif;
     font-size: 100%;
     text-align: center;
     padding: 3px 8px;
@@ -225,16 +318,13 @@ th { /*tabel header*/
 
 }
 
-#nQContainer {
+#nextQuestionContainer {
     display: none;
     justify-content: center;
     
 }
 
-.buttonStandard {
-    padding: 10px 15px;
-    font-size: 14px;
-}
+
 
 #buttonContainer{
     display: flex;

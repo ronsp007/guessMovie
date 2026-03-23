@@ -230,7 +230,7 @@ function answerbuttons(){
         
 
         //Do the buttons so they work ass radio buttons
-        buttons.addEventListener("click", ()=> { //Kanek ska ha function() istället för =>
+        buttons.addEventListener("click", ()=> { 
             const allButtons = document.querySelectorAll(".movie-name-buttons"); 
             allButtons.forEach(button => button.classList.remove("selected")); //deselect all buttons 
 
