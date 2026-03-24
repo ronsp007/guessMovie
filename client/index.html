@@ -36,8 +36,8 @@
                     <div class="dropdown"> 
                         <button class="dropbtn" id="language-button">Language</button> 
                             <div class="dropdown-content" id="dropdown-content-front"> 
-                                <button onclick="language('swe')" class="buttonStandard">Swedish</button> 
-                                <button onclick="language('eng')" class="buttonStandard">English</button> 
+                                <button onclick="language('swe')" class="button-standard">Swedish</button> 
+                                <button onclick="language('eng')" class="button-standard">English</button> 
                             </div> 
                     </div> 
                          
@@ -69,10 +69,10 @@
             </div> 
 
             <div id="gameChooserContainer"> <!--Container for choosing different games-->
-                <button class="buttonStandard" id="selectGame-YearGame"name="gameChooser" >Year</button>
-                <button class="buttonStandard" id="selectGame-DescriptionGame" name="gameChooser" class="play-button">Description</button>
-                <button class="buttonStandard" id="selectGame-DirectorGame" name="gameChooser" class="play-button">Director</button>
-                <button class="buttonStandard" id="selectGame-ActorsGame" name="gameChooser" class="play-button">Actors</button>
+                <button class="button-standard" id="yearGame" name="gameChooser" >Year</button>
+                <button class="button-standard" id="descriptionGame" name="gameChooser" >Description</button>
+                <button class="button-standard" id="directorGame" name="gameChooser">Director</button>
+                <button class="button-standard" id="actorsGame" name="gameChooser" >Actors</button>
             </div>
 
             <div class="game-center"> <!--Center container, where the game will be displayed as well as rules and leaderboard--> 
@@ -99,38 +99,39 @@
 
                         <!--Here the game will be called through a function-->
                         
-                        <div id="textDisplay">
-        
-                            <p id="gameTextDisplay"></p>
-                        </div>
+                        <div id="info-display">
+                            <div id="text-display">
+                                <p id="game-text-display"></p>
+                            </div>
 
-                        <div id="endGame">
-                            <button onclick="newGame()" class="buttonStandard">New Game</button>
-                            <p>Congratulations!</p>
-                            <p>Your score is: </p>
-                            
+                            <div id="end-game">
+                                <button onclick="newGame()" class="button-standard">New Game</button>
+                                <p>Congratulations!</p>
+                                <p>Your score is: </p>
+                                
+                            </div>
                         </div>
 
                         <div id="start-box"> <!--Start box for game--> 
 
                             <p> 
-                                <label for="entry_name">Entry name:</label> 
+                                <label for="entry_name">Enter name:</label> 
                                 <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
                             </p> 
 
                             <div class="dropdown"> 
-                                <button  class ="buttonStandard dropbtn" >Difficulty</button> 
+                                <button  class ="button-standard dropbtn" >Difficulty</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick="startGame('easy')" class="buttonStandard">Easy</button> 
-                                    <button onclick="startGame('normal')" class="buttonStandard">Normal</button> 
-                                    <button onclick="startGame('hard')" class="buttonStandard">Hard</button> 
+                                    <button onclick="startGame('easy')" class="button-standard">Easy</button> 
+                                    <button onclick="startGame('normal')" class="button-standard">Normal</button> 
+                                    <button onclick="startGame('hard')" class="button-standard">Hard</button> 
                                 </div> 
                             </div> 
 
                         </div> 
 
-                        <div id="gameContent">
-
+                        <div id="game-content">
+                            <img id="movie-picture" alt="AI generated movie poster">
                         </div>
 
                         <div id="answer-buttons-display"> 
@@ -138,11 +139,11 @@
                         </div> 
 
                         <div id="submit-container">
-                            <button onclick="submitQuestion()" class="buttonStandard">Sumbit</button>
+                            <button onclick="submitQuestion()" class="button-standard">Sumbit</button>
                         </div> 
 
-                        <div id="nextQuestionContainer">
-                            <button onclick="nextQuestion()" class="nextQuestionContainer">Next question</button>
+                        <div id="next-question-container">
+                            <button onclick="nextQuestion()" class="button-standard">Next question</button>
                         </div>
 
                     </div>
@@ -154,10 +155,10 @@
                         <h2>Leaderboard</h2>
 
                         <div>
-                            <button onclick="requestLeaderboard()" class="buttonStandard">Update leaderboard</button>
+                            <button onclick="requestLeaderboard()" class="button-standard">Update leaderboard</button>
                         </div>
 
-                        <table id="leaderboardText">
+                        <table id="leaderboard-text">
                             <tr>
                                 <th>Name</th>
                                 <th>Score</th>

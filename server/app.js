@@ -31,6 +31,7 @@ const server = http.createServer((req,res) => {
         
         /*****Set up****/
         let gameParameters = {
+            answer: null,
             questionBase: null,
             optionBase: null,
             searchParameter: null, //what the data must include (is used for entries with photos)
@@ -54,7 +55,7 @@ const server = http.createServer((req,res) => {
                 singleMovie(res,pathComponents[2]); 
             break;
 
-            case "pictureGame":
+            case "yearGame":
                 gameParameters.questionBase = "year";
                 gameParameters.optionBase = "year";
                 gameParameters.searchParameter = "photo";
@@ -64,28 +65,21 @@ const server = http.createServer((req,res) => {
                 routingGame(res, gameParameters);
             break
 
-            case "description":
+            case "descriptionGame":
                 gameParameters.questionBase = "description";
                 gameParameters.optionBase = "name";
 
                 routingGame(res, gameParameters);
             break;
 
-            case "actors":
+            case "actorsGame":
                 gameParameters.questionBase = "star"; //star is the key for actors in the database
                 gameParameters.optionBase = "name"; //still name of movie
 
                 routingGame(res, gameParameters);
             break;
 
-            case "directorWhichMovie":
-                gameParameters.questionBase = "director";
-                gameParameters.optionBase = "name";
-
-                routingGame(res, gameParameters);
-            break;
-
-            case "moviesDirector":
+            case "directorGame":
                 gameParameters.questionBase = "director";
                 gameParameters.optionBase = "director";
 

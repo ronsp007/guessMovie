@@ -1,21 +1,56 @@
 
 const serverUrl = "http://127.0.0.1:3000";
+
 let gameScore = 0; 
 let gameInfo = [];
 let playerName = "";
-let gameDifficulty = "";
+let gameDifficulty = "normal";
 let selectedMovie = null;
 let questionCounter = 0;
+let gameType = "yearGame"; // sets the default game
+const amountOfQuestion = 10; //games are set to 10 questions
 
-let gameParameters = {
-    gameType: null, //maybe
-    questionBase: null,
-    optionBase: null,
-    searchParameter: null, //what the data must include (is used for entries with photos)
-    amountOfQuestion: 10, //set the standard to all the games to have 10 questions
-    difficulty: null,
+let gameParameters = { //answer and questionBase are the same, it's whats being asked of the user
+    yearGame: {
+        answer: "year", 
+        questionBase: "photo",
+        optionBase: "year",
+        pictureBefore: true,
+        pictureAfter: false, 
+    },
+    descriptionGame:{
+        answer: "name",
+        questionBase: "description",
+        optionBase: "name",
+        pictureBefore: false,
+        pictureAfter: true, 
+    },
+    directorGame:{
+        answer: "name",
+        questionBase: "director",
+        optionBase: "year",
+        pictureBefore: true,
+        pictureAfter: false, 
+    },
+    actorsGame:{
+        answer: "name",
+        questionBase: "star",
+        optionBase: "name",
+        pictureBefore: false,
+        pictureAfter: true, 
+    }
 };
 
+
+//runs when the website is loaded.
+document.addEventListener("DOMContentLoaded", function(){
+
+    createButtonFunction(); 
+    requestLeaderboard();
+    
+});
+
+//changes html document based on selected language
 function language(lang) {
     if (lang == "eng") {
         window.location.href = "index.html";
@@ -24,12 +59,28 @@ function language(lang) {
     }
 }
 
-
-//runs when the website is loaded.
-document.addEventListener("DOMContentLoaded", function(){
-
+//adds radiobutton like functionality to the game choosing buttons
+function createButtonFunction(){
     
-});
+    const buttons = document.getElementsByName("gameChooser");
+
+    buttons.forEach(button => {
+        if(button.id == gameType){ //shows the standard game is choosen
+            button.classList.add("selected");
+        }
+
+        button.addEventListener("click", () => {
+
+            //removes the selected property from all gameChooser buttons
+            buttons.forEach(btn => {btn.classList.remove("selected")});
+
+            //adds selected status for pressed button and sets the game based on the button
+            button.classList.add("selected");
+            gameType = button.id;
+
+        })
+    });
+}
 
 //Will display the relevant html object for the game site
 function displayGameView() {
@@ -38,25 +89,31 @@ function displayGameView() {
     
 }
 
+function setGameState(){
+
+}
+
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
+
     //Hides intro box
     const startBox = document.getElementById("start-box");  
     startBox.style.display = "none";
 
+
     //resets and adds game information 
     gameScore = 0; //sets the score to 0 at the start of the game
     questionCounter = 0; //starts the counter at 0
+
     gameDifficulty = difficulty; 
     playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
 
-    console.log("Name: " + playerName + " Game Difficulty: " + gameDifficulty);
 
-    //Check which game is being played
-
+    //gameType is already choosen depending on button pressed down. 
+    console.log("Name: " + playerName + ", Game Difficulty: " + gameDifficulty + ", Game Type: " + gameType);
     
-    //requesting the 10 random pictures(movies) from the server
-    const response = await fetch(serverUrl + "/" + "pictureGame" + "/" + difficulty,  { 
+    //requesting amountOfQuestion random movies from the server, what info depends on gameType and difficulty
+    const response = await fetch(serverUrl + "/" + gameType + "/" + difficulty,  { 
         method : "GET",
         headers: {
             "Content-Type": "application/json",
@@ -68,8 +125,8 @@ async function startGame(difficulty) {
     if (!response.ok) {
         // Code to display error message on the webpage
         console.log("Response not okay");
-        const textDiv = document.getElementById("textDisplay");
-        const gameText = document.getElementById("gameTextDisplay");
+        const textDiv = document.getElementById("text-display");
+        const gameText = document.getElementById("game-text-display");
         textDiv.style.display = "block";
         gameText.textContent = "Error in loading server";
 
@@ -83,8 +140,7 @@ async function startGame(difficulty) {
 }
 
 async function gameRound() {
-    const gameContent = document.getElementById("gameContent");  // Code to display error message on the webpage
-    gameContent.innerHTML = ""; // Maybe problem*
+    const gameContent = document.getElementById("game-content");  // Code to display error message on the webpage
     answerbuttons(); //Display the answer option buttons
 
     console.log("Image URL: " + gameInfo.QuestionMovie[questionCounter].normalized_id);
@@ -100,16 +156,9 @@ async function gameRound() {
     if (response.ok) {
 
         response.blob().then((blobBody) => {
-            const pictureDiv = document.createElement("div");
-
-            //göra det på html istället? nej va
-            const image = document.createElement("img");
+            const image = document.getElementById("movie-picture");
             image.src = URL.createObjectURL(blobBody);
-            image.style.width = "60%";
-            image.style.objectFit = "cover";
-
-            pictureDiv.appendChild(image);
-            gameContent.appendChild(pictureDiv);
+            gameContent.style.display = "block";
         });
 
     } else {
@@ -123,11 +172,11 @@ async function gameRound() {
 function submitQuestion() {
 
     const gameDiv = document.getElementById("game-display");
-    const nextButton = document.getElementById("nQContainer");
+    const nextButton = document.getElementById("next-question-container");
     nextButton.style.display = "flex";
 
     //Depending on answer: add score and give positive indikator or give negative indikator
-    if (selectedMovie == gameInfo.QuestionMovie[questionCounter].name) { //not working
+    if (selectedMovie == gameInfo.QuestionMovie[questionCounter][gameParameters.questionBase]) { 
         gameScore++;
         gameDiv.style.borderColor = "green";
 
@@ -140,9 +189,8 @@ function submitQuestion() {
     submitButton.style.display = "none"; 
 
     //Display correct answer: 
-
-    const textDisplayDiv = document.getElementById("textDisplay");
-    const textDiv = document.getElementById("gameTextDisplay");
+    const textDisplayDiv = document.getElementById("text-display");
+    const textDiv = document.getElementById("game-text-display");
     textDiv.textContent = "The movie " + gameInfo.QuestionMovie[questionCounter].name + " came out in: " + gameInfo.QuestionMovie[questionCounter].year;
     textDisplayDiv.style.display = "block";
 }
@@ -150,12 +198,12 @@ function submitQuestion() {
 
 function nextQuestion(){
     const gameDiv = document.getElementById("game-display");
-    const textDisplayDiv = document.getElementById("textDisplay");
-    const nextButton = document.getElementById("nQContainer");
+    const textDisplayDiv = document.getElementById("text-display");
+    const nextButton = document.getElementById("next-question-container");
 
     questionCounter++;
 
-     if (questionCounter < 10)
+     if (questionCounter < amountOfQuestion)
             {
             console.log("Question number:" + (questionCounter+1));
 
@@ -166,7 +214,7 @@ function nextQuestion(){
 
             gameRound();
             
-        }else if (questionCounter == 10)
+        }else if (questionCounter == amountOfQuestion)
         {
             console.log("End of game"); 
             nextButton.style.display = "none";
@@ -182,7 +230,7 @@ async function endOfGame(){ //kolla över så att saker som ska göras i css och
     gameDiv.innerHTML= "";
     buttonBox.innerHTML = "";
     
-    const textDisplayDiv = document.getElementById("endGame");
+    const textDisplayDiv = document.getElementById("end-game");
     console.log(gameScore)
 
     const resultText = document.createElement("p");
@@ -196,14 +244,13 @@ async function endOfGame(){ //kolla över så att saker som ska göras i css och
 
 }
 
+//Brings back the start game container
 function newGame(){
     const startBox = document.getElementById("start-box");
-    const textDisplayDiv = document.getElementById("endGame");
+    const textDisplayDiv = document.getElementById("end-game");
     textDisplayDiv.style.display = "none";
     startBox.style.display = "block";
 }
-
-
 
 //Displays the answer option buttons for the relevant question
 function answerbuttons(){  
@@ -226,6 +273,7 @@ function answerbuttons(){
 
         const buttons = document.createElement("button"); 
         buttons.classList.add("movie-name-buttons"); 
+        buttons.classList.add("button-standard"); 
         buttons.textContent = allAnswer[i].year;
         
 
@@ -237,6 +285,7 @@ function answerbuttons(){
             buttons.classList.add("selected"); //select the preest button
 
             selectedMovie = buttons.textContent; //so we now which button is selected
+            console.log(selectedMovie)
 
         });
     
@@ -306,7 +355,7 @@ async function requestLeaderboard(){ //requests the 10 players with the higest s
         response.json().then((jsonBody) => {
             console.log(jsonBody);
 
-            const tabel = document.getElementById("leaderboardText");
+            const tabel = document.getElementById("leaderboard-text");
             //potentially empties the list exept the headers 
             while(tabel.rows.length > 1){
                 tabel.deleteRow(1);
