@@ -15,9 +15,9 @@
 
     <body>
 
-        <div class="frontpage"> <!-- Frontpage of the webside -->
+        <div class="frontpage"> <!-- Frontpage of the webpage -->
 
-            <div> <!--Intro text-->
+            <div> <!--Title/Intro text-->
                 <div id="intro1-front">
                     <h1 id="intro-text1">Välkommen till</h1>
                 </div>
@@ -28,16 +28,16 @@
             </div>
             
             <div> <!--Buttons of the frontpage: play and language-->
-                <div  id="press-to-play-button"> <!--Play button-->
+                <div  id="play-button-container"> <!--Play button-->
                     <button id="play-button" onclick = "displayGameView()">Tryck för att spela</button>
                 </div>
 
                 <div id="language-container"> <!--Language dropdown button-->
                     <div class="dropdown"> 
-                        <button class="dropbtn" id="language-button">Språk</button> 
+                        <button id="language-button">Språk</button> 
                             <div class="dropdown-content" id="dropdown-content-front"> 
-                                <button onclick="language('swe')" class="dropdown-buttons">Svenska</button> 
-                                <button onclick="language('eng')" class="dropdown-buttons">Engelska</button> 
+                                <button onclick="language('swe')" class="button-standard">Svenska</button> 
+                                <button onclick="language('eng')" class="button-standard">Engelska</button> 
                             </div> 
                     </div> 
                          
@@ -48,9 +48,9 @@
         </div>
 
 
-        <div class="main-page"> <!--The mainpage of the webside--> 
+        <div class="main-page"> <!--The mainpage of the webpage--> 
 
-            <div class="header-main"> <!--Header container: Title and clapperboards--> 
+            <div id="header-main"> <!--Header container: Title and clapperboards--> 
 
                 <div class="clapperboard">
                     <div class="clapper-top"></div>
@@ -68,12 +68,19 @@
 
             </div> 
 
+            <div id="gameChooserContainer"> <!--Container for choosing different games-->
+                <button class="button-standard" id="yearGame" name="gameChooser" >År</button>
+                <button class="button-standard" id="descriptionGame" name="gameChooser" >Beskrivning</button>
+                <button class="button-standard" id="directorGame" name="gameChooser">Regissör</button>
+                <button class="button-standard" id="actorsGame" name="gameChooser" >Skådespelare</button>
+            </div>
+
             <div class="game-center"> <!--Center container, where the game will be displayed as well as rules and leaderboard--> 
 
-                <div id="rules-container"> <!--Rules--> 
-                    <div id="rules"> 
+                <div id="instructions-container"> <!--Rules--> 
+                    <div id="instructions"> 
                         <h2>Instruktioner</h2> 
-                        <ul id="rulesList">
+                        <ul id="instructionsList">
                             <li>Skriv användarnamn och välj svårighetsgrad.</li>
                             <li>Affisher av olika filmer kommer visas efter varandra</li>
                             <li>Välj det korrekta utgivnings året bland alternativen och tryck på bekräfta.</li>
@@ -88,13 +95,17 @@
 
                     <div id="game-display"> 
 
-                        <div id="textDisplay"> <!--Correct answer will be written-->
-                            <p id="gameTextDisplay"></p>
-                        </div>
+                        <div id="info-display">
+                            <div id="text-display">
+                                <p id="game-text-display"></p>
+                            </div>
 
-                         <div id="endGame"> <!--End of the game with total score-->
-                            <p>Grattis!</p>
-                            <p>Ditt poäng:</p>
+                            <div id="end-game">
+                                <button onclick="newGame()" class="button-standard">Nytt spel</button>
+                                <p>Grattis!</p>
+                                <p>Ditt poäng: </p>
+                                
+                            </div>
                         </div>
 
                         <div id="start-box"> <!--Start box for game: Entry name and difficulty--> 
@@ -105,15 +116,19 @@
                             </p> 
 
                             <div class="dropdown"> <!--Dropdown button for difficulty levels-->
-                                <button class="dropbtn">Svårighetsgrad</button> 
+                                <button class="button-standard" id="difficulty-button">Svårighetsgrad</button> 
                                 <div class="dropdown-content"> 
-                                    <button onclick="startGame('easy')" class="dropdown-buttons">Enkel</button> 
-                                    <button onclick="startGame('normal')" class="dropdown-buttons">Medium</button> 
-                                    <button onclick="startGame('hard')" class="dropdown-buttons">Svår</button> 
+                                    <button onclick="startGame('easy')" class="button-standard">Enkel</button> 
+                                    <button onclick="startGame('normal')" class="button-standard">Medium</button> 
+                                    <button onclick="startGame('hard')" class="button-standard">Svår</button> 
                                 </div> 
                             </div> 
 
                         </div> 
+
+                        <div id="game-content">
+                            <img id="movie-picture" alt="AI generated movie poster">
+                        </div>
 
                         <div id="answer-buttons-display"> 
                             <!--buttons will be created through a function in client.js--> 
@@ -123,16 +138,20 @@
                             <button onclick="submitQuestion()" class="buttonStandard">Bekräfta</button>
                         </div> 
 
-                        <div id="nQContainer">
+                        <!--<div id="nQContainer">
                             <button onclick="nextQuestion()" class="nQ">Nästa fråga</button>
+                        </div>-->
+                        <div id="next-question-container">
+                            <button onclick="nextQuestion()" class="button-standard">Next question</button>
                         </div>
+
 
                     </div> 
 
                 </div> 
 
                 <div id="leaderboard-container"> <!--Leaderboard--> 
-                    <div>
+                    <!--<div>
                         <button onclick="requestLeaderboard()" class="buttonStandard">Uppdatera leaderboard</button>
                     </div>
                     <div id="leaderboard"> 
@@ -143,6 +162,22 @@
                                 <th>Poäng</th>
                             </tr>
                         </table>
+                    </div> -->
+                    <div id="leaderboard"> 
+
+                        <h2>Leaderboard</h2>
+
+                        <div>
+                            <button onclick="requestLeaderboard()" class="button-standard">Uppdatera leaderboard</button>
+                        </div>
+
+                        <table id="leaderboard-text">
+                            <tr>
+                                <th>Namn</th>
+                                <th>Poäng</th>
+                            </tr>
+                        </table>
+
                     </div> 
 
                 </div> 

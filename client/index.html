@@ -15,7 +15,7 @@
 
     <body>
 
-        <div class="frontpage"> <!--frontpage-->
+        <div class="frontpage"> <!--Frontpage of the webpage-->
 
             <div> <!--Title/Intro text-->
                 <div id="intro1-front">
@@ -28,13 +28,13 @@
             </div>
             
             <div> <!--Buttons of the frontpage: play and language-->
-                 <div  id="press-to-play-button"> <!--Play button-->
+                <div  id="play-button-container"> <!--Play button-->
                     <button id="play-button" onclick = "displayGameView()"> Press to play</button>
-                 </div>
+                </div>
 
                 <div id="language-container"> <!--Language dropdown button-->
                     <div class="dropdown"> 
-                        <button class="dropbtn" id="language-button">Language</button> 
+                        <button id="language-button">Language</button> 
                             <div class="dropdown-content" id="dropdown-content-front"> 
                                 <button onclick="language('swe')" class="button-standard">Swedish</button> 
                                 <button onclick="language('eng')" class="button-standard">English</button> 
@@ -45,12 +45,12 @@
 
             </div>
         
-     </div>
+        </div>
 
 
         <div class="main-page"> <!--The mainpage of the webside--> 
 
-            <div class="header-main"> <!--Header container: Title and clapperboards--> 
+            <div id="header-main"> <!--Header container: Title and clapperboards--> 
 
                 <div class="clapperboard">
                     <div class="clapper-top"></div>
@@ -77,10 +77,10 @@
 
             <div class="game-center"> <!--Center container, where the game will be displayed as well as rules and leaderboard--> 
 
-                <div id="rules-container"> <!--Rules--> 
-                    <div id="rules"> 
+                <div id="instructions-container"> <!--Rules--> 
+                    <div id="instructions"> 
                         <h2>Instructions</h2> 
-                        <ul id="rulesList">
+                        <ul id="instructionsList">
                             <li>Enter username and choose difficulty. </li>
                             <li>10 poster of different movies will appear in succession.</li>
                             <li>Choose the correct release date year from the options and press submit.</li>
@@ -91,13 +91,9 @@
                     </div> 
                 </div> 
 
-                
-
-                <div id="game"> <!--Game display--> 
+                <div id="game"> <!--Display of the actual game--> 
 
                     <div id="game-display"> <!--????-->
-
-                        <!--Here the game will be called through a function-->
                         
                         <div id="info-display">
                             <div id="text-display">
@@ -112,15 +108,15 @@
                             </div>
                         </div>
 
-                        <div id="start-box"> <!--Start box for game--> 
+                        <div id="start-box"> <!--Start box for game: Entry name and difficulty--> 
 
                             <p> 
                                 <label for="entry_name">Enter name:</label> 
                                 <input type="text" id="entry_name" name="entry_name" minlength="1" /> 
                             </p> 
 
-                            <div class="dropdown"> 
-                                <button  class ="button-standard dropbtn" >Difficulty</button> 
+                            <div class="dropdown"> <!--Dropdown button for difficulty levels-->
+                                <button  class ="button-standard" id="difficulty-button" >Difficulty</button> 
                                 <div class="dropdown-content"> 
                                     <button onclick="startGame('easy')" class="button-standard">Easy</button> 
                                     <button onclick="startGame('normal')" class="button-standard">Normal</button> 
@@ -138,7 +134,7 @@
                             <!--buttons will be created through a function in client.js--> 
                         </div> 
 
-                        <div id="submit-container">
+                        <div id="submit-container"> <!--Submit button-->
                             <button onclick="submitQuestion()" class="button-standard">Sumbit</button>
                         </div> 
 
@@ -147,6 +143,7 @@
                         </div>
 
                     </div>
+
                 </div> 
 
                 <div id="leaderboard-container"> <!--Leaderboard--> 

@@ -1,5 +1,5 @@
 /*Main page css-----------------------------------------------------------------------------*/
-.main-page {
+.main-page { /*Modifying all content on the main page, ex creating a standard font*/
     display: none;
     flex-direction: column;
     font-family: 'Verdana, sans-serif';
@@ -7,50 +7,18 @@
     font-size: 1.2rem;
 }
 
-/*Header div - css*/
-.header-main{
+/*Title and clapperboards, container for the header*/
+#header-main{
     display: flex;
     align-items: center;
     gap: 1%;
-    /*text-align: center;*/
     font-size: 300%;
     font-family: "Broadway";
     text-shadow: 0 10px 15px rgb(0, 0, 5);
     color: rgba(161, 5, 5, 0.719);
 }
 
-.button-standard { /*The press to play button*/
-    font-size: 1.2rem;
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    border-radius: 10px;
-
-    /*box-shadow: 0 5px 15px rgb(0, 0, 5);*/
-    background-color: rgb(241, 241, 241);
-    color: black;
-    
-    transition: all 0.3s ease; 
-}
-
-.button-standard:hover{ /* Press to play button hover*/
-    color: rgb(255, 255, 255); 
-    background-color:rgba(88, 3, 3);
-    /*
-    background-color: rgba(94, 2, 2, 0.863);
-    color: rgba(245, 245, 245, 0.815);*/
-    transform:translateY(2%)
-    
-}
-
-button.selected {
-    color: rgb(255, 255, 255); 
-    background-color:rgb(88, 3, 3);
-    box-shadow: 0 5px 15px rgb(46, 2, 3) inset;
-    transform:translateY(1px)
-    
-}
-
-/*Work in progress - clapperboard*/
+/*Clapperboards*/
 .clapperboard{
   width:10%;
   margin:2% auto;
@@ -87,68 +55,52 @@ button.selected {
 #clapperBoardLeft {
     transform: scaleX(-1);
 }
-
 /*----------*/
-
-#dropdown-language-main {
-    text-align: right;
-    margin: 0 2% 2% 0;
-}
 
 h1{
     margin-bottom: 5%;
 }
 
 
-.dropbtn { /* Main*/
-  width: 100%;
-  /*padding: 15px 25px; */
-  border-radius: 15px;
-    /*box-shadow: 0 5px 10px rgb(0, 0, 5);
-  font-family: sans-serif;*/
-  margin-bottom: 0px;
-}
-.dropbtn:hover{
-  color: rgb(255, 255, 255); 
-  background-color: rgba(88, 3, 3, 0.507);
-}
-
-/* Links inside dropdown content */
-.dropdown-content button { /*Main*/
-  color: rgb(0, 0, 0); 
-  background-color: rgba(255, 255, 255);
-  width: 100%;
-  /*padding: 5px 1px;*/
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
-  /*font-size: 50%;*/
-
-  /*font-family: sans-serif;*/
-  border-radius: 10px;
-  margin-bottom: 0px;
-}
-
-
-/*Game options div - css*/
-.game-options {
+/*Buttons to choose between different games*/
+#gameChooserContainer{
+    flex-direction: row;
     text-align: center;
-    /*margin: 50px 50px 50px 50px;*/
-    margin: 3% 3% 3% 3%;
+    margin-bottom: 0.5%;
 }
 
-.game-button {
-    padding: 3px 8px;
+.button-standard { /*The press to play button*/
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    margin-bottom: 5px;
     border-radius: 10px;
-    box-shadow: 0 5px 10px rgb(0, 0, 5);
+
+    /*box-shadow: 0 5px 15px rgb(0, 0, 5);*/
+    background-color: rgb(241, 241, 241);
+    color: black;
+    
+    transition: all 0.3s ease; 
 }
 
-.game-button:hover {
-    background-color: rgb(255, 217, 0);
+.button-standard:hover{ /* Press to play button hover*/
+    color: rgb(255, 255, 255); 
+    background-color:rgba(88, 3, 3);
+    /*
+    background-color: rgba(94, 2, 2, 0.863);
+    color: rgba(245, 245, 245, 0.815);*/
+    transform:translateY(2%)
 }
 
-/*Game center div - css*/
-.game-center {
+button.selected {
+    color: rgb(255, 255, 255); 
+    background-color:rgb(88, 3, 3);
+    box-shadow: 0 5px 15px rgb(46, 2, 3) inset;
+    transform:translateY(1px) 
+}
+
+
+/*Game center container*/
+.game-center { /*Container for instructions, the game, and leaderboard*/
     display: flex;
     flex-direction: row;
     min-height: 600px;
@@ -157,12 +109,7 @@ h1{
 #game {  /*The container with the actual game*/
     width: 60%;
     text-align: center;
-    /*border-style: solid;
-    border-color: rgb(0, 0, 0);*/
-    /*margin: 0 10px 0 10px;*/
-    margin: 0 0.5% 0 0.5%;
-    
-    
+    margin: 0 0.5% 0 0.5%; 
 }
 
 #game-display { /*The game box*/
@@ -173,16 +120,7 @@ h1{
     min-height: 100%;
 }
 
-
-/*Game chooser buttons */
-#gameChooserContainer{
-    flex-direction: row;
-    text-align: center;
-    margin-bottom: 0.5%;
-}
-
 #start-box { /*The container where the user puts their name and chooses difficulty*/
-    /*margin: 5% 5% 5% 5%;*/
     padding: 5% 5% 5% 5%;
     color:rgb(255, 255, 253);
     font-size: 200%;
@@ -192,12 +130,36 @@ h1{
     font-size: 50%;
 }
 
-#rules-container {
+/*Unique styling for the dropdown buttons on the mainpage (difficulty)*/
+#difficulty-button {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 0px;
+}
+
+#difficulty-button:hover{
+  color: rgb(255, 255, 255); 
+  background-color: rgba(88, 3, 3, 0.507);
+}
+
+.dropdown-content button { /* Links inside dropdown content */
+  color: rgb(0, 0, 0); 
+  background-color: rgba(255, 255, 255);
+  width: 100%;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  
+  border-radius: 10px;
+  margin-bottom: 0px;
+}
+
+#instructions-container {
     width: 20%;
     min-height: 100%;
 }
 
-#rules {
+#instructions {
     text-align: center;
     border-style: solid;
     
@@ -208,11 +170,11 @@ h1{
     height: 100%;
 }
 
-#rulesList{
+#instructionsList{
     text-align: left;
 }
 
-li{
+li{ /*Creating space between items in the list of instructions*/
  margin-top: 10px;
 }
 
@@ -235,7 +197,6 @@ li{
 #leaderboard-text {
     margin-top: 10px;
 }
-
 
 th { /*tabel header*/
     width: 50px;
@@ -303,8 +264,6 @@ th { /*tabel header*/
     justify-content: center;
     
 }
-
-
 
 #buttonContainer{
     display: flex;

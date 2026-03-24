@@ -6,13 +6,13 @@
     
 }
 
-body{
+body {
     background-image: url("../client/Resources/felix-mooneeram-evlkOfkQ5rE-unsplash.jpg");
     background-size: cover;
     background-position: center;
 }
 
-#intro-text1{ /*Text:Welcome To*/
+#intro-text1 { /*Text:Welcome To*/
     font-family: "Broadway";
     text-align: center;
     font-size:1700%;
@@ -23,7 +23,7 @@ body{
     
 } 
 
-#intro-text2{ /*Text: Guess The Game*/
+#intro-text2 { /*Text: Guess The Game*/
     font-family: "Broadway";
     text-align: center;
     font-size:1000%;
@@ -32,14 +32,14 @@ body{
     text-shadow: 0 10px 15px rgb(0, 0, 5);
 }
 
-#press-to-play-button{ /*press to play button (around)*/
+#play-button-container { /*Press to play button (around)*/
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
     margin-left: 50px;
 }
 
-#play-button{ /*The press to play button*/
+#play-button { /*The press to play button*/
     font-family: sans-serif;
     font-size: 250%;
     padding: 30px 80px;
@@ -50,22 +50,26 @@ body{
     transition: all 0.3s ease; 
 }
 
-#play-button:hover{ /* Press to play button hover*/
+#play-button:hover { /* Press to play button hover*/
     background-color: rgba(94, 2, 2, 0.863);
     color: rgba(245, 245, 245, 0.815);
     transform:translateY(2%)
     
 }
 
-#language-container{ /*Choose language (around) */
+
+/*Dropdown buttons, language on frontpage and difficulty on mainpage*/
+/*Some css is unique for language dropdown button, that code includes "language" or "front".
+A lot of the code also takes care of the difficulty dropdown button on the main page,
+together with additional code on the stylesMain.css file*/
+#language-container { /*Button to choose language (around) */
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
     margin-left: 50px;
 }
 
-
-#language-button{
+#language-button { /*The default look of the language button, when no one is hovering over it*/
     font-family: sans-serif;
     font-size: 150%;
     padding: 3px 8px;
@@ -80,16 +84,9 @@ body{
     color: rgba(253, 253, 253, 0.815);
 }
 
-/* Collor of droppdown buttons*/
-.dropdown-buttons:hover { 
-    background-color: rgba(109, 3, 3, 0.863);
-}
-
-/*Dropdown buttons*/
-.dropdown  {
+.dropdown {
   position: relative;
   display: inline-block;
-  
 }
 
 /* Dropdown content */
@@ -102,11 +99,7 @@ body{
   min-width: 5%;
 }
 
-
-
-#dropdown-content-front button {
-  /*color: rgb(0, 0, 0); */
-  /*background-color: rgb(255, 255, 255);*/
+#dropdown-content-front button { /*Unique styling for the dropdown buttons on the frontpage*/
   width: 100%;
   padding: 3px 8px;
   text-decoration: none;
@@ -119,56 +112,4 @@ body{
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
-
-
-/*
-Show the dropdown content on hover 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-*/
-
-
-/*Dropdown buttons
-.dropdown  {
-  position: relative;
-  display: inline-block;
-}
-*/
-
-/* Dropdown content 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 5%;
-}
-*/
-
-/* Links inside dropdown content 
-.dropdown-content button {
-  color: rgb(216, 209, 209);
-  background-color: rgb(255, 255, 255);
-  width: 100%;
-  padding: 5px 1px;
-  text-decoration: none;
-  display: block;
-  font-size: 15px;
-}
-*/
-
-/*
-#dropdown-content-front button { 
-  color: black;
-  width: 100%;
-  padding: 10px 10px;
-  text-decoration: none;
-  display: block;
-  font-size: 80%;
-}
-*/
-
-
+/*------------------------------------------------*/
