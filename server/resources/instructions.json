@@ -1,0 +1,46 @@
+{
+    "eng":{
+        "start": [
+            "Choose which quiz game you want from amongst the button at the top.", 
+            "All quizes consists of 10 questions",
+            "Enter username and choose difficulty to start the game.", 
+            "Difficulty sets how many answer options will be availible.",
+            "Your score will be displayed at the end of the game.",
+            "On the right side of the screen you can see the leaderbord for the selected game, depending on the difficulty lever.",
+            "If you ever want to quit the current game and choose another you can press the Restart game button that will appear."
+            ],
+        "standard":[
+            "Press the sumbit button.",
+            "The correct answer will be displayed under the picture.",
+            "Press the Next Question button to continue the game.",
+            "Your score will be displayed at the end of the game.",
+            "If you want to quit the current game and choose another press the Restart game button at the top."
+        ],
+        "yearGame": "Choose the correct release date year, based on the movie, from among the options.",
+        "descriptionGame":"Choose the correct movie, based on the description, from among the options.",
+        "directorGame":"Choose the correct director, based on the movie, from among the options.",
+        "actorsGame":"Choose the correct movie, based on the actors, from among the options."
+    },
+    "sv":{
+         "start": [
+            "Välj vilket quiz du vill spela från knapparna över mitten rutan.",
+            "Alla spel innehåller 10 frågor",
+            "Skriv användarnamn och välj svårighetsgrad för att börja spela", 
+            "Svårighetsgrader bestämmer hur många svarsalternativ som ges.",
+            "Resultatet poängen visas i slutet",
+            "På höger sida finns leaderboard som visar de högsta spela för valda spel.",
+            "Om du mitt i spelet vill avsluta och byta spel kan du trycka på 'Starta om' knappen om kommer visas."
+            ],
+        "standard":[
+            "Tryck på Bekräfta knappen.",
+            "Det korrekta svaret skrivs ut under bilden.",
+            "Tryck på Nästa frpga knappen för att gå vidare.",
+            "Poängen visas i slutet av spelet.",
+            "Om du mitt i spelet vill avsluta och byta spel kan du trycka på 'Starta om' knappen i toppen av mitten lådan."
+        ],
+        "yearGame": "Baserat på filmen, välj det korrekta utgivs året bland alternativen",
+        "descriptionGame":"Baserat på film beskrivningen, välj den korrekta filmen.",
+        "directorGame":"Baserat på filmen, välj den/de korrekta regissör bland alternativen.",
+        "actorsGame":"Baserat på de kändaste skådespelarna från filmen, välj korrekt film bland alternativen."
+    }
+}

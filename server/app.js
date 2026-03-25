@@ -34,7 +34,7 @@ const server = http.createServer((req,res) => {
             answer: null,
             questionBase: null,
             optionBase: null,
-            searchParameter: null, //what the data must include (is used for entries with photos)
+            searchParameter: "photo",
             amountOfQuestion: 10, //set the standard to all the games to have 10 questions
             difficulty: 5,
         };
@@ -58,7 +58,6 @@ const server = http.createServer((req,res) => {
             case "yearGame":
                 gameParameters.questionBase = "year";
                 gameParameters.optionBase = "year";
-                gameParameters.searchParameter = "photo";
 
                 console.log(gameParameters);
 
@@ -96,6 +95,19 @@ const server = http.createServer((req,res) => {
             case "picture":
                 
                 routingImages(res, pathComponents[2]); //pathcomponents[2] = normalized_id
+                
+            break;
+
+            case "instructions":
+                const filePath = "./resources/instructions.json";
+
+                fs.readFile(filePath, "utf-8", (err, data) => { //data becomes a string
+                    if(err){
+                        sendResponse(res, 404, "text/plain", "Instructions not found");
+                    }else{
+                        sendResponse(res, 200, "application/json", data);
+                    }
+                });
                 
             break;
 
@@ -196,20 +208,16 @@ async function routingGame(res, gameParameters){
     const amountOfMovies = parseInt(gameParameters.amountOfQuestion);
     const amountOfQuestions = parseInt(gameParameters.difficulty);
 
-    const sampelFilterQuestion = [];
-    if(gameParameters.searchParameter != null){  //if we want to match search something that is added
-        sampelFilterQuestion.push({
-            $match: {[gameParameters.searchParameter]: 1}, //bracket [] are used to ensure the request dosen't search for the field "matchfilter", and instead the value assigned to it
-        })
-    }
-    sampelFilterQuestion.push(
+    const sampelFilterQuestion = [
+        {$match: {[gameParameters.searchParameter]: 1}}, //we only want entries that have pictures
         {$sample: {size: amountOfMovies}}, //sets how many entries we want
         {$project: {
             normalized_id: 1, //always inclued the normalized_id since it's the same between different data groups(images)
             name: 1,
             [gameParameters.questionBase]: 1,
         }}
-    );
+    ];
+   
   
     //movies that are used for the questions are found and stored. 
     resultToClient.QuestionMovie = await dbCollection.aggregate(sampelFilterQuestion).toArray();
@@ -219,8 +227,8 @@ async function routingGame(res, gameParameters){
         
         const sampelFilterOptions = [
             {$match: {//excludes the real answer from the options answers so there are no dublicates
-                normalized_id: {$ne: resultToClient.QuestionMovie.normalized_id}, //included to explicitly remove the correct answer
-                [gameParameters.optionBase]: {$ne: resultToClient.QuestionMovie[gameParameters.optionBase]},
+                normalized_id: {$ne: resultToClient.QuestionMovie[i].normalized_id}, //included to explicitly remove the correct answer
+                [gameParameters.optionBase]: {$ne: resultToClient.QuestionMovie[i][gameParameters.optionBase]},
             }}, 
 
             //group is used to ensure we don't get the same values for the option questions, for example year

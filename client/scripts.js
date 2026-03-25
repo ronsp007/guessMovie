@@ -1,4 +1,5 @@
 
+
 const serverUrl = "http://127.0.0.1:3000";
 
 let gameScore = 0; 
@@ -13,7 +14,7 @@ const amountOfQuestion = 10; //standard amount of questions
 let gameParameters = { //answer and questionBase are the same, it's whats being asked of the user
     yearGame: {
         answer: "year", 
-        questionBase: "photo",
+        questionBase: "name",
         optionBase: "year",
         pictureBefore: true,
         pictureAfter: false, 
@@ -26,9 +27,9 @@ let gameParameters = { //answer and questionBase are the same, it's whats being 
         pictureAfter: true, 
     },
     directorGame:{
-        answer: "name",
-        questionBase: "director",
-        optionBase: "year",
+        answer: "director",
+        questionBase: "name",
+        optionBase: "director",
         pictureBefore: true,
         pictureAfter: false, 
     },
@@ -45,8 +46,10 @@ let gameParameters = { //answer and questionBase are the same, it's whats being 
 //runs when the website is loaded.
 document.addEventListener("DOMContentLoaded", function(){
 
-    createButtonFunction(); 
-    requestLeaderboard();
+    createGameSelectionButtons(); 
+    requestLeaderboard("normal");
+    writeInstructions("start");
+    createLederboardButtons();
     
 });
 
@@ -60,7 +63,7 @@ function language(lang) {
 }
 
 //adds radiobutton like functionality to the game choosing buttons
-function createButtonFunction(){
+function createGameSelectionButtons(){
     
     const buttons = document.getElementsByName("gameChooser");
 
@@ -82,6 +85,27 @@ function createButtonFunction(){
     });
 }
 
+function createLederboardButtons(){
+    const buttons = document.getElementsByName("leaderboard-chooser");
+
+    buttons.forEach(button => {
+        if(button.id == gameDifficulty){ //shows the standard difficulty at start
+            button.classList.add("selected");
+        }
+        button.addEventListener("click", () => {
+
+            //removes the selected property from all other leaderboard buttons
+            buttons.forEach(btn => {btn.classList.remove("selected")});
+
+            //adds selected status for pressed button and sets the game based on the button
+            button.classList.add("selected");
+            console.log("current leaderbord: " + button.id);
+            requestLeaderboard(button.id);
+
+        })
+    });
+}
+
 //Will display the relevant html object for the game site
 function displayGameView() {
    document.querySelector(".frontpage").style.display = "none"; 
@@ -89,7 +113,58 @@ function displayGameView() {
     
 }
 
-function setGameState(){
+async function writeInstructions(infoType) {
+    const instuctionList = document.getElementById("instructions-list");
+    instuctionList.innerHTML = ""; //makes sure the list i empty before we write
+
+    const response = await fetch(serverUrl + "/instructions",  { 
+        method : "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: null,
+    }); 
+
+    if (response.ok) {
+
+        response.json().then((jsonBody) => {
+            console.log(jsonBody); //test
+
+            //checks which language version
+            const htmlUsed = window.location.pathname.split("/").pop();
+            let lang = null;
+            if(htmlUsed == "index.html"){
+                console.log("English site");
+                lang = "eng";
+            }else{
+                lang = "sv";
+            }
+
+            //checks whether the start instuctions or specifik game instructions should be written
+            if(infoType == "start"){
+                for(let i = 0; i < jsonBody[lang].start.length; i++){
+                    const listItem = document.createElement("li");
+                    listItem.textContent = jsonBody[lang].start[i];
+                    instuctionList.appendChild(listItem);
+                }
+            }else{
+                const listItem = document.createElement("li");
+                //writes specifik info depending on game
+                listItem.textContent = jsonBody[lang][gameType];
+                instuctionList.appendChild(listItem);
+
+                //writes out genereic info for the games
+                for(let i = 0; i < jsonBody[lang].standard.length; i++){
+                    const listItem = document.createElement("li");
+                    listItem.textContent = jsonBody[lang].standard[i];
+                    instuctionList.appendChild(listItem);
+                }
+            }
+        });
+
+    } else {
+        console.log("Instruction request failed");
+    }
 
 }
 
@@ -102,7 +177,7 @@ async function startGame(difficulty) {
     const gameChooser = document.getElementById("gameChooserContainer");
     const infoDisplay = document.getElementById("info-display");
     const restartButton = document.getElementById("restart-game");
-
+    
     restartButton.style.display = "block";
     infoDisplay.style.display = "block";
     gameChooser.style.display = "none";
@@ -115,7 +190,8 @@ async function startGame(difficulty) {
 
     gameDifficulty = difficulty; 
     playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
-
+    
+    await writeInstructions();
 
     //gameType is already choosen depending on button pressed down. 
     console.log("Name: " + playerName + ", Game Difficulty: " + gameDifficulty + ", Game Type: " + gameType);
@@ -177,6 +253,7 @@ async function displayMoviePoster()
 async function gameRound() {
     const gameContent = document.getElementById("game-content");  
     answerbuttons(); //Display the answer option buttons
+    selectedMovie = null;
 
     
 
@@ -189,11 +266,10 @@ async function gameRound() {
     
     console.log(gameParameters[gameType].questionBase);
 
-    if(gameParameters[gameType].questionBase != "photo"){
-        const questionText = document.getElementById("movie-question");
-        questionText.textContent = gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].questionBase];
-    }
-
+    const questionText = document.getElementById("movie-question");
+    questionText.textContent = gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].questionBase];
+    questionText.style.display = "inline-block";
+    questionText.style.visibility = "visible";
     gameContent.style.display = "block"; //display question
 
 }
@@ -201,38 +277,46 @@ async function gameRound() {
 
 //Takes the value from the button pressed and depending on that increases the score. 
 function submitQuestion() {
+    if (selectedMovie != null){ //Will only run if a answerOption button is pressed
+        const gameDiv = document.getElementById("game-display");
+        const nextButton = document.getElementById("next-question-container");
+        nextButton.style.display = "flex";
+        
+        console.log("Correct answer: " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer])
 
-    const gameDiv = document.getElementById("game-display");
-    const nextButton = document.getElementById("next-question-container");
-    nextButton.style.display = "flex";
+        //Depending on answer: add score and give positive indikator or give negative indikator
     
-    console.log("Correct answer: " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer])
-
-    //Depending on answer: add score and give positive indikator or give negative indikator
-    if (selectedMovie == gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer]) { 
+        if (selectedMovie == gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer]) { 
         gameScore++;
         gameDiv.style.borderColor = "green";
 
-    }else{
-        gameDiv.style.borderColor = "red";
+        }else {
+            gameDiv.style.borderColor = "red";
+        }
+   
+
+        //Hide sumbit button
+        const submitButton = document.getElementById("submit-container");
+        submitButton.style.display = "none"; 
+
+        //Display correct answer: 
+        const textDisplayDiv = document.getElementById("text-display");
+        const text = document.getElementById("game-text-display");
+        text.textContent = "Answer:  " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer];
+
+        if(gameParameters[gameType].pictureAfter){ //depending on the game the movie poster is shown with the answer
+            displayMoviePoster();
+
+            const gameContent = document.getElementById("movie-question");  
+            gameContent.style.display = "none";
+        }
+
+        
+        textDisplayDiv.style.visibility = "visible";
+    
+    
     }
-
-    //Hide sumbit button
-    const submitButton = document.getElementById("submit-container");
-    submitButton.style.display = "none"; 
-
-    //Display correct answer: 
-    const textDisplayDiv = document.getElementById("text-display");
-    const text = document.getElementById("game-text-display");
-    text.textContent = "Answer:  " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer];
-
-    if(gameParameters[gameType].pictureAfter){ //depending on the game the movie poster is shown with the answer
-        displayMoviePoster();
-    }
-
-    const gameContent = document.getElementById("movie-question");  
-    gameContent.innerHTML = "";
-    textDisplayDiv.style.visibility = "visible";
+    
 }
 
 
@@ -300,7 +384,7 @@ function newGame(){
     const textDisplayDiv = document.getElementById("text-display");
     const restartButton = document.getElementById("restart-game");
     const movieQuestionText = document.getElementById("movie-question"); 
-    movieQuestionText.innerHTML = "";
+    movieQuestionText.style.visibility = "hidden";
 
     document.querySelectorAll(".game-running").forEach(element => {
         element.style.display = "none";
@@ -402,9 +486,9 @@ async function uploadScore() {
     }
 }
 
-async function requestLeaderboard(){ //requests the 10 players with the higest score
+async function requestLeaderboard(difficulty){ //requests the 10 players with the higest score
 
-    const response = await fetch(serverUrl + "/" + "leaderboard/" + gameDifficulty,  { 
+    const response = await fetch(serverUrl + "/" + "leaderboard/" + difficulty,  { 
         method : "GET",
         headers: {
             "Content-Type": "application/json",
