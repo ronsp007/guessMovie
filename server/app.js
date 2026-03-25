@@ -87,8 +87,9 @@ const server = http.createServer((req,res) => {
 
             case "leaderboard":
 
-                const difficulty = pathComponents[2];
-                routingScore(res, difficulty);
+                const gameType = pathComponents[2];
+                const difficulty = pathComponents[3];
+                routingScore(res, gameType, difficulty);
 
             break;
 
@@ -347,7 +348,7 @@ async function uploadingScore(dataFromClient) {
 
     const scoreJsonData = JSON.parse(dataFromClient); //Converts the string into an objekt
   
-    const collectionName =  "leaderboard_" + scoreJsonData.difficulty;    
+    const collectionName =  "leaderboard_" + scoreJsonData.gameType;    
 
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
@@ -361,12 +362,14 @@ async function uploadingScore(dataFromClient) {
 }
 
 //gets the results(maximum of 10) from the specified difficulty level and sends it to the client 
-async function routingScore(res, diff){
+async function routingScore(res, type, diff){
     await dbClient.connect();
     const db = dbClient.db("tnm121-project");
-    const  dbCollection = db.collection("leaderboard_" + diff);
+    const  dbCollection = db.collection("leaderboard_" + type); //searches in the database for the requested game.
 
-    const filterQuery = {};
+    const filterQuery = {
+        difficulty: diff //only find the ones with the relevant difficulty
+    };
     const sortQuery = {score: -1}; //sorts in decending order highest->lowest
     const findResult = await dbCollection.find(filterQuery).sort(sortQuery).limit(10).toArray();
     

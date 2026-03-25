@@ -128,13 +128,11 @@ async function writeInstructions(infoType) {
     if (response.ok) {
 
         response.json().then((jsonBody) => {
-            console.log(jsonBody); //test
 
             //checks which language version
             const htmlUsed = window.location.pathname.split("/").pop();
             let lang = null;
             if(htmlUsed == "index.html"){
-                console.log("English site");
                 lang = "eng";
             }else{
                 lang = "sv";
@@ -464,6 +462,7 @@ async function uploadScore() {
 
     const scoreData = {
         name: playerName,
+        gameType: gameType,
         score: gameScore,
         difficulty: gameDifficulty
     };
@@ -488,7 +487,7 @@ async function uploadScore() {
 
 async function requestLeaderboard(difficulty){ //requests the 10 players with the higest score
 
-    const response = await fetch(serverUrl + "/" + "leaderboard/" + difficulty,  { 
+    const response = await fetch(serverUrl + "/" + "leaderboard/" + gameType + "/" + difficulty,  { 
         method : "GET",
         headers: {
             "Content-Type": "application/json",
@@ -527,7 +526,12 @@ async function requestLeaderboard(difficulty){ //requests the 10 players with th
             }
         });
 
-    }else{///////////////show this in the browser//////////////////////////////
+    }else{
+        //empties list if there is no leaderboard
+        const tabel = document.getElementById("leaderboard-text"); 
+        while(tabel.rows.length > 1){
+            tabel.deleteRow(1);
+        }
         console.log("Failed to request leaderbord from server.")
     }
 
