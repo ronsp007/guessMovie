@@ -172,7 +172,7 @@ async function startGame(difficulty) {
 
     //Hides intro box
     const startBox = document.getElementById("start-box");  
-    const gameChooser = document.getElementById("gameChooserContainer");
+    const gameChooser = document.getElementById("game-chooser-container");
     const infoDisplay = document.getElementById("info-display");
     const restartButton = document.getElementById("restart-game");
     
@@ -265,7 +265,28 @@ async function gameRound() {
     console.log(gameParameters[gameType].questionBase);
 
     const questionText = document.getElementById("movie-question");
-    questionText.textContent = gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].questionBase];
+    questionText.innerHTML = "";
+    const questionContent = gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].questionBase];
+
+    const questionArray = Array.isArray(questionContent)
+        ? questionContent //if questionContent already is an array assing the same value
+        : questionContent.split(","); //if questionContent isn't an array slit the string turning it into an array
+
+    if(questionArray.length > 1){ //If there is more than one name/item that needs to be written out
+        const lastCheck = questionArray.length - 1; 
+
+        for(let i = 0; i < questionArray.length; i++){
+            if(i != lastCheck){
+                questionText.textContent += questionArray[i] + ",  ";
+            }else{
+                questionText.textContent += questionArray[i];
+            } 
+        }
+        
+    }else{
+        questionText.textContent = questionContent;
+    }
+    
     questionText.style.display = "inline-block";
     questionText.style.visibility = "visible";
     gameContent.style.display = "block"; //display question
@@ -339,6 +360,7 @@ function nextQuestion(){
         }else if (questionCounter == amountOfQuestion)
         {
             console.log("End of game"); 
+            gameDiv.style.borderColor = "white";
             nextButton.style.display = "none";
             textDisplayDiv.style.visibility = "hidden";
             endOfGame();
@@ -357,10 +379,8 @@ async function endOfGame(){ //kolla över så att saker som ska göras i css och
     const endTextDisplayDiv = document.getElementById("end-game");
     console.log(gameScore)
 
-    const resultText = document.createElement("p");
+    const resultText = document.getElementById("score-display");
     resultText.textContent = gameScore;
-
-    endTextDisplayDiv.appendChild(resultText);
 
     endTextDisplayDiv.style.display = "block";
 
@@ -378,7 +398,7 @@ function newGame(){
     const textEndDisplayDiv = document.getElementById("end-game");
     */
     const startBox = document.getElementById("start-box");
-    const gameChooser = document.getElementById("gameChooserContainer");
+    const gameChooser = document.getElementById("game-chooser-container");
     const textDisplayDiv = document.getElementById("text-display");
     const restartButton = document.getElementById("restart-game");
     const movieQuestionText = document.getElementById("movie-question"); 

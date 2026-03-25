@@ -64,7 +64,7 @@ h1{
 
 
 /*Buttons to choose between different games*/
-#gameChooserContainer{
+#game-chooser-container{
     flex-direction: row;
     text-align: center;
     margin-bottom: 0.5%;
@@ -197,6 +197,7 @@ button.selected {
 
 #instructions-list{
     text-align: left;
+    margin: 2%;
 }
 
 li{ /*Creating space between items in the list of instructions*/

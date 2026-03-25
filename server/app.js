@@ -11,7 +11,6 @@ const dbClient = new MongoClient(dbServerUrl);
 // declaration and loading (inclusion) of various modules
 const http = require("node:http");      // Node.js standard library for handling client/server server features
 const fs = require("node:fs");      //needed for loading in pictures
-const path = require("node:path");
 
 // initialization of server properties
 const hostname = "127.0.0.1";
@@ -51,15 +50,12 @@ const server = http.createServer((req,res) => {
         switch(pathComponents[1]){
             
             case"movie": //test to get a single movie from the imdb database
-                console.log("hej");
                 singleMovie(res,pathComponents[2]); 
             break;
 
             case "yearGame":
                 gameParameters.questionBase = "year";
                 gameParameters.optionBase = "year";
-
-                console.log(gameParameters);
 
                 routingGame(res, gameParameters);
             break
@@ -188,7 +184,7 @@ async function singleMovie(res, search){
 
     const filterQuery = {name: search};
     const findResult = await dbCollection.find(filterQuery).toArray();
-    console.log(findResult);
+    
     const findResultString = JSON.stringify(findResult);
 
     sendResponse(res,200,"application/json",findResultString);
@@ -331,7 +327,6 @@ async function randomAnswerOptions(numr, exclude) {
 function routingImages(res, id) {
 
     const imageFilePath = "./media/" + id + ".png";
-    console.log(imageFilePath);
 
     fs.readFile(imageFilePath, (err, data) => {
         if (err) {

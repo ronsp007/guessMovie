@@ -15,7 +15,7 @@ body {
 #intro-text1 { /*Text:Welcome To*/
     font-family: "Broadway";
     text-align: center;
-    font-size:1700%;
+    font-size:1500%;
     margin-top: 100px;
     margin-bottom: 5px;
     text-shadow: 0 10px 15px rgb(0, 0, 5);
@@ -26,7 +26,7 @@ body {
 #intro-text2 { /*Text: Guess The Game*/
     font-family: "Broadway";
     text-align: center;
-    font-size:1000%;
+    font-size:800%;
     margin-top: 5px;
     color: rgba(235, 235, 235, 0.733);
     text-shadow: 0 10px 15px rgb(0, 0, 5);
@@ -34,8 +34,6 @@ body {
 
 #play-button-container { /*Press to play button (around)*/
     text-align: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
     margin-left: 50px;
 }
 
@@ -64,7 +62,7 @@ A lot of the code also takes care of the difficulty dropdown button on the main 
 together with additional code on the stylesMain.css file*/
 #language-container { /*Button to choose language (around) */
     text-align: center;
-    margin-top: 50px;
+    margin-top: 30px;
     margin-bottom: 50px;
     margin-left: 50px;
 }
