@@ -94,13 +94,17 @@
                 <div id="game"> <!--Display of the actual game--> 
 
                     <div id="game-display"> <!--????-->
+
+                        <div id="restart-game">
+                            <button onclick="newGame()" class="buttonStandard">Restart game</button>
+                        </div>
                         
                         <div id="info-display">
                             <div id="text-display">
                                 <p id="game-text-display"></p>
                             </div>
 
-                            <div id="end-game">
+                            <div class="game-running" id="end-game">
                                 <button onclick="newGame()" class="button-standard">New Game</button>
                                 <p>Congratulations!</p>
                                 <p>Your score is: </p>
@@ -126,19 +130,22 @@
 
                         </div> 
 
-                        <div id="game-content">
+                        
+
+                        <div class="game-running" id="game-content">
                             <img id="movie-picture" alt="AI generated movie poster">
+                            <p id="movie-question"></p>
                         </div>
 
-                        <div id="answer-buttons-display"> 
+                        <div class="game-running"  id="answer-buttons-display"> 
                             <!--buttons will be created through a function in client.js--> 
                         </div> 
 
-                        <div id="submit-container"> <!--Submit button-->
+                        <div class="game-running" id="submit-container"> <!--Submit button-->
                             <button onclick="submitQuestion()" class="button-standard">Sumbit</button>
                         </div> 
 
-                        <div id="next-question-container">
+                        <div class="game-running" id="next-question-container">
                             <button onclick="nextQuestion()" class="button-standard">Next question</button>
                         </div>
 

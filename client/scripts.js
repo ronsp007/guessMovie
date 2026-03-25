@@ -8,7 +8,7 @@ let gameDifficulty = "normal";
 let selectedMovie = null;
 let questionCounter = 0;
 let gameType = "yearGame"; // sets the default game
-const amountOfQuestion = 10; //games are set to 10 questions
+const amountOfQuestion = 10; //standard amount of questions
 
 let gameParameters = { //answer and questionBase are the same, it's whats being asked of the user
     yearGame: {
@@ -93,11 +93,19 @@ function setGameState(){
 
 }
 
+
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
 
     //Hides intro box
     const startBox = document.getElementById("start-box");  
+    const gameChooser = document.getElementById("gameChooserContainer");
+    const infoDisplay = document.getElementById("info-display");
+    const restartButton = document.getElementById("restart-game");
+
+    restartButton.style.display = "block";
+    infoDisplay.style.display = "block";
+    gameChooser.style.display = "none";
     startBox.style.display = "none";
 
 
@@ -139,9 +147,8 @@ async function startGame(difficulty) {
 
 }
 
-async function gameRound() {
-    const gameContent = document.getElementById("game-content");  // Code to display error message on the webpage
-    answerbuttons(); //Display the answer option buttons
+async function displayMoviePoster()
+{
 
     console.log("Image URL: " + gameInfo.QuestionMovie[questionCounter].normalized_id);
 
@@ -158,12 +165,36 @@ async function gameRound() {
         response.blob().then((blobBody) => {
             const image = document.getElementById("movie-picture");
             image.src = URL.createObjectURL(blobBody);
-            gameContent.style.display = "block";
+            console.log("image ok")
+            image.style.display = "inline";
         });
 
     } else {
-        console.log("Image request went bad");
+        console.log("Image request failed");
     }
+}
+
+async function gameRound() {
+    const gameContent = document.getElementById("game-content");  
+    answerbuttons(); //Display the answer option buttons
+
+    
+
+    if(gameParameters[gameType].pictureBefore == true){ //depending on the game the movie poster is shown with the question
+        await displayMoviePoster();
+    }else{
+        const moviePoster = document.getElementById("movie-picture");
+        moviePoster.style.display = "none";
+    }
+    
+    console.log(gameParameters[gameType].questionBase);
+
+    if(gameParameters[gameType].questionBase != "photo"){
+        const questionText = document.getElementById("movie-question");
+        questionText.textContent = gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].questionBase];
+    }
+
+    gameContent.style.display = "block"; //display question
 
 }
 
@@ -174,9 +205,11 @@ function submitQuestion() {
     const gameDiv = document.getElementById("game-display");
     const nextButton = document.getElementById("next-question-container");
     nextButton.style.display = "flex";
+    
+    console.log("Correct answer: " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer])
 
     //Depending on answer: add score and give positive indikator or give negative indikator
-    if (selectedMovie == gameInfo.QuestionMovie[questionCounter][gameParameters.questionBase]) { 
+    if (selectedMovie == gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer]) { 
         gameScore++;
         gameDiv.style.borderColor = "green";
 
@@ -190,9 +223,16 @@ function submitQuestion() {
 
     //Display correct answer: 
     const textDisplayDiv = document.getElementById("text-display");
-    const textDiv = document.getElementById("game-text-display");
-    textDiv.textContent = "The movie " + gameInfo.QuestionMovie[questionCounter].name + " came out in: " + gameInfo.QuestionMovie[questionCounter].year;
-    textDisplayDiv.style.display = "block";
+    const text = document.getElementById("game-text-display");
+    text.textContent = "Answer:  " + gameInfo.QuestionMovie[questionCounter][gameParameters[gameType].answer];
+
+    if(gameParameters[gameType].pictureAfter){ //depending on the game the movie poster is shown with the answer
+        displayMoviePoster();
+    }
+
+    const gameContent = document.getElementById("movie-question");  
+    gameContent.innerHTML = "";
+    textDisplayDiv.style.visibility = "visible";
 }
 
 
@@ -209,7 +249,7 @@ function nextQuestion(){
 
             gameDiv.style.borderColor = "white";
 
-            textDisplayDiv.style.display = "none";
+            textDisplayDiv.style.visibility = "hidden";
             nextButton.style.display = "none";
 
             gameRound();
@@ -218,27 +258,29 @@ function nextQuestion(){
         {
             console.log("End of game"); 
             nextButton.style.display = "none";
-            textDisplayDiv.style.display = "none";
+            textDisplayDiv.style.visibility = "hidden";
             endOfGame();
         }
 }
 
 
 async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
-    const gameDiv = document.getElementById("gameContent");
+    const gameDiv = document.getElementById("game-content");
     const buttonBox = document.getElementById("answer-buttons-display"); 
-    gameDiv.innerHTML= "";
+    const submitButton = document.getElementById("submit-container"); 
+    submitButton.style.display = "none";
+    gameDiv.style.display = "none";
     buttonBox.innerHTML = "";
     
-    const textDisplayDiv = document.getElementById("end-game");
+    const endTextDisplayDiv = document.getElementById("end-game");
     console.log(gameScore)
 
     const resultText = document.createElement("p");
     resultText.textContent = gameScore;
 
-    textDisplayDiv.appendChild(resultText);
+    endTextDisplayDiv.appendChild(resultText);
 
-    textDisplayDiv.style.display = "block";
+    endTextDisplayDiv.style.display = "block";
 
     uploadScore(); //upload the playerinfo and score to the database
 
@@ -246,10 +288,29 @@ async function endOfGame(){ //kolla över så att saker som ska göras i css och
 
 //Brings back the start game container
 function newGame(){
+    /*
+    const gameDiv = document.getElementById("game-content");
+    const submitButton = document.getElementById("submit-container"); 
+    const buttonBox = document.getElementById("answer-buttons-display"); 
+   
+    const textEndDisplayDiv = document.getElementById("end-game");
+    */
     const startBox = document.getElementById("start-box");
-    const textDisplayDiv = document.getElementById("end-game");
-    textDisplayDiv.style.display = "none";
+    const gameChooser = document.getElementById("gameChooserContainer");
+    const textDisplayDiv = document.getElementById("text-display");
+    const restartButton = document.getElementById("restart-game");
+    const movieQuestionText = document.getElementById("movie-question"); 
+    movieQuestionText.innerHTML = "";
+
+    document.querySelectorAll(".game-running").forEach(element => {
+        element.style.display = "none";
+    });
+
+    restartButton.style.display = "none";
+    textDisplayDiv.style.visibility = "hidden";
+    gameChooser.style.display = "block";
     startBox.style.display = "block";
+    
 }
 
 //Displays the answer option buttons for the relevant question
@@ -257,6 +318,7 @@ function answerbuttons(){
    
     const container = document.getElementById("answer-buttons-display"); //Connect the right div
     container.innerHTML = ""; //Empty buttons every time 
+    container.style.display = "grid";
 
     //const corectAnswerName = gameInfo.QuestionMovie[questionCounter].name;
     const corectAnswer = gameInfo.QuestionMovie[questionCounter];
@@ -274,7 +336,7 @@ function answerbuttons(){
         const buttons = document.createElement("button"); 
         buttons.classList.add("movie-name-buttons"); 
         buttons.classList.add("button-standard"); 
-        buttons.textContent = allAnswer[i].year;
+        buttons.textContent = allAnswer[i][gameParameters[gameType].optionBase];
         
 
         //Do the buttons so they work ass radio buttons
@@ -285,7 +347,7 @@ function answerbuttons(){
             buttons.classList.add("selected"); //select the preest button
 
             selectedMovie = buttons.textContent; //so we now which button is selected
-            console.log(selectedMovie)
+            console.log("Selected answer:" + selectedMovie)
 
         });
     
@@ -366,7 +428,11 @@ async function requestLeaderboard(){ //requests the 10 players with the higest s
                 const tabelRow = document.createElement("tr");
                
                 const tabelContentName = document.createElement("td");
-                tabelContentName.textContent = jsonBody[i].name;
+                if(jsonBody[i].name == ""){
+                    tabelContentName.textContent = "Anonymous";
+                }else{
+                    tabelContentName.textContent = jsonBody[i].name;
+                }
                 tabelRow.appendChild(tabelContentName);
 
                 const tabelContentScore = document.createElement("td");
