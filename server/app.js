@@ -38,9 +38,10 @@ const server = http.createServer((req,res) => {
             difficulty: 5,
         };
 
+        //determines how many option questions need to be sent
         if(pathComponents[2] == "easy"){
             gameParameters.difficulty = 2;
-        }else if (pathComponents[2] == "normal"){ //should this be removed since it's unecesarrry
+        }else if (pathComponents[2] == "normal"){ 
             gameParameters.difficulty = 5;
         }else if(pathComponents[2] == "hard"){
             gameParameters.difficulty = 8; 
@@ -318,10 +319,6 @@ async function randomAnswerOptions(numr, exclude) {
     await dbClient.close();
     return findResult; 
 }
-
-
-
-
 
 //sends image to client based on the normalized id
 function routingImages(res, id) {
