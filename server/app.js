@@ -17,10 +17,14 @@ const hostname = "127.0.0.1";
 const port = 3000;
 const serverUrl = "http://" + hostname + ":" + port + "";
 
-/**************** STANDARD SERVER CREATION AND RESPONS MANAGMENT *****************/
+//starts server listening and connects to database
+startServer();
+
+/**************** STANDARD SERVER CREATION AND API REQUEST MANAGMENT *****************/
 
 const server = http.createServer((req,res) => {
 
+    
     //saves the request url in an array: pathcomponents
     const requestUrl = new URL(serverUrl + req.url);
     const pathComponents = requestUrl.pathname.split("/");
@@ -49,12 +53,15 @@ const server = http.createServer((req,res) => {
         /**************/
 
         switch(pathComponents[1]){
+
+            
             
             case"movie": //test to get a single movie from the imdb database
                 singleMovie(res,pathComponents[2]); 
             break;
 
             case "yearGame":
+                
                 gameParameters.questionBase = "year";
                 gameParameters.optionBase = "year";
 
@@ -69,8 +76,8 @@ const server = http.createServer((req,res) => {
             break;
 
             case "actorsGame":
-                gameParameters.questionBase = "star"; //star is the key for actors in the database
-                gameParameters.optionBase = "name"; //still name of movie
+                gameParameters.questionBase = "star"; //star is the field name for actors in the database
+                gameParameters.optionBase = "name"; 
 
                 routingGame(res, gameParameters);
             break;
@@ -92,31 +99,26 @@ const server = http.createServer((req,res) => {
 
             case "picture":
                 
-                routingImages(res, pathComponents[2]); //pathcomponents[2] = normalized_id
+                const normalized_id = pathComponents[2];
+                routingImages(res, normalized_id); 
                 
             break;
 
-            case "instructions":
-                const filePath = "./resources/instructions.json";
+            case "instructions": //gets the instructions and sends them if found
 
-                fs.readFile(filePath, "utf-8", (err, data) => { //data becomes a string
-                    if(err){
-                        sendResponse(res, 404, "text/plain", "Instructions not found");
-                    }else{
-                        sendResponse(res, 200, "application/json", data);
-                    }
-                });
+                const language = pathComponents[2];
+                routingInstructions(res,language);
                 
             break;
 
             default:
-                sendResponse(res,200,"text/plain", "No specific request made");
+                sendResponse(res, 400, "text/plain", "A HTTP GET method has been sent to the server, but no specific API endpoint could be determined.");
             
         }
 
     }else if(req.method == "OPTIONS"){
 
-        sendResponse(res,200, null,null); 
+        sendResponse(res,204, null,null); 
 
     }else if(req.method == "POST") { //Used for game result and leaderboard
        
@@ -125,8 +127,8 @@ const server = http.createServer((req,res) => {
             case "score":
     
                 const bodyChunks = [];
-                
-                req.on("error", (err) => {
+                //handels Post message body 
+                req.on("error", (err) => { 
                     console.log("An error occured when reading the Post message body.");
                     sendResponse(res,500,null,null);
                 })
@@ -137,8 +139,9 @@ const server = http.createServer((req,res) => {
                     //Buffer.concat() takes an array of Buffer objekt and concatenates
                     //them into a singel Buffer objekt. (Incoming HTTP request bodies are handled as Buffer objekt(works with raw binary data))
                     const messageBody = Buffer.concat(bodyChunks).toString(); //composes message as a string
+                   
 
-                    uploadingScore(messageBody);
+                    uploadingScore(res, messageBody);
                 })
 
             break;
@@ -147,16 +150,30 @@ const server = http.createServer((req,res) => {
         }
 
     }else {
-        sendResponse(res,200,"text/plain", "Unrecognized request");
+        sendResponse(res, 400, "text/plain", "Unrecognized request");
     }
 
 });
 
 
-server.listen(port, hostname, () => {
-    console.log("The server is running an listening at: " + serverUrl);
-});
 
+
+
+async function startServer() {
+    try{
+        await dbClient.connect();
+        console.log("Connected to database");
+        server.listen(port, hostname, () => {
+            console.log("The server is running an listening at: " + serverUrl);
+        });
+    
+    }catch(error){
+        console.log("Failed to connect to database. Error: ", error); 
+    }
+}
+
+
+/******************** FUNCTIONS  ***********************/
 
 //standardfunction for sending respons to client
 function sendResponse(res, statusCode, contentType, data){
@@ -173,24 +190,44 @@ function sendResponse(res, statusCode, contentType, data){
 
 }
 
-
-/******************** FUNCTIONS  ***********************/
-
-//test function for communication with database
+//Requests a single movie based on the name. Used as a test function for communication with database
 async function singleMovie(res, search){
 
-    await dbClient.connect();
+    //await dbClient.connect();
     const db = dbClient.db("tnm121-project");
     const  dbCollection = db.collection("imdb");
 
     const filterQuery = {name: search};
-    const findResult = await dbCollection.find(filterQuery).toArray();
+
+    try{
+        const findResult = await dbCollection.find(filterQuery).toArray();
+        const findResultString = JSON.stringify(findResult);
+
+        sendResponse(res,200,"application/json",findResultString);
+  
+    }catch(error){
+        sendResponse(res, 500, "text/plain", "Failed connect to database");
+    }
     
-    const findResultString = JSON.stringify(findResult);
+    //await dbClient.close();
 
-    sendResponse(res,200,"application/json",findResultString);
-    await dbClient.close();
+}
 
+function routingInstructions(res, language){
+    const filePath = "./resources/instructions.json";
+
+    fs.readFile(filePath, (err, data) => { //data becomes a string
+        if(err){
+            sendResponse(res, 404, "text/plain", "Instructions not found");
+        }else{
+            
+            const jsonData = JSON.parse(data);
+            const specificData = jsonData[language];
+            const dataToClient = JSON.stringify(specificData);
+            
+            sendResponse(res, 200, "application/json", dataToClient);
+        }
+    });
 }
 
 async function routingGame(res, gameParameters){
@@ -200,32 +237,40 @@ async function routingGame(res, gameParameters){
         answerOptionsForQuestion: [], 
     };
     
-    await dbClient.connect();
+    //await dbClient.connect();
     const db = dbClient.db("tnm121-project");
     const dbCollection = db.collection("imdb");
     const amountOfMovies = parseInt(gameParameters.amountOfQuestion);
     const amountOfQuestions = parseInt(gameParameters.difficulty);
 
-    const sampelFilterQuestion = [
+    //filter for the information we want 
+    const sampleFilterQuestion = [
         {$match: {[gameParameters.searchParameter]: 1}}, //we only want entries that have pictures
         {$sample: {size: amountOfMovies}}, //sets how many entries we want
-        {$project: {
+        {$project: { //what field should be inclued
             normalized_id: 1, //always inclued the normalized_id since it's the same between different data groups(images)
             name: 1,
             [gameParameters.questionBase]: 1,
         }}
     ];
    
-  
     //movies that are used for the questions are found and stored. 
-    resultToClient.QuestionMovie = await dbCollection.aggregate(sampelFilterQuestion).toArray();
+    try{
+        resultToClient.QuestionMovie = await dbCollection.aggregate(sampleFilterQuestion).toArray();
+
+    } catch(error){
+        sendResponse(res, 500, "text/plain", "Failed connect to database");
+        //await dbClient.close();
+        return;
+    }
     
 
     for(let i = 0; i < resultToClient.QuestionMovie.length; i++){
         
-        const sampelFilterOptions = [
-            {$match: {//excludes the real answer from the options answers so there are no dublicates
+        const sampleFilterQuestion = [
+            {$match: {//excludes the real answer from the options answers so there are no duplicates
                 normalized_id: {$ne: resultToClient.QuestionMovie[i].normalized_id}, //included to explicitly remove the correct answer
+                    //removes all entries that has the same value in the field corresponding to the answer
                 [gameParameters.optionBase]: {$ne: resultToClient.QuestionMovie[i][gameParameters.optionBase]},
             }}, 
 
@@ -237,87 +282,29 @@ async function routingGame(res, gameParameters){
             }}, 
 
             {$sample: {size: amountOfQuestions}}, //how many answer options there are is dependent on difficulty
-            {$project: { //include the following variable name
+            {$project: { //what field should be inclued
                 [gameParameters.optionBase]: "$_id",
             }}
         ];
 
-        const optionData = await dbCollection.aggregate(sampelFilterOptions).toArray();
-        resultToClient.answerOptionsForQuestion.push(optionData);
-    }
+        //connect to the database
+        try{
+            const optionData = await dbCollection.aggregate(sampleFilterQuestion).toArray();
+            resultToClient.answerOptionsForQuestion.push(optionData);
 
-    await dbClient.close();
-    const stringToClient = JSON.stringify(resultToClient);
-    sendResponse(res, 200, "application/json", stringToClient);
-
-}
-
-
-
-
-
-
-//Asks database for numr random entry titles(every one distinct)
-//Imports the numr of correspondning pictures. 
-//For each of the main numr movies, numrAnswerOptions other random movie names (which are different from the main movie) needs to be includeed: these will be the answer options
-async function routingPictureGame(res, amount, numrAnswerOptions) {
-    
-    const resultToClient = {
-        QuestionMovie: null,
-        answerOptionsForQuestion: null, 
-    };
-
-    const MovieQuestion = await randomMovies(amount, null); //fetches the data that will be used for the questions
-    resultToClient.QuestionMovie = MovieQuestion;
-
-    let answerOptions = []; //empty array that will store the answer options for each movie
-    for(let i = 0; i < amount; i++){
-        const optionData = await randomMovies(numrAnswerOptions, resultToClient.QuestionMovie[i]);//fetches the data that will be used for the answer options
-        answerOptions.push(optionData);
-    }
-    resultToClient.answerOptionsForQuestion = answerOptions;
-
-    const stringToClient = JSON.stringify(resultToClient);
-    sendResponse(res, 200, "application/json", stringToClient);
-
-}
-//asks database for numr amount of randomized movies that are distinct from check. 
-async function randomMovies(numr, exclude) {
-
-    const sampelFilter = [
-        {$match: {photo: 1}},
-        {$sample: {size: amountOfMovies}},
-        {$project: {
-            _id: 0,
-            name: 1,
-        }}
-        ];
-    
-    const findResult = await dbCollection.aggregate(sampelFilter).toArray();
-    //console.log(findResult);
-
-    await dbClient.close();
-    return findResult
-
-}
-async function randomAnswerOptions(numr, exclude) {
-    await dbClient.connect();
-    const db = dbClient.db("tnm121-project");
-    const  dbCollection = db.collection("imdb");
-    const amountOfMovies = parseInt(numr);
-
-    const sampelFilter = [
-            {$match: {normalized_id: {$ne: exclude.normalized_id}}}, //sets which entry we want to exclude
-            {$sample: {size: amountOfMovies-1}}, //sets how many entries we want
-            {$project: { //only include the following data
-                _id: 0,
-                name: 1,
-            }}
-        ];
-    const findResult = await dbCollection.aggregate(sampelFilter).toArray();
+        }catch(error){
+            sendResponse(res, 500, "text/plain", "Failed connect to database");
+            //await dbClient.close();
+            return;
+        }
         
-    await dbClient.close();
-    return findResult; 
+        
+    }
+    
+    const stringToClient = JSON.stringify(resultToClient);
+    sendResponse(res, 200, "application/json", stringToClient);
+    //await dbClient.close();
+
 }
 
 //sends image to client based on the normalized id
@@ -336,26 +323,36 @@ function routingImages(res, id) {
 }
 
 //uploads score to database
-async function uploadingScore(dataFromClient) {
+async function uploadingScore(res, dataFromClient) {
 
     const scoreJsonData = JSON.parse(dataFromClient); //Converts the string into an objekt
-  
-    const collectionName =  "leaderboard_" + scoreJsonData.gameType;    
 
-    await dbClient.connect();
-    const db = dbClient.db("tnm121-project");
-    const dbCollection = db.collection(collectionName); //if there isn't one, one is created
-    
-    const insertResult = await dbCollection.insertOne(scoreJsonData);
-    console.log("Uploaded to database: " + insertResult);
+    if(scoreJsonData.name == null || scoreJsonData.score == null){ //makes sure that the data is correct 
+        sendResponse(res,400,"text/plain","Unvaild data");
+    }else{
+         const collectionName =  "leaderboard_" + scoreJsonData.gameType;    
 
-    await dbClient.close();
+        //await dbClient.connect();
+        const db = dbClient.db("tnm121-project");
+        const dbCollection = db.collection(collectionName); //if there isn't one, one is created
+        
+        try{
+            const insertResult = await dbCollection.insertOne(scoreJsonData);
+            console.log("Uploaded to database: " + insertResult.insertedId);
+
+            sendResponse(res, 200, "text/plain", "Score saved"); //sends a response to the client knows if the save was sucsessfull
+        }catch(error){
+            sendResponse(res, 500, "text/plain", "Failed to save score");
+        }
+        
+        //await dbClient.close();
+    }
     
 }
 
-//gets the results(maximum of 10) from the specified difficulty level and sends it to the client 
+//gets the results(maximum of 10) from the specified game type and difficulty level and sends it to the client 
 async function routingScore(res, type, diff){
-    await dbClient.connect();
+    //await dbClient.connect();
     const db = dbClient.db("tnm121-project");
     const  dbCollection = db.collection("leaderboard_" + type); //searches in the database for the requested game.
 
@@ -363,17 +360,22 @@ async function routingScore(res, type, diff){
         difficulty: diff //only find the ones with the relevant difficulty
     };
     const sortQuery = {score: -1}; //sorts in decending order highest->lowest
-    const findResult = await dbCollection.find(filterQuery).sort(sortQuery).limit(10).toArray();
-    console.log(findResult);
 
-    if(findResult.length > 0) {
-        console.log(" info");
-        const resultToClient = JSON.stringify(findResult);
-        sendResponse(res, 200, "application/json", resultToClient);
+    try{
+        const findResult = await dbCollection.find(filterQuery).sort(sortQuery).limit(10).toArray();
 
-    }else { //if no resulst are found
-        console.log("No info");
-        sendResponse(res, 204, null, null); //sends message No content
+        if(findResult.length > 0) {
+            const resultToClient = JSON.stringify(findResult);
+            sendResponse(res, 200, "application/json", resultToClient);
+
+        }else { //if no resulst are found
+            sendResponse(res, 204, null, null); //sends message No content
+        }
+        
+    }catch(error){
+        sendResponse(res, 500, "text/plain", "Failed connect to database");
     }
-    await dbClient.close();
+
+    //await dbClient.close();
+
 }

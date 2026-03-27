@@ -326,6 +326,10 @@ li{ /*Creating space between items in the list of instructions*/
     color: white;
 }
 
+#score-display{
+    margin-top: 1%;
+}
+
 
 
 
