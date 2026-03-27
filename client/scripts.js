@@ -62,6 +62,13 @@ function language(lang) {
     }
 }
 
+//displays the relevant html object for the game site
+function displayGameView() {
+   document.querySelector(".frontpage").style.display = "none"; 
+   document.querySelector(".main-page").style.display ="block";
+    
+}
+
 //adds radiobutton like functionality to the game choosing buttons
 function createGameSelectionButtons(){
     
@@ -80,11 +87,16 @@ function createGameSelectionButtons(){
             //adds selected status for pressed button and sets the game based on the button
             button.classList.add("selected");
             gameType = button.id;
+            
 
-        })
+            //makes the leaderboard change depending on the game choosen
+            const leaderboardButton = document.getElementById(gameDifficulty);
+            leaderboardButton.click();
+        });
     });
 }
 
+//adds radiobutton like functionality to the leaderboard buttons
 function createLederboardButtons(){
     const buttons = document.getElementsByName("leaderboard-chooser");
 
@@ -101,16 +113,8 @@ function createLederboardButtons(){
             button.classList.add("selected");
             console.log("current leaderbord: " + button.id);
             requestLeaderboard(button.id);
-
-        })
+        });
     });
-}
-
-//Will display the relevant html object for the game site
-function displayGameView() {
-   document.querySelector(".frontpage").style.display = "none"; 
-   document.querySelector(".main-page").style.display ="block";
-    
 }
 
 async function writeInstructions(infoType) {
@@ -163,9 +167,7 @@ async function writeInstructions(infoType) {
     } else {
         console.log("Instruction request failed");
     }
-
 }
-
 
 //takes in the given values for name and game diffuculty
 async function startGame(difficulty) {
@@ -181,18 +183,18 @@ async function startGame(difficulty) {
     gameChooser.style.display = "none";
     startBox.style.display = "none";
 
-
     //resets and adds game information 
-    gameScore = 0; //sets the score to 0 at the start of the game
-    questionCounter = 0; //starts the counter at 0
 
     gameDifficulty = difficulty; 
     playerName = document.getElementById("entry_name").value; //this is from the input element in the middle of the screen 
     
-    await writeInstructions();
+    const leaderboardButton = document.getElementById(difficulty);
+    leaderboardButton.click();
 
+    await writeInstructions();
+    
     //gameType is already choosen depending on button pressed down. 
-    console.log("Name: " + playerName + ", Game Difficulty: " + gameDifficulty + ", Game Type: " + gameType);
+    console.log("Name: " + playerName + ", Game Difficulty: " + gameDifficulty + ", Game Type: " + gameType + "/" + amountOfQuestion);
     
     //requesting amountOfQuestion random movies from the server, what info depends on gameType and difficulty
     const response = await fetch(serverUrl + "/" + gameType + "/" + difficulty,  { 
@@ -203,14 +205,13 @@ async function startGame(difficulty) {
         body: null,
     }); 
 
-
     if (!response.ok) {
         // Code to display error message on the webpage
         console.log("Response not okay");
         const textDiv = document.getElementById("text-display");
         const gameText = document.getElementById("game-text-display");
-        textDiv.style.display = "block";
         gameText.textContent = "Error in loading server";
+        textDiv.style.display = "block";
 
     } else {
         gameInfo = await response.json(); //saves the info of the current game as in a global variable. 
@@ -282,7 +283,7 @@ async function gameRound() {
                 questionText.textContent += questionArray[i];
             } 
         }
-        
+
     }else{
         questionText.textContent = questionContent;
     }
@@ -368,25 +369,7 @@ function nextQuestion(){
 }
 
 
-async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
-    const gameDiv = document.getElementById("game-content");
-    const buttonBox = document.getElementById("answer-buttons-display"); 
-    const submitButton = document.getElementById("submit-container"); 
-    submitButton.style.display = "none";
-    gameDiv.style.display = "none";
-    buttonBox.innerHTML = "";
-    
-    const endTextDisplayDiv = document.getElementById("end-game");
-    console.log(gameScore)
 
-    const resultText = document.getElementById("score-display");
-    resultText.textContent = gameScore;
-
-    endTextDisplayDiv.style.display = "block";
-
-    uploadScore(); //upload the playerinfo and score to the database
-
-}
 
 //Brings back the start game container
 function newGame(){
@@ -407,6 +390,8 @@ function newGame(){
     document.querySelectorAll(".game-running").forEach(element => {
         element.style.display = "none";
     });
+
+    d
 
     restartButton.style.display = "none";
     textDisplayDiv.style.visibility = "hidden";
@@ -461,24 +446,33 @@ function answerbuttons(){
     const submitButton = document.getElementById("submit-container");
     submitButton.style.display = "flex";
 
-    /////////////////////////////////////////////Gör om //////////////////////////////////////////////////////////
-    /*
-    const submitButton = document.createElement("button");
-    submitButton.textContent = "Submit";
-    submitButton.style.position = "center";
-    submitButton.addEventListener("click", function (){
-        submittQuestion();
-    });
-    submitButton.style.gridColumn = "2";
-    submitButton.style.fontSize = "100%";
-    submitButton.style.margin = "5%";
-    submitButton.style.font = "Serif";
-    container.appendChild(submitButton);
-    */
 
 }
 
-async function uploadScore() {
+async function endOfGame(){ //kolla över så att saker som ska göras i css och html inte görs här
+    const gameDiv = document.getElementById("game-content");
+    const buttonBox = document.getElementById("answer-buttons-display"); 
+    const submitButton = document.getElementById("submit-container"); 
+    submitButton.style.display = "none";
+    gameDiv.style.display = "none";
+    buttonBox.innerHTML = "";
+    
+    const endTextDisplayDiv = document.getElementById("end-game");
+
+    gameScore = 0; //sets the score to 0 at the start of the game
+    questionCounter = 0; //starts the counter at 0
+    gameDifficulty = "normal";
+
+    const resultText = document.getElementById("score-display");
+    resultText.textContent = gameScore;
+
+    endTextDisplayDiv.style.display = "block";
+
+    uploadScore(endTextDisplayDiv); //upload the playerinfo and score to the database
+
+}
+
+async function uploadScore(textDisplay) {
 
     const scoreData = {
         name: playerName,
@@ -486,8 +480,6 @@ async function uploadScore() {
         score: gameScore,
         difficulty: gameDifficulty
     };
-
-    console.log(scoreData);
 
     const response = await fetch(serverUrl + "/" + "score",  { 
         method : "Post",
@@ -499,9 +491,11 @@ async function uploadScore() {
 
     ///////////////show this in the browser//////////////////////////////
     if(response.ok){
+        textDisplay += "\nGame Saved.";
         console.log("Game saved");
     }else {
-        console.log("Failed to save game info to database");
+        textDisplay += "\nFailed to save game info to database.";
+        console.log("");
     }
 }
 
@@ -515,18 +509,16 @@ async function requestLeaderboard(difficulty){ //requests the 10 players with th
         body: null,
     }); 
 
-    if(response.ok){
+    const tabel = document.getElementById("leaderboard-text");
+        //potentially empties the list exept the headers 
+        while(tabel.rows.length > 1){
+            tabel.deleteRow(1);
+        }
+
+    if(response.status == 200){
 
         response.json().then((jsonBody) => {
-            console.log(jsonBody);
-
-            const tabel = document.getElementById("leaderboard-text");
-            //potentially empties the list exept the headers 
-            while(tabel.rows.length > 1){
-                tabel.deleteRow(1);
-            }
-
-            //writes out the new list(is ordered on the server side)
+            //writes out the new list(which is ordered on the server side)
             for(let i = 0; i < jsonBody.length; i++) {
                 const tabelRow = document.createElement("tr");
                
@@ -546,13 +538,11 @@ async function requestLeaderboard(difficulty){ //requests the 10 players with th
             }
         });
 
+    }else if (response.status == 204){ //the server return a 204 (no content) status message
+        console.log("requested leaderbord is empty")
+        //the leaderbord is left empty
     }else{
-        //empties list if there is no leaderboard
-        const tabel = document.getElementById("leaderboard-text"); 
-        while(tabel.rows.length > 1){
-            tabel.deleteRow(1);
-        }
-        console.log("Failed to request leaderbord from server.")
+        console.log("failed to connect to server")
     }
 
 }

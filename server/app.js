@@ -364,13 +364,16 @@ async function routingScore(res, type, diff){
     };
     const sortQuery = {score: -1}; //sorts in decending order highest->lowest
     const findResult = await dbCollection.find(filterQuery).sort(sortQuery).limit(10).toArray();
-    
+    console.log(findResult);
+
     if(findResult.length > 0) {
+        console.log(" info");
         const resultToClient = JSON.stringify(findResult);
         sendResponse(res, 200, "application/json", resultToClient);
 
     }else { //if no resulst are found
-        sendResponse(res, 404, null, null);
+        console.log("No info");
+        sendResponse(res, 204, null, null); //sends message No content
     }
     await dbClient.close();
 }
